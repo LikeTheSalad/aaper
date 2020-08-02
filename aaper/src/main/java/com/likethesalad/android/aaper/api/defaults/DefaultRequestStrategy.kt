@@ -1,15 +1,16 @@
 package com.likethesalad.android.aaper.api.defaults
 
 import android.app.Activity
-import com.likethesalad.android.aaper.api.PermissionRequestHandler
+import com.likethesalad.android.aaper.api.base.ActivityRequestStrategy
 
 /**
  * Created by César Muñoz on 29/07/20.
  */
-class DefaultPermissionRequestHandler : PermissionRequestHandler() {
+class DefaultRequestStrategy(activity: Activity) :
+    ActivityRequestStrategy(activity) {
 
     companion object {
-        val NAME = DefaultPermissionRequestHandler::class.java.name
+        val NAME = DefaultRequestStrategy::class.java.name
     }
 
     override fun getName(): String {
@@ -17,7 +18,6 @@ class DefaultPermissionRequestHandler : PermissionRequestHandler() {
     }
 
     override fun onPermissionsRequestResults(
-        activity: Activity,
         permissionsGranted: List<String>,
         permissionsDenied: List<String>
     ): Boolean {

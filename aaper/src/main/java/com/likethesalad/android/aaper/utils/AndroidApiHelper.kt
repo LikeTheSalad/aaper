@@ -23,13 +23,4 @@ object AndroidApiHelper {
     fun requestPermissions(activity: Activity, permissions: Array<String>, requestCode: Int) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
-
-    fun getShowRequestPermissionRationale(
-        activity: Activity,
-        permissions: Array<String>
-    ): List<String> {
-        return permissions.filter {
-            ActivityCompat.shouldShowRequestPermissionRationale(activity, it)
-        }
-    }
 }

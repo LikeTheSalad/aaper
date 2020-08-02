@@ -2,9 +2,9 @@ package com.likethesalad.android.aaper.internal
 
 import android.app.Activity
 import com.likethesalad.android.aaper.Aaper
-import com.likethesalad.android.aaper.api.PendingRequestRunnable
-import com.likethesalad.android.aaper.api.PermissionRequestHandler
+import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.data.PendingRequest
+import com.likethesalad.android.aaper.api.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PermissionStatuses
 import com.likethesalad.android.aaper.utils.AndroidApiHelper
@@ -47,14 +47,14 @@ object PermissionManager {
         if (activity != request.activity) {
             return
         }
-        if (requestCode != request.handler.getRequestCode()) {
+        if (requestCode != request.strategy.getRequestCode()) {
             return
         }
 
         val statuses = getPermissionStatusesOnResponse(permissions, grantResults)
 
         try {
-            if (delegatePermissionResultHandling(activity, request.handler, statuses)) {
+            if (delegatePermissionResultHandling(activity, request.strategy, statuses)) {
                 request.originalMethod.run()
             }
         } finally {
@@ -63,9 +63,9 @@ object PermissionManager {
     }
 
     private fun delegatePermissionResultHandling(
-        activity: Activity, handler: PermissionRequestHandler, statuses: PermissionStatuses
+        activity: Activity, strategy: RequestStrategy<*>, statuses: PermissionStatuses
     ): Boolean {
-        return handler.onPermissionsRequestResults(
+        return strategy.internalOnPermissionsRequestResults(
             activity,
             statuses.permissionsGranted,
             statuses.permissionsDenied
@@ -103,7 +103,7 @@ object PermissionManager {
     private fun requestPermissions(
         activity: Activity,
         originalMethod: Runnable,
-        permissions: Array<String>,
+        missingPermissions: Array<String>,
         handlerName: String
     ) {
         if (currentRequest != null) {
@@ -112,35 +112,30 @@ object PermissionManager {
 
         val handler = Aaper.getHandlersProvider().getHandlerByName(handlerName)
 
-        val showRequestRationaleFor = getShowRequestRationaleForPermissions(activity, permissions)
-        if (showRequestRationaleFor.isNotEmpty()) {
-            val pendingRequest = PendingRequest(activity, handler, originalMethod, permissions)
-            val wasHandled = handler.onShowRequestPermissionRationale(
-                activity, showRequestRationaleFor, PendingRequestRunnable(pendingRequest)
+        val pendingRequest = PendingRequest(activity, handler, originalMethod, missingPermissions)
+        val requestRunner = RequestRunner(pendingRequest)
+
+        val wasHandled = handler.onBeforeLaunchingRequest(
+            activity, missingPermissions,
+            RequestRunner(
+                pendingRequest
             )
-            if (wasHandled) {
-                return
-            }
+        )
+        if (wasHandled) {
+            return
         }
 
-        launchPermissionsRequest(activity, originalMethod, handler, permissions)
+        requestRunner.run()
     }
 
-    internal fun launchPermissionsRequest(
-        activity: Activity,
-        originalMethod: Runnable,
-        handler: PermissionRequestHandler,
-        permissions: Array<String>
-    ) {
+    internal fun launchPermissionsRequest(pendingRequest: PendingRequest) {
+        val activity = pendingRequest.activity
+        val originalMethod = pendingRequest.originalMethod
+        val handler = pendingRequest.strategy
+        val permissions = pendingRequest.permissions
+
         currentRequest = CurrentRequest(activity, originalMethod, handler)
 
         AndroidApiHelper.requestPermissions(activity, permissions, handler.getRequestCode())
-    }
-
-    private fun getShowRequestRationaleForPermissions(
-        activity: Activity,
-        permissions: Array<String>
-    ): List<String> {
-        return AndroidApiHelper.getShowRequestPermissionRationale(activity, permissions)
     }
 }
