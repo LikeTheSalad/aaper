@@ -1,8 +1,8 @@
-package com.likethesalad.android.aaper.internal
+package com.likethesalad.android.aaper.api
 
-import com.likethesalad.android.aaper.Aaper
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
+import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.utils.RequestRunner
@@ -14,6 +14,7 @@ import com.likethesalad.android.aaper.internal.data.PendingRequest
  */
 object PermissionManager {
 
+    lateinit var strategyProvider: RequestStrategyProvider
     private var currentRequest: CurrentRequest? = null
 
     fun processPermissionRequest(
@@ -22,7 +23,7 @@ object PermissionManager {
         originalMethod: Runnable,
         strategyName: String
     ) {
-        val strategy = Aaper.getStrategyProvider().getStrategy(host, strategyName)
+        val strategy = strategyProvider.getStrategy(host, strategyName)
         val missingPermissions = getMissingPermissions(
             host,
             strategy.getPermissionStatusProvider(),
@@ -34,7 +35,13 @@ object PermissionManager {
             return
         }
 
-        requestPermissions(host, permissions, missingPermissions, originalMethod, strategy)
+        requestPermissions(
+            host,
+            permissions,
+            missingPermissions,
+            originalMethod,
+            strategy
+        )
     }
 
     fun processPermissionResponse(

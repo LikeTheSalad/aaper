@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.internal.interceptors
 
 import android.app.Activity
-import com.likethesalad.android.aaper.internal.PermissionManager
+import com.likethesalad.android.aaper.api.PermissionManager
 import net.bytebuddy.implementation.bind.annotation.AllArguments
 import net.bytebuddy.implementation.bind.annotation.SuperCall
 import net.bytebuddy.implementation.bind.annotation.This
