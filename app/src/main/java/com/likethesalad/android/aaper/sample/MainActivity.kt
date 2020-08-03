@@ -4,7 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.likethesalad.android.aaper.api.RequiresPermission
+import com.likethesalad.android.aaper.api.EnsurePermissions
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresPermission(permissions = [Manifest.permission.CAMERA])
+    @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
     fun takePicture() {
         Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
     }

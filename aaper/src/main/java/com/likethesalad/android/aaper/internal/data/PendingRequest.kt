@@ -4,9 +4,9 @@ import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 
 /**
- * Created by César Muñoz on 29/07/20.
+ * Created by César Muñoz on 30/07/20.
  */
-data class CurrentRequest(
+data class PendingRequest(
     val host: Any,
     val data: PermissionsRequest,
     val strategy: RequestStrategy<Any>,

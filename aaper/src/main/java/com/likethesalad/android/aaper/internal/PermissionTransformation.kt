@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.internal
 
 import android.app.Activity
-import com.likethesalad.android.aaper.api.RequiresPermission
+import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.internal.interceptors.ReceivesRequestResultInterceptor
 import com.likethesalad.android.aaper.internal.interceptors.RequiresPermissionInterceptor
 import com.likethesalad.android.buddy.tools.Transformation
@@ -25,7 +25,7 @@ class PermissionTransformation : Plugin {
         typeDescription: TypeDescription,
         classFileLocator: ClassFileLocator
     ): DynamicType.Builder<*> {
-        return builder.method(isAnnotatedWith(RequiresPermission::class.java))
+        return builder.method(isAnnotatedWith(EnsurePermissions::class.java))
             .intercept(MethodDelegation.to(RequiresPermissionInterceptor::class.java))
             .method(named("onRequestPermissionsResult"))
             .intercept(MethodDelegation.to(ReceivesRequestResultInterceptor::class.java))

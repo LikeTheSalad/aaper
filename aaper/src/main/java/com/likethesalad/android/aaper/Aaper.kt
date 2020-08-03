@@ -1,13 +1,13 @@
 package com.likethesalad.android.aaper
 
-import com.likethesalad.android.aaper.api.RequestHandlersProvider
+import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 
 /**
  * Created by César Muñoz on 29/07/20.
  */
 object Aaper {
 
-    private val provider = RequestHandlersProvider()
+    private lateinit var provider: RequestStrategyProvider
 
-    fun getHandlersProvider(): RequestHandlersProvider = provider
+    fun getStrategyProvider(): RequestStrategyProvider = provider
 }

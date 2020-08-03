@@ -3,9 +3,21 @@ package com.likethesalad.android.aaper.api.base
 /**
  * Created by César Muñoz on 02/08/20.
  */
-interface RequestStrategyProvider {
+abstract class RequestStrategyProvider {
 
-    fun getStrategyForName(host: Any, name: String): RequestStrategy<*>
+    companion object {
+        const val DEFAULT_STRATEGY = "[default.strategy]"
+    }
 
-    fun getDefaultStrategy(host: Any): RequestStrategy<*>
+    internal fun getStrategy(host: Any, name: String): RequestStrategy<Any> {
+        return if (name == DEFAULT_STRATEGY) {
+            getDefaultStrategy(host)
+        } else {
+            getStrategyForName(host, name)
+        }
+    }
+
+    abstract fun getStrategyForName(host: Any, name: String): RequestStrategy<Any>
+
+    abstract fun getDefaultStrategy(host: Any): RequestStrategy<Any>
 }

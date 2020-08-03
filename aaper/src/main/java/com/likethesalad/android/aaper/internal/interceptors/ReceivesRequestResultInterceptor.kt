@@ -21,8 +21,7 @@ object ReceivesRequestResultInterceptor {
         PermissionManager.processPermissionResponse(
             activity,
             arguments[0] as Int,
-            arguments[1] as Array<out String>,
-            arguments[2] as IntArray
+            arguments[1] as Array<out String>
         )
         originalMethodCall.run()
     }

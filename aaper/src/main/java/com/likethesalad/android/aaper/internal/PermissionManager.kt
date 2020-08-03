@@ -1,14 +1,13 @@
 package com.likethesalad.android.aaper.internal
 
-import android.app.Activity
 import com.likethesalad.android.aaper.Aaper
+import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.data.PendingRequest
+import com.likethesalad.android.aaper.api.data.PermissionsRequest
+import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
-import com.likethesalad.android.aaper.internal.data.PermissionStatuses
-import com.likethesalad.android.aaper.utils.AndroidApiHelper
-import com.likethesalad.android.aaper.utils.AndroidApiHelper.isPermissionGranted
+import com.likethesalad.android.aaper.internal.data.PendingRequest
 
 /**
  * Created by César Muñoz on 29/07/20.
@@ -17,44 +16,49 @@ object PermissionManager {
 
     private var currentRequest: CurrentRequest? = null
 
-    internal fun processPermissionRequest(
-        activity: Activity,
-        originalMethod: Runnable,
+    fun processPermissionRequest(
+        host: Any,
         permissions: Array<String>,
-        handlerName: String
+        originalMethod: Runnable,
+        strategyName: String
     ) {
+        val strategy = Aaper.getStrategyProvider().getStrategy(host, strategyName)
         val missingPermissions = getMissingPermissions(
-            activity, permissions
+            host,
+            strategy.getPermissionStatusProvider(),
+            permissions
         )
+
         if (missingPermissions.isEmpty()) {
             originalMethod.run()
             return
         }
 
-        requestPermissions(
-            activity,
-            originalMethod,
-            missingPermissions,
-            handlerName
-        )
+        requestPermissions(host, permissions, missingPermissions, originalMethod, strategy)
     }
 
-    internal fun processPermissionResponse(
-        activity: Activity, requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray
+    fun processPermissionResponse(
+        host: Any,
+        requestCode: Int,
+        permissionsRequested: Array<out String>
     ) {
         val request = currentRequest ?: return
-        if (activity != request.activity) {
+        if (host != request.host) {
             return
         }
         if (requestCode != request.strategy.getRequestCode()) {
             return
         }
 
-        val statuses = getPermissionStatusesOnResponse(permissions, grantResults)
+        val permissionsResult = getPermissionsResult(
+            host,
+            request.strategy,
+            request.data,
+            permissionsRequested
+        )
 
         try {
-            if (delegatePermissionResultHandling(activity, request.strategy, statuses)) {
+            if (delegatePermissionResultHandling(host, request.strategy, permissionsResult)) {
                 request.originalMethod.run()
             }
         } finally {
@@ -63,79 +67,78 @@ object PermissionManager {
     }
 
     private fun delegatePermissionResultHandling(
-        activity: Activity, strategy: RequestStrategy<*>, statuses: PermissionStatuses
+        host: Any, strategy: RequestStrategy<Any>, result: PermissionsResult
     ): Boolean {
-        return strategy.internalOnPermissionsRequestResults(
-            activity,
-            statuses.permissionsGranted,
-            statuses.permissionsDenied
+        return strategy.onPermissionsRequestResults(
+            host, result
         )
     }
 
-    private fun getPermissionStatusesOnResponse(
-        permissions: Array<out String>, grantResults: IntArray
-    ): PermissionStatuses {
+    private fun getPermissionsResult(
+        host: Any,
+        strategy: RequestStrategy<Any>,
+        requestData: PermissionsRequest,
+        permissionsRequested: Array<out String>
+    ): PermissionsResult {
+        val permissionStatusProvider = strategy.getPermissionStatusProvider()
         val granted = mutableListOf<String>()
         val denied = mutableListOf<String>()
 
-        permissions.forEachIndexed { index, permission ->
-            when (isPermissionGranted(grantResults[index])) {
+        permissionsRequested.forEach { permission ->
+            when (permissionStatusProvider.isPermissionGranted(host, permission)) {
                 true -> granted.add(permission)
                 false -> denied.add(permission)
             }
         }
 
-        return PermissionStatuses(granted, denied)
-    }
-
-    private fun cleanUp() {
-        currentRequest = null
-    }
-
-    private fun getMissingPermissions(
-        activity: Activity, permissionsRequested: Array<String>
-    ): Array<String> {
-        return permissionsRequested.filter {
-            !isPermissionGranted(activity, it)
-        }.toTypedArray()
+        return PermissionsResult(requestData, granted, denied)
     }
 
     private fun requestPermissions(
-        activity: Activity,
+        host: Any,
+        permissions: Array<String>,
+        missingPermissions: List<String>,
         originalMethod: Runnable,
-        missingPermissions: Array<String>,
-        handlerName: String
+        strategy: RequestStrategy<Any>
     ) {
         if (currentRequest != null) {
             return
         }
 
-        val handler = Aaper.getHandlersProvider().getHandlerByName(handlerName)
+        val data = PermissionsRequest(permissions.toList(), missingPermissions)
 
-        val pendingRequest = PendingRequest(activity, handler, originalMethod, missingPermissions)
-        val requestRunner = RequestRunner(pendingRequest)
+        val pendingRequest = PendingRequest(host, data, strategy, originalMethod)
+        val requestRunner = RequestRunner(pendingRequest, ::launchPermissionsRequest)
 
-        val wasHandled = handler.onBeforeLaunchingRequest(
-            activity, missingPermissions,
-            RequestRunner(
-                pendingRequest
-            )
-        )
-        if (wasHandled) {
+        if (strategy.onBeforeLaunchingRequest(host, data, requestRunner)) {
             return
         }
 
         requestRunner.run()
     }
 
-    internal fun launchPermissionsRequest(pendingRequest: PendingRequest) {
-        val activity = pendingRequest.activity
+    private fun getMissingPermissions(
+        host: Any,
+        permissionStatusProvider: PermissionStatusProvider<Any>,
+        permissions: Array<String>
+    ): List<String> {
+        return permissions.filter {
+            !permissionStatusProvider.isPermissionGranted(host, it)
+        }
+    }
+
+    private fun launchPermissionsRequest(pendingRequest: PendingRequest) {
+        val host = pendingRequest.host
         val originalMethod = pendingRequest.originalMethod
-        val handler = pendingRequest.strategy
-        val permissions = pendingRequest.permissions
+        val strategy = pendingRequest.strategy
+        val data = pendingRequest.data
 
-        currentRequest = CurrentRequest(activity, originalMethod, handler)
+        currentRequest = CurrentRequest(host, data, strategy, originalMethod)
 
-        AndroidApiHelper.requestPermissions(activity, permissions, handler.getRequestCode())
+        strategy.getRequestLauncher().launchPermissionsRequest(host, data.missingPermissions)
+    }
+
+    private fun cleanUp() {
+        currentRequest = null
     }
 }

@@ -5,5 +5,5 @@ package com.likethesalad.android.aaper.api.base
  */
 interface RequestLauncher<T> {
 
-    fun launchPermissionsRequest(host: T, permissions: Array<String>)
+    fun launchPermissionsRequest(host: T, permissions: List<String>)
 }

@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.internal.interceptors
 
 import android.app.Activity
-import com.likethesalad.android.aaper.api.RequiresPermission
+import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.internal.PermissionManager
 import net.bytebuddy.implementation.bind.annotation.Origin
 import net.bytebuddy.implementation.bind.annotation.SuperCall
@@ -19,9 +19,9 @@ object RequiresPermissionInterceptor {
         @SuperCall originalMethod: Runnable,
         @Origin methodReference: Method
     ) {
-        val annotation = methodReference.getAnnotation(RequiresPermission::class.java)
+        val annotation = methodReference.getAnnotation(EnsurePermissions::class.java)
         PermissionManager.processPermissionRequest(
-            activity, originalMethod, annotation.permissions, annotation.requestHandlerName
+            activity, annotation.permissions, originalMethod, annotation.requestHandlerName
         )
     }
 }
