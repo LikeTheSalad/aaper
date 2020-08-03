@@ -9,6 +9,6 @@ import com.likethesalad.android.aaper.api.data.PermissionsRequest
 data class CurrentRequest(
     val host: Any,
     val data: PermissionsRequest,
-    val strategy: RequestStrategy<Any>,
+    val strategy: RequestStrategy<out Any>,
     internal val originalMethod: Runnable
 )

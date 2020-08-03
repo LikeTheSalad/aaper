@@ -3,7 +3,15 @@ package com.likethesalad.android.aaper.api.base
 /**
  * Created by César Muñoz on 02/08/20.
  */
-interface RequestLauncher<T> {
+abstract class RequestLauncher<T> {
 
-    fun launchPermissionsRequest(host: T, permissions: List<String>)
+    internal fun internalLaunchPermissionsRequest(
+        host: Any,
+        permissions: List<String>,
+        requestCode: Int
+    ) {
+        launchPermissionsRequest(host as T, permissions, requestCode)
+    }
+
+    abstract fun launchPermissionsRequest(host: T, permissions: List<String>, requestCode: Int)
 }

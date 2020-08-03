@@ -9,7 +9,7 @@ abstract class RequestStrategyProvider {
         const val DEFAULT_STRATEGY = "[default.strategy]"
     }
 
-    internal fun getStrategy(host: Any, name: String): RequestStrategy<Any> {
+    internal fun getStrategy(host: Any, name: String): RequestStrategy<out Any> {
         return if (name == DEFAULT_STRATEGY) {
             getDefaultStrategy(host)
         } else {
@@ -17,7 +17,7 @@ abstract class RequestStrategyProvider {
         }
     }
 
-    abstract fun getStrategyForName(host: Any, name: String): RequestStrategy<Any>
+    abstract fun getStrategyForName(host: Any, name: String): RequestStrategy<out Any>
 
-    abstract fun getDefaultStrategy(host: Any): RequestStrategy<Any>
+    abstract fun getDefaultStrategy(host: Any): RequestStrategy<out Any>
 }

@@ -84,16 +84,16 @@ object PermissionManager {
     }
 
     private fun delegatePermissionResultHandling(
-        host: Any, strategy: RequestStrategy<Any>, result: PermissionsResult
+        host: Any, strategy: RequestStrategy<out Any>, result: PermissionsResult
     ): Boolean {
-        return strategy.onPermissionsRequestResults(
+        return strategy.internalOnPermissionsRequestResults(
             host, result
         )
     }
 
     private fun getPermissionsResult(
         host: Any,
-        strategy: RequestStrategy<Any>,
+        strategy: RequestStrategy<out Any>,
         requestData: PermissionsRequest,
         permissionsRequested: Array<out String>
     ): PermissionsResult {
@@ -102,7 +102,7 @@ object PermissionManager {
         val denied = mutableListOf<String>()
 
         permissionsRequested.forEach { permission ->
-            when (permissionStatusProvider.isPermissionGranted(host, permission)) {
+            when (permissionStatusProvider.internalIsPermissionGranted(host, permission)) {
                 true -> granted.add(permission)
                 false -> denied.add(permission)
             }
@@ -116,7 +116,7 @@ object PermissionManager {
         permissions: Array<String>,
         missingPermissions: List<String>,
         originalMethod: Runnable,
-        strategy: RequestStrategy<Any>
+        strategy: RequestStrategy<out Any>
     ) {
         if (currentRequest != null) {
             return
@@ -127,7 +127,7 @@ object PermissionManager {
         val pendingRequest = PendingRequest(host, data, strategy, originalMethod)
         val requestRunner = RequestRunner(pendingRequest, ::launchPermissionsRequest)
 
-        if (strategy.onBeforeLaunchingRequest(host, data, requestRunner)) {
+        if (strategy.internalOnBeforeLaunchingRequest(host, data, requestRunner)) {
             return
         }
 
@@ -136,11 +136,11 @@ object PermissionManager {
 
     private fun getMissingPermissions(
         host: Any,
-        permissionStatusProvider: PermissionStatusProvider<Any>,
+        permissionStatusProvider: PermissionStatusProvider<out Any>,
         permissions: Array<String>
     ): List<String> {
         return permissions.filter {
-            !permissionStatusProvider.isPermissionGranted(host, it)
+            !permissionStatusProvider.internalIsPermissionGranted(host, it)
         }
     }
 
@@ -152,7 +152,12 @@ object PermissionManager {
 
         currentRequest = CurrentRequest(host, data, strategy, originalMethod)
 
-        strategy.getRequestLauncher().launchPermissionsRequest(host, data.missingPermissions)
+        strategy.getRequestLauncher()
+            .internalLaunchPermissionsRequest(
+                host,
+                data.missingPermissions,
+                strategy.getRequestCode()
+            )
     }
 
     private fun cleanUp() {

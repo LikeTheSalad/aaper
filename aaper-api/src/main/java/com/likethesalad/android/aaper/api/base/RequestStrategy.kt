@@ -14,6 +14,21 @@ abstract class RequestStrategy<T> {
         const val DEFAULT_REQUEST_CODE = 1202
     }
 
+    internal fun internalOnBeforeLaunchingRequest(
+        host: Any,
+        data: PermissionsRequest,
+        request: RequestRunner
+    ): Boolean {
+        return onBeforeLaunchingRequest(host as T, data, request)
+    }
+
+    internal fun internalOnPermissionsRequestResults(
+        host: Any,
+        data: PermissionsResult
+    ): Boolean {
+        return onPermissionsRequestResults(host as T, data)
+    }
+
     open fun getRequestCode(): Int {
         return DEFAULT_REQUEST_CODE
     }
