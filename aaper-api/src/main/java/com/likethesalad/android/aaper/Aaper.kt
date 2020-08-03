@@ -10,4 +10,8 @@ object Aaper {
     private lateinit var provider: RequestStrategyProvider
 
     fun getStrategyProvider(): RequestStrategyProvider = provider
+
+    fun setStrategyProvider(provider: RequestStrategyProvider) {
+        this.provider = provider
+    }
 }
