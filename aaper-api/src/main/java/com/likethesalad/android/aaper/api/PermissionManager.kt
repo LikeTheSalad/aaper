@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.api
 
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProviderHolder
+import com.likethesalad.android.aaper.api.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.utils.RequestRunner
@@ -14,17 +14,17 @@ import com.likethesalad.android.aaper.internal.data.PendingRequest
  */
 object PermissionManager {
 
-    private var strategyProviderHolder: RequestStrategyProviderHolder? = null
+    private var strategyProviderSource: RequestStrategyProviderSource? = null
     private val strategyProvider by lazy {
-        strategyProviderHolder!!.getRequestStrategyProvider()
+        strategyProviderSource!!.getRequestStrategyProvider()
     }
     private var currentRequest: CurrentRequest? = null
 
-    fun setStrategyProviderHolder(holder: RequestStrategyProviderHolder) {
-        if (strategyProviderHolder != null) {
-            throw IllegalStateException("There's a holder already set")
+    fun setStrategyProviderSource(source: RequestStrategyProviderSource) {
+        if (strategyProviderSource != null) {
+            throw IllegalStateException("There's a source already set")
         }
-        strategyProviderHolder = holder
+        strategyProviderSource = source
     }
 
     fun processPermissionRequest(

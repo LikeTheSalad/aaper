@@ -10,7 +10,7 @@ import com.likethesalad.android.aaper.strategies.base.ActivityRequestStrategy
 class DefaultRequestStrategy : ActivityRequestStrategy() {
 
     companion object {
-        val NAME = DefaultRequestStrategy::class.java.name
+        internal val NAME = DefaultRequestStrategy::class.java.name
     }
 
     override fun onPermissionsRequestResults(host: Activity, data: PermissionsResult): Boolean {
