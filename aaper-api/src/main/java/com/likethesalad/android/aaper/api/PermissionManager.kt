@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.api
 
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.base.RequestStrategyProviderHolder
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.utils.RequestRunner
@@ -14,8 +14,11 @@ import com.likethesalad.android.aaper.internal.data.PendingRequest
  */
 object PermissionManager {
 
-    lateinit var strategyProvider: RequestStrategyProvider
+    lateinit var strategyProviderHolder: RequestStrategyProviderHolder
     private var currentRequest: CurrentRequest? = null
+    private val strategyProvider by lazy {
+        strategyProviderHolder.getRequestStrategyProvider()
+    }
 
     fun processPermissionRequest(
         host: Any,
