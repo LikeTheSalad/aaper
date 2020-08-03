@@ -21,7 +21,7 @@ object RequiresPermissionInterceptor {
     ) {
         val annotation = methodReference.getAnnotation(EnsurePermissions::class.java)
         PermissionManager.processPermissionRequest(
-            activity, annotation.permissions, originalMethod, annotation.requestHandlerName
+            activity, annotation.permissions, originalMethod, annotation.strategyName
         )
     }
 }

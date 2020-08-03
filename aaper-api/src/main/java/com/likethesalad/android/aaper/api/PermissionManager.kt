@@ -14,10 +14,17 @@ import com.likethesalad.android.aaper.internal.data.PendingRequest
  */
 object PermissionManager {
 
-    lateinit var strategyProviderHolder: RequestStrategyProviderHolder
-    private var currentRequest: CurrentRequest? = null
+    private var strategyProviderHolder: RequestStrategyProviderHolder? = null
     private val strategyProvider by lazy {
-        strategyProviderHolder.getRequestStrategyProvider()
+        strategyProviderHolder!!.getRequestStrategyProvider()
+    }
+    private var currentRequest: CurrentRequest? = null
+
+    fun setStrategyProviderHolder(holder: RequestStrategyProviderHolder) {
+        if (strategyProviderHolder != null) {
+            throw IllegalStateException("There's a holder already set")
+        }
+        strategyProviderHolder = holder
     }
 
     fun processPermissionRequest(

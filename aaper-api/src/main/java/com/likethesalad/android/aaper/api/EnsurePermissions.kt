@@ -10,5 +10,5 @@ import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 @Target(AnnotationTarget.FUNCTION)
 annotation class EnsurePermissions(
     val permissions: Array<String>,
-    val requestHandlerName: String = RequestStrategyProvider.DEFAULT_STRATEGY
+    val strategyName: String = RequestStrategyProvider.DEFAULT_STRATEGY
 )
