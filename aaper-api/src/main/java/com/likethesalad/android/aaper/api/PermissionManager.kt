@@ -3,7 +3,7 @@ package com.likethesalad.android.aaper.api
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
-import com.likethesalad.android.aaper.api.base.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
