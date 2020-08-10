@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.api.base
 
 /**
- * Created by César Muñoz on 02/08/20.
+ * This class should tell whether a given permission is granted not.
  */
 abstract class PermissionStatusProvider<T> {
 
@@ -10,5 +10,11 @@ abstract class PermissionStatusProvider<T> {
         return isPermissionGranted(host as T, permissionName)
     }
 
+    /**
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
+     * @param permissionName - The permission being queried.
+     *
+     * @return - TRUE if the [permissionName] is granted, FALSE otherwise.
+     */
     abstract fun isPermissionGranted(host: T, permissionName: String): Boolean
 }
