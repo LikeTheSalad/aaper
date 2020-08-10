@@ -5,6 +5,7 @@ package com.likethesalad.android.aaper.api.base
  */
 abstract class RequestLauncher<T> {
 
+    @Suppress("UNCHECKED_CAST")
     internal fun internalLaunchPermissionsRequest(
         host: Any,
         permissions: List<String>,

@@ -4,7 +4,6 @@ import android.app.Activity
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.internal.interceptors.ReceivesRequestResultInterceptor
 import com.likethesalad.android.aaper.internal.interceptors.RequiresPermissionInterceptor
-import com.likethesalad.android.buddy.tools.Transformation
 import net.bytebuddy.build.Plugin
 import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.ClassFileLocator
@@ -17,7 +16,6 @@ import net.bytebuddy.matcher.ElementMatchers.named
  * Created by César Muñoz on 25/07/20.
  */
 
-@Transformation
 class PermissionTransformation : Plugin {
 
     override fun apply(

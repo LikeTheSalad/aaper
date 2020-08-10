@@ -5,6 +5,7 @@ package com.likethesalad.android.aaper.api.base
  */
 abstract class PermissionStatusProvider<T> {
 
+    @Suppress("UNCHECKED_CAST")
     internal fun internalIsPermissionGranted(host: Any, permissionName: String): Boolean {
         return isPermissionGranted(host as T, permissionName)
     }
