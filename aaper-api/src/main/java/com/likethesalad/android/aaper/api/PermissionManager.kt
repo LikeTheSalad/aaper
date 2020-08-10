@@ -5,7 +5,7 @@ import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.api.utils.RequestRunner
+import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PendingRequest
 

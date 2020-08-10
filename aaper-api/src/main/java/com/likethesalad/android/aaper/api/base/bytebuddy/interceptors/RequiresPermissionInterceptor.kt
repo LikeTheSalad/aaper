@@ -1,6 +1,5 @@
-package com.likethesalad.android.aaper.internal.interceptors
+package com.likethesalad.android.aaper.api.base.bytebuddy.interceptors
 
-import android.app.Activity
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.api.PermissionManager
 import net.bytebuddy.implementation.bind.annotation.Origin
@@ -15,13 +14,13 @@ object RequiresPermissionInterceptor {
 
     @JvmStatic
     fun intercept(
-        @This activity: Activity,
+        @This host: Any,
         @SuperCall originalMethod: Runnable,
         @Origin methodReference: Method
     ) {
         val annotation = methodReference.getAnnotation(EnsurePermissions::class.java)
         PermissionManager.processPermissionRequest(
-            activity, annotation.permissions, originalMethod, annotation.strategyName
+            host, annotation.permissions, originalMethod, annotation.strategyName
         )
     }
 }

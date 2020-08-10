@@ -16,6 +16,10 @@ buildscript {
     }
 }
 
+ext {
+    byteBuddy_version = '1.10.14'
+}
+
 allprojects {
     repositories {
         mavenLocal()

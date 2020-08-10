@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.api.base
 
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.api.utils.RequestRunner
+import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
  * Created by César Muñoz on 29/07/20.

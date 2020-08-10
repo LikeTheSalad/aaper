@@ -1,6 +1,5 @@
-package com.likethesalad.android.aaper.internal.interceptors
+package com.likethesalad.android.aaper.api.base.bytebuddy.interceptors
 
-import android.app.Activity
 import com.likethesalad.android.aaper.api.PermissionManager
 import net.bytebuddy.implementation.bind.annotation.AllArguments
 import net.bytebuddy.implementation.bind.annotation.SuperCall
@@ -14,12 +13,12 @@ object ReceivesRequestResultInterceptor {
     @Suppress("UNCHECKED_CAST")
     @JvmStatic
     fun intercept(
-        @This activity: Activity,
+        @This host: Any,
         @SuperCall originalMethodCall: Runnable,
         @AllArguments arguments: Array<Any>
     ) {
         PermissionManager.processPermissionResponse(
-            activity,
+            host,
             arguments[0] as Int,
             arguments[1] as Array<out String>
         )
