@@ -28,7 +28,7 @@ abstract class RequestStrategyProvider {
      *
      * @return - The requested [RequestStrategy].
      */
-    abstract fun getStrategyForName(host: Any, name: String): RequestStrategy<out Any>
+    protected abstract fun getStrategyForName(host: Any, name: String): RequestStrategy<out Any>
 
     /**
      * This method will be called if the default strategy name was provided, or by default if no
@@ -38,5 +38,5 @@ abstract class RequestStrategyProvider {
      *
      * @return - The default [RequestStrategy].
      */
-    abstract fun getDefaultStrategy(host: Any): RequestStrategy<out Any>
+    protected abstract fun getDefaultStrategy(host: Any): RequestStrategy<out Any>
 }
