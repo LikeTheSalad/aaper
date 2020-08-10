@@ -31,6 +31,16 @@ abstract class RequestStrategy<T> {
         return onPermissionsRequestResults(host as T, data)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun internalGetPermissionStatusProvider(host: Any): PermissionStatusProvider<T> {
+        return getPermissionStatusProvider(host as T)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun internalGetRequestLauncher(host: Any): RequestLauncher<T> {
+        return getRequestLauncher(host as T)
+    }
+
     /**
      * This getter is called before launching the request and it must provide
      * the request code that will be used for it.
@@ -89,12 +99,16 @@ abstract class RequestStrategy<T> {
     /**
      * This getter must provide a [RequestLauncher] instance which will be used to
      * launch a request.
+     *
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
      */
-    abstract fun getRequestLauncher(): RequestLauncher<T>
+    abstract fun getRequestLauncher(host: T): RequestLauncher<T>
 
     /**
      * This getter must provide a [PermissionStatusProvider] instance which will
      * be used to query the status of the permissions required for a method.
+     *
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
      */
-    abstract fun getPermissionStatusProvider(): PermissionStatusProvider<T>
+    abstract fun getPermissionStatusProvider(host: T): PermissionStatusProvider<T>
 }

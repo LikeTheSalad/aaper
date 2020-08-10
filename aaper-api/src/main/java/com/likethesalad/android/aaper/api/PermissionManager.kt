@@ -3,9 +3,9 @@ package com.likethesalad.android.aaper.api
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
-import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
+import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PendingRequest
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
@@ -57,7 +57,7 @@ object PermissionManager {
         val strategy = strategyProvider.getStrategy(host, strategyName)
         val missingPermissions = getMissingPermissions(
             host,
-            strategy.getPermissionStatusProvider(),
+            strategy.internalGetPermissionStatusProvider(host),
             permissions
         )
 
@@ -127,7 +127,7 @@ object PermissionManager {
         requestData: PermissionsRequest,
         permissionsRequested: Array<out String>
     ): PermissionsResult {
-        val permissionStatusProvider = strategy.getPermissionStatusProvider()
+        val permissionStatusProvider = strategy.internalGetPermissionStatusProvider(host)
         val granted = mutableListOf<String>()
         val denied = mutableListOf<String>()
 
@@ -182,7 +182,7 @@ object PermissionManager {
 
         currentRequest = CurrentRequest(host, data, strategy, originalMethod)
 
-        strategy.getRequestLauncher()
+        strategy.internalGetRequestLauncher(host)
             .internalLaunchPermissionsRequest(
                 host,
                 data.missingPermissions,

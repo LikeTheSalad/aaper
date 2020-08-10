@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.strategies.defaults
+package com.likethesalad.android.aaper.strategies.defaults.launchers
 
 import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.base.RequestLauncher
