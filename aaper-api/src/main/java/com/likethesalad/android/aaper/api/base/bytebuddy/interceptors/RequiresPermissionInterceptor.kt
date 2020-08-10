@@ -8,7 +8,9 @@ import net.bytebuddy.implementation.bind.annotation.This
 import java.lang.reflect.Method
 
 /**
- * Created by César Muñoz on 25/07/20.
+ * This ByteBuddy interceptor triggers the permission process on [PermissionManager].
+ * It extracts the needed variables from [EnsurePermissions] and passes them to the
+ * [PermissionManager.processPermissionRequest] function.
  */
 object RequiresPermissionInterceptor {
 

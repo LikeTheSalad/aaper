@@ -6,7 +6,9 @@ import net.bytebuddy.implementation.bind.annotation.SuperCall
 import net.bytebuddy.implementation.bind.annotation.This
 
 /**
- * Created by César Muñoz on 29/07/20.
+ * This ByteBuddy interceptor triggers the permission result process on [PermissionManager].
+ * It passes the "onRequestPermissionsResult" to the
+ * [PermissionManager.processPermissionResponse] function.
  */
 object ReceivesRequestResultInterceptor {
 

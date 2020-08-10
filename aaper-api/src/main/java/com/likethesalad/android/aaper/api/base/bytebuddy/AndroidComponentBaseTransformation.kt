@@ -11,7 +11,12 @@ import net.bytebuddy.implementation.MethodDelegation
 import net.bytebuddy.matcher.ElementMatchers
 
 /**
- * Created by César Muñoz on 10/08/20.
+ * This is the base ByteBuddy plugin for android components' permission-related
+ * transformations.
+ *
+ * It should allow to attach Aaper to any class that has an
+ * "onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)"
+ * method.
  */
 
 abstract class AndroidComponentBaseTransformation : Plugin {
@@ -35,6 +40,10 @@ abstract class AndroidComponentBaseTransformation : Plugin {
         // Nothing to close by default.
     }
 
+    /**
+     * This function must return the type of Android component class
+     * to which Aaper will be attached to. e.g. Activity.
+     */
     abstract fun getHostClassType(): Class<out Any>
 
 }
