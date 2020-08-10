@@ -9,7 +9,7 @@ import java.lang.reflect.Method
 
 /**
  * This ByteBuddy interceptor triggers the permission process on [PermissionManager].
- * It extracts the needed variables from [EnsurePermissions] and passes them to the
+ * It extracts the values from [EnsurePermissions] and passes them to the
  * [PermissionManager.processPermissionRequest] function.
  */
 object RequiresPermissionInterceptor {
