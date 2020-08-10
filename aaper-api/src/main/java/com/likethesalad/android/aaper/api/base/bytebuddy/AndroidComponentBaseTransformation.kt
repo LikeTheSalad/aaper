@@ -35,6 +35,6 @@ abstract class AndroidComponentBaseTransformation : Plugin {
         // Nothing to close by default.
     }
 
-    abstract fun getSupportedClassType(): Class<*>
+    abstract fun getSupportedClassType(): Class<out Any>
 
 }
