@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.api.data
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This data class holds the result of a request as well as the request data.
  */
 data class PermissionsResult(
     val request: PermissionsRequest,

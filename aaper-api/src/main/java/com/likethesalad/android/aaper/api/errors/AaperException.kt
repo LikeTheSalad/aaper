@@ -1,6 +1,6 @@
 package com.likethesalad.android.aaper.api.errors
 
 /**
- * Created by César Muñoz on 01/08/20.
+ * Base exception for all Aaper operations' exceptions.
  */
 open class AaperException(message: String?, cause: Throwable?) : Exception(message, cause)

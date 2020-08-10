@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.api.data
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This data class holds the request parameters.
  */
 data class PermissionsRequest(
     val permissions: List<String>,

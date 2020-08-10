@@ -2,15 +2,17 @@ package com.likethesalad.android.aaper.api
 
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
+import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PendingRequest
+import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
- * Created by César Muñoz on 29/07/20.
+ * This object is the core of the permissions handling system, it's where the
+ * functions are passed to and processed by provided [RequestStrategy] instances.
  */
 object PermissionManager {
 
@@ -20,6 +22,12 @@ object PermissionManager {
     }
     private var currentRequest: CurrentRequest? = null
 
+    /**
+     * This setter is to define the source for a [RequestStrategyProvider] instance.
+     * It can only be called once.
+     *
+     * @param source - The source for the [RequestStrategyProvider] instance.
+     */
     fun setStrategyProviderSource(source: RequestStrategyProviderSource) {
         if (strategyProviderSource != null) {
             throw IllegalStateException("There's a source already set")
@@ -27,6 +35,19 @@ object PermissionManager {
         strategyProviderSource = source
     }
 
+    /**
+     * This function is for starting the permission request process for a method
+     * (called the original method). It first gets a [RequestStrategy] by its name,
+     * then verifies if some permissions are missing, if not,
+     * then it calls the original method right away, otherwise it continues with the
+     * request process.
+     *
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
+     * @param permissions - The array of permissions that the original method needs.
+     * @param originalMethod - The method annotated with [EnsurePermissions].
+     * @param strategyName - The strategy name that will take care of the process for the
+     * originalMethod.
+     */
     fun processPermissionRequest(
         host: Any,
         permissions: Array<String>,
@@ -54,6 +75,15 @@ object PermissionManager {
         )
     }
 
+    /**
+     * This function processes the response of a previously launched permission
+     * request. It mostly delegates the actions to the [RequestStrategy] used to make
+     * the request and then it cleans up this instance, if needed.
+     *
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
+     * @param requestCode - The request code used to launch the permission request.
+     * @param permissionsRequested - The array of permissions that the original method requires.
+     */
     fun processPermissionResponse(
         host: Any,
         requestCode: Int,
