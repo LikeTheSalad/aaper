@@ -8,7 +8,7 @@ import com.likethesalad.android.aaper.api.base.bytebuddy.AndroidComponentBaseTra
  */
 class ActivityTransformation : AndroidComponentBaseTransformation() {
 
-    override fun getSupportedClassType(): Class<out Any> {
+    override fun getHostClassType(): Class<out Any> {
         return Activity::class.java
     }
 }

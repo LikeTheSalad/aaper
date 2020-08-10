@@ -28,13 +28,13 @@ abstract class AndroidComponentBaseTransformation : Plugin {
     }
 
     override fun matches(target: TypeDescription): Boolean {
-        return target.isAssignableTo(getSupportedClassType())
+        return target.isAssignableTo(getHostClassType())
     }
 
     override fun close() {
         // Nothing to close by default.
     }
 
-    abstract fun getSupportedClassType(): Class<out Any>
+    abstract fun getHostClassType(): Class<out Any>
 
 }
