@@ -9,6 +9,7 @@ import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -24,9 +25,6 @@ import org.junit.Test
 class PermissionManagerTest : BaseMockable() {
 
     @MockK
-    lateinit var strategyProvider: RequestStrategyProvider
-
-    @MockK
     lateinit var originalMethod: Runnable
 
     @MockK
@@ -38,25 +36,31 @@ class PermissionManagerTest : BaseMockable() {
     @MockK
     lateinit var strategy: RequestStrategy<Any>
 
+    @MockK
+    lateinit var host: Any
 
-    private val host = Any()
+
     private val requestCode = 1202
     private val strategyName = "someStrategyName"
 
     companion object {
 
-        private val sourceMock: RequestStrategyProviderSource = mockk(relaxUnitFun = true)
+        private lateinit var sourceMock: RequestStrategyProviderSource
+        private lateinit var strategyProvider: RequestStrategyProvider
 
         @JvmStatic
         @BeforeClass
         fun init() {
+            sourceMock = mockk(relaxUnitFun = true)
+            strategyProvider = mockk(relaxUnitFun = true)
+            every { sourceMock.getRequestStrategyProvider() }.returns(strategyProvider)
             PermissionManager.setStrategyProviderSource(sourceMock)
         }
     }
 
     @Before
     fun setUp() {
-        every { sourceMock.getRequestStrategyProvider() }.returns(strategyProvider)
+        cleanUp()
         every { strategyProvider.getStrategy(host, strategyName) }.returns(strategy)
         every {
             strategy.internalGetPermissionStatusProvider(host)
@@ -128,5 +132,12 @@ class PermissionManagerTest : BaseMockable() {
                 permissionStatusProvider.internalIsPermissionGranted(host, it)
             }.returns(it !in missingPermissions)
         }
+    }
+
+    private fun cleanUp() {
+        clearMocks(strategyProvider)
+        val method = PermissionManager::class.java.getDeclaredMethod("cleanUp")
+        method.isAccessible = true
+        method.invoke(PermissionManager)
     }
 }
