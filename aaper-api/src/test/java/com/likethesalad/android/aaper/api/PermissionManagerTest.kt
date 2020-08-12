@@ -184,6 +184,49 @@ class PermissionManagerTest : BaseMockable() {
         }
     }
 
+    @Test
+    fun `Call original method of second request with no permissions missing when another request is ongoing`() {
+        val permissions = arrayOf("one", "two")
+        val missingPermissions = arrayOf("one")
+        setUpPermissions(permissions, missingPermissions)
+        every {
+            strategy.internalOnBeforeLaunchingRequest(
+                host, any(), any()
+            )
+        }.returns(false)
+
+        PermissionManager.processPermissionRequest(host, permissions, originalMethod, strategyName)
+
+        verify {
+            strategy.internalOnBeforeLaunchingRequest(host, any(), any())
+            strategy.internalGetRequestLauncher(host)
+        }
+        clearMocks(strategy)
+
+        // Second request
+        val secondPermissions = arrayOf("three", "four")
+        val secondMethod = mockk<Runnable>()
+        setUpPermissions(secondPermissions, emptyArray())
+        every {
+            strategy.internalGetPermissionStatusProvider(host)
+        }.returns(permissionStatusProvider)
+
+        PermissionManager.processPermissionRequest(
+            host,
+            secondPermissions,
+            secondMethod,
+            strategyName
+        )
+
+        verify {
+            secondMethod.run()
+        }
+        verify(exactly = 0) {
+            strategy.internalOnBeforeLaunchingRequest(any(), any(), any())
+            strategy.internalGetRequestLauncher(any())
+        }
+    }
+
     private fun setUpPermissions(permissions: Array<String>, missingPermissions: Array<String>) {
         permissions.forEach {
             every {
