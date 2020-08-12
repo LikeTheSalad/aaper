@@ -78,7 +78,7 @@ object PermissionManager {
     /**
      * This function processes the response of a previously launched permission
      * request. It mostly delegates the actions to the [RequestStrategy] used to make
-     * the request and then it cleans up this instance, if needed.
+     * the request and then it cleans up any trace of such request.
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      * @param requestCode - The request code used to launch the permission request.
