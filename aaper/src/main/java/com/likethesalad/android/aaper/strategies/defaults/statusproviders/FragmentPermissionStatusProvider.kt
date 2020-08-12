@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 
 /**
- * Created by César Muñoz on 10/08/20.
+ * This class queries a permission granted status using Fragment as host.
  */
 class FragmentPermissionStatusProvider : PermissionStatusProvider<Fragment>() {
 

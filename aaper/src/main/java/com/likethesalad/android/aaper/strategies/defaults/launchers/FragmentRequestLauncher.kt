@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.base.RequestLauncher
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This class launches a request permission using a Fragment as host.
  */
 class FragmentRequestLauncher : RequestLauncher<Fragment>() {
 

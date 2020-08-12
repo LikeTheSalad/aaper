@@ -5,7 +5,7 @@ import androidx.core.app.ActivityCompat
 import com.likethesalad.android.aaper.api.base.RequestLauncher
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This class launches a request permission using an Activity as host.
  */
 class ActivityRequestLauncher : RequestLauncher<Activity>() {
 

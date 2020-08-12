@@ -11,7 +11,9 @@ import com.likethesalad.android.aaper.strategies.defaults.statusproviders.Activi
 import com.likethesalad.android.aaper.strategies.defaults.statusproviders.FragmentPermissionStatusProvider
 
 /**
- * Created by César Muñoz on 10/08/20.
+ * Base class to create a strategy for both Activities and Fragments as supported hosts,
+ * meaning that all of the annotated functions in either an Activity or a Fragment will be
+ * handled by this Strategy.
  */
 abstract class AllRequestStrategy : RequestStrategy<Any>() {
 

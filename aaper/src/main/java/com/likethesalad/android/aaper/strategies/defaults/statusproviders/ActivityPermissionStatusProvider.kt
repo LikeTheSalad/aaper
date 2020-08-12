@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This class queries a permission granted status using Activity as host.
  */
 class ActivityPermissionStatusProvider : PermissionStatusProvider<Activity>() {
 

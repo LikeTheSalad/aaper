@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.base.bytebuddy.AndroidComponentBaseTransformation
 
 /**
- * Created by César Muñoz on 10/08/20.
+ * ByteBuddy transformation for Activities.
  */
 class FragmentTransformation : AndroidComponentBaseTransformation() {
 
