@@ -126,6 +126,64 @@ class PermissionManagerTest : BaseMockable() {
         }
     }
 
+    @Test
+    fun `Process request with no missing permissions`() {
+        val permissions = arrayOf("one", "two")
+        setUpPermissions(permissions, emptyArray())
+
+        PermissionManager.processPermissionRequest(host, permissions, originalMethod, strategyName)
+
+        verify {
+            originalMethod.run()
+        }
+        verify(exactly = 0) {
+            strategy.internalOnBeforeLaunchingRequest(any(), any(), any())
+            strategy.internalGetRequestLauncher(any())
+        }
+    }
+
+    @Test
+    fun `Ignore request when another request is ongoing`() {
+        val permissions = arrayOf("one", "two")
+        val missingPermissions = arrayOf("one")
+        setUpPermissions(permissions, missingPermissions)
+        every {
+            strategy.internalOnBeforeLaunchingRequest(
+                host, any(), any()
+            )
+        }.returns(false)
+
+        PermissionManager.processPermissionRequest(host, permissions, originalMethod, strategyName)
+
+        verify {
+            strategy.internalOnBeforeLaunchingRequest(host, any(), any())
+            strategy.internalGetRequestLauncher(host)
+        }
+        clearMocks(strategy)
+
+        // Second request
+        val secondPermissions = arrayOf("three", "four")
+        val secondMissingPermissions = arrayOf("three")
+        val secondMethod = mockk<Runnable>()
+        setUpPermissions(secondPermissions, secondMissingPermissions)
+        every {
+            strategy.internalGetPermissionStatusProvider(host)
+        }.returns(permissionStatusProvider)
+
+        PermissionManager.processPermissionRequest(
+            host,
+            secondPermissions,
+            secondMethod,
+            strategyName
+        )
+
+        verify(exactly = 0) {
+            secondMethod.run()
+            strategy.internalOnBeforeLaunchingRequest(any(), any(), any())
+            strategy.internalGetRequestLauncher(any())
+        }
+    }
+
     private fun setUpPermissions(permissions: Array<String>, missingPermissions: Array<String>) {
         permissions.forEach {
             every {
