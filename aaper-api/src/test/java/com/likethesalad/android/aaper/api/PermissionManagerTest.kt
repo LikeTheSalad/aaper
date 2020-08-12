@@ -6,7 +6,9 @@ import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
+import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
 import io.mockk.clearMocks
@@ -18,6 +20,7 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import java.lang.reflect.Field
 
 /**
  * Created by César Muñoz on 10/08/20.
@@ -227,6 +230,102 @@ class PermissionManagerTest : BaseMockable() {
         }
     }
 
+    @Test
+    fun `Do nothing if no current request is ongoing when processing response`() {
+        PermissionManager.processPermissionResponse(host, requestCode, arrayOf("one"))
+
+        verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Do nothing if current request host and provided host are different for response`() {
+        val currentRequest = mockk<CurrentRequest>()
+        val notRequestingHost = mockk<Any>()
+        every { currentRequest.host }.returns(host)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(notRequestingHost, requestCode, arrayOf())
+
+        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Do nothing if current request code is not the same as the one provided for response`() {
+        val currentRequest = mockk<CurrentRequest>()
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, 404, arrayOf())
+
+        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Delegate response handling to currentRequest strategy and clean up, don't call method when response is false`() {
+        val currentRequest = mockk<CurrentRequest>()
+        val requestData = mockk<PermissionsRequest>()
+        val resultDataCaptor = slot<PermissionsResult>()
+        val permissionsRequested = arrayOf("one", "two", "three", "four")
+        val permissionsDenied = arrayOf("one", "three")
+        setUpPermissions(permissionsRequested, permissionsDenied)
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        every { currentRequest.originalMethod }.returns(originalMethod)
+        every { currentRequest.data }.returns(requestData)
+        every { strategy.internalOnPermissionsRequestResults(any(), any()) }.returns(false)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, requestCode, permissionsRequested)
+
+        Truth.assertThat(getCurrentRequestValue()).isNull()
+        verify {
+            strategy.internalOnPermissionsRequestResults(host, capture(resultDataCaptor))
+        }
+        verify(exactly = 0) {
+            originalMethod.run()
+        }
+        val capturedResponse = resultDataCaptor.captured
+        Truth.assertThat(capturedResponse.granted).containsExactly("two", "four")
+        Truth.assertThat(capturedResponse.denied).containsExactly("one", "three")
+        Truth.assertThat(capturedResponse.request).isEqualTo(requestData)
+    }
+
+    @Test
+    fun `Delegate response handling to currentRequest strategy and clean up, do call method when response is true`() {
+        val currentRequest = mockk<CurrentRequest>()
+        val requestData = mockk<PermissionsRequest>()
+        val resultDataCaptor = slot<PermissionsResult>()
+        val permissionsRequested = arrayOf("one", "two", "three", "four")
+        setUpPermissions(permissionsRequested, emptyArray())
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        every { currentRequest.originalMethod }.returns(originalMethod)
+        every { currentRequest.data }.returns(requestData)
+        every { strategy.internalOnPermissionsRequestResults(any(), any()) }.returns(true)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, requestCode, permissionsRequested)
+
+        Truth.assertThat(getCurrentRequestValue()).isNull()
+        verify {
+            strategy.internalOnPermissionsRequestResults(host, capture(resultDataCaptor))
+            originalMethod.run()
+        }
+        val capturedResponse = resultDataCaptor.captured
+        Truth.assertThat(capturedResponse.granted).containsExactlyElementsIn(permissionsRequested)
+        Truth.assertThat(capturedResponse.denied).isEmpty()
+        Truth.assertThat(capturedResponse.request).isEqualTo(requestData)
+    }
+
     private fun setUpPermissions(permissions: Array<String>, missingPermissions: Array<String>) {
         permissions.forEach {
             every {
@@ -240,5 +339,20 @@ class PermissionManagerTest : BaseMockable() {
         val method = PermissionManager::class.java.getDeclaredMethod("cleanUp")
         method.isAccessible = true
         method.invoke(PermissionManager)
+    }
+
+    private fun setCurrentRequestValue(currentRequest: CurrentRequest?) {
+        val field = getCurrentRequestField()
+        field.set(PermissionManager, currentRequest)
+    }
+
+    private fun getCurrentRequestValue(): CurrentRequest? {
+        return getCurrentRequestField().get(PermissionManager) as? CurrentRequest
+    }
+
+    private fun getCurrentRequestField(): Field {
+        return PermissionManager::class.java.getDeclaredField("currentRequest").apply {
+            isAccessible = true
+        }
     }
 }
