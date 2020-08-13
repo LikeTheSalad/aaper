@@ -4,7 +4,6 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "net.bytebuddy:byte-buddy:$byteBuddy_version"
     testImplementation 'junit:junit:4.12'
     testImplementation "com.google.truth:truth:1.0.1"
     testImplementation "io.mockk:mockk:1.10.0"

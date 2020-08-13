@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.transformations
 
 import androidx.fragment.app.Fragment
-import com.likethesalad.android.aaper.api.base.bytebuddy.AndroidComponentBaseTransformation
+import com.likethesalad.android.aaper.transformations.base.AndroidComponentBaseTransformation
 
 /**
  * ByteBuddy transformation for Fragments.

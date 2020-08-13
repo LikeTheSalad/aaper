@@ -1,8 +1,8 @@
-package com.likethesalad.android.aaper.api.base.bytebuddy
+package com.likethesalad.android.aaper.transformations.base
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
-import com.likethesalad.android.aaper.api.base.bytebuddy.interceptors.ReceivesRequestResultInterceptor
-import com.likethesalad.android.aaper.api.base.bytebuddy.interceptors.RequiresPermissionInterceptor
+import com.likethesalad.android.aaper.transformations.base.interceptors.ReceivesRequestResultInterceptor
+import com.likethesalad.android.aaper.transformations.base.interceptors.RequiresPermissionInterceptor
 import net.bytebuddy.build.Plugin
 import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.ClassFileLocator

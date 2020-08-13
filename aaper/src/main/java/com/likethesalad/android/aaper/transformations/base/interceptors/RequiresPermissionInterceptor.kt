@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.api.base.bytebuddy.interceptors
+package com.likethesalad.android.aaper.transformations.base.interceptors
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.api.PermissionManager
