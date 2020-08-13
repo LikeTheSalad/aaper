@@ -22,6 +22,5 @@ class DefaultRequestStrategy : AllRequestStrategy() {
         return data.denied.isEmpty()
     }
 
-    override fun getName(): String =
-        NAME
+    override fun getName(): String = NAME
 }
