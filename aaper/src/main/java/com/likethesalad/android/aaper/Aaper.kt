@@ -8,13 +8,22 @@ import com.likethesalad.android.aaper.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.strategies.DefaultRequestStrategyProvider
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * Aaper entry point.
  */
 object Aaper : RequestStrategyProviderSource {
 
     private lateinit var strategyProvider: RequestStrategyProvider
     private var initialized = false
 
+    /**
+     * Initializes Aaper, this function must be called once only and it must be done
+     * before any permission request. Therefore, a great place to call it is the
+     * "Application.onCreate" function.
+     *
+     * @param strategyProvider - (Optional) If you want to override the default [RequestStrategyProvider]
+     * instance by a custom one, you can pass yours here. Otherwise, the default will be
+     * [DefaultRequestStrategyProvider].
+     */
     @JvmOverloads
     fun init(strategyProvider: RequestStrategyProvider = DefaultRequestStrategyProvider()) {
         if (initialized) {
@@ -32,6 +41,11 @@ object Aaper : RequestStrategyProviderSource {
         }
     }
 
+    /**
+     * Returns the instance of [RequestStrategyProvider] being used, which is the one set on
+     * the [init] function. If no custom instance was passed, then this function will return a
+     * [DefaultRequestStrategyProvider] one.
+     */
     override fun getRequestStrategyProvider(): RequestStrategyProvider {
         return strategyProvider
     }
