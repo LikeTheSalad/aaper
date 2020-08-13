@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.api
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.api.base.LaunchMetadata
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.api.base.RequestStrategy
@@ -42,8 +43,9 @@ class PermissionManagerTest : BaseMockable() {
     @MockK
     lateinit var host: Any
 
+    @MockK
+    lateinit var launchMetadata: LaunchMetadata
 
-    private val requestCode = 1202
     private val strategyName = "someStrategyName"
 
     companion object {
@@ -69,7 +71,9 @@ class PermissionManagerTest : BaseMockable() {
             strategy.internalGetPermissionStatusProvider(host)
         }.returns(permissionStatusProvider)
         every { strategy.internalGetRequestLauncher(host) }.returns(requestLauncher)
-        every { strategy.getRequestCode() }.returns(requestCode)
+        every { strategy.internalGetLaunchMetadata(host) }.returns(launchMetadata)
+        every { launchMetadata.isEqualTo(launchMetadata) }.returns(true)
+        every { launchMetadata.isEqualTo(null) }.returns(false)
     }
 
     @Test
@@ -87,7 +91,7 @@ class PermissionManagerTest : BaseMockable() {
             requestLauncher.internalLaunchPermissionsRequest(
                 host,
                 missingPermissions.toList(),
-                requestCode
+                launchMetadata
             )
         }
     }
@@ -114,7 +118,7 @@ class PermissionManagerTest : BaseMockable() {
             requestLauncher.internalLaunchPermissionsRequest(
                 host,
                 missingPermissions.toList(),
-                requestCode
+                launchMetadata
             )
         }
 
@@ -124,7 +128,7 @@ class PermissionManagerTest : BaseMockable() {
             requestLauncher.internalLaunchPermissionsRequest(
                 host,
                 missingPermissions.toList(),
-                requestCode
+                launchMetadata
             )
         }
     }
@@ -232,7 +236,7 @@ class PermissionManagerTest : BaseMockable() {
 
     @Test
     fun `Do nothing if no current request is ongoing when processing response`() {
-        PermissionManager.processPermissionResponse(host, requestCode, arrayOf("one"))
+        PermissionManager.processPermissionResponse(host, arrayOf("one"), launchMetadata)
 
         verify(exactly = 0) {
             strategy.internalOnPermissionsRequestResults(any(), any())
@@ -246,7 +250,7 @@ class PermissionManagerTest : BaseMockable() {
         every { currentRequest.host }.returns(host)
         setCurrentRequestValue(currentRequest)
 
-        PermissionManager.processPermissionResponse(notRequestingHost, requestCode, arrayOf())
+        PermissionManager.processPermissionResponse(notRequestingHost, arrayOf(), launchMetadata)
 
         Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
@@ -255,16 +259,67 @@ class PermissionManagerTest : BaseMockable() {
     }
 
     @Test
-    fun `Do nothing if current request code is not the same as the one provided for response`() {
+    fun `Do nothing if current request metadata is not the same as the one provided for response`() {
+        val currentRequest = mockk<CurrentRequest>()
+        val responseMetadata = mockk<LaunchMetadata>()
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        every { launchMetadata.isEqualTo(responseMetadata) }.returns(false)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, arrayOf(), responseMetadata)
+
+        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Do nothing if current request metadata is null and response is not`() {
+        val currentRequest = mockk<CurrentRequest>()
+        val responseMetadata = mockk<LaunchMetadata>()
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        every { strategy.internalGetLaunchMetadata(host) }.returns(null)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, arrayOf(), responseMetadata)
+
+        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Do nothing if current request metadata is not null and response is`() {
         val currentRequest = mockk<CurrentRequest>()
         every { currentRequest.host }.returns(host)
         every { currentRequest.strategy }.returns(strategy)
         setCurrentRequestValue(currentRequest)
 
-        PermissionManager.processPermissionResponse(host, 404, arrayOf())
+        PermissionManager.processPermissionResponse(host, arrayOf(), null)
 
         Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
+            strategy.internalOnPermissionsRequestResults(any(), any())
+        }
+    }
+
+    @Test
+    fun `Continue with response process if both request and response metadatas are null`() {
+        val currentRequest = mockk<CurrentRequest>()
+        every { currentRequest.host }.returns(host)
+        every { currentRequest.strategy }.returns(strategy)
+        every { currentRequest.data }.returns(mockk())
+        every { strategy.internalGetLaunchMetadata(host) }.returns(null)
+        every { strategy.internalOnPermissionsRequestResults(any(), any()) }.returns(false)
+        setCurrentRequestValue(currentRequest)
+
+        PermissionManager.processPermissionResponse(host, arrayOf(), null)
+
+        verify {
             strategy.internalOnPermissionsRequestResults(any(), any())
         }
     }
@@ -284,7 +339,7 @@ class PermissionManagerTest : BaseMockable() {
         every { strategy.internalOnPermissionsRequestResults(any(), any()) }.returns(false)
         setCurrentRequestValue(currentRequest)
 
-        PermissionManager.processPermissionResponse(host, requestCode, permissionsRequested)
+        PermissionManager.processPermissionResponse(host, permissionsRequested, launchMetadata)
 
         Truth.assertThat(getCurrentRequestValue()).isNull()
         verify {
@@ -313,7 +368,7 @@ class PermissionManagerTest : BaseMockable() {
         every { strategy.internalOnPermissionsRequestResults(any(), any()) }.returns(true)
         setCurrentRequestValue(currentRequest)
 
-        PermissionManager.processPermissionResponse(host, requestCode, permissionsRequested)
+        PermissionManager.processPermissionResponse(host, permissionsRequested, launchMetadata)
 
         Truth.assertThat(getCurrentRequestValue()).isNull()
         verify {

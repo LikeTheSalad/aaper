@@ -94,7 +94,7 @@ object PermissionManager {
         if (host != request.host) {
             return
         }
-        if (launchMetadata?.isEqualTo(request.strategy.internalGetLaunchMetadata(host)) != true) {
+        if (!areMetadatasEqual(launchMetadata, request.strategy.internalGetLaunchMetadata(host))) {
             return
         }
 
@@ -112,6 +112,17 @@ object PermissionManager {
         } finally {
             cleanUp()
         }
+    }
+
+    private fun areMetadatasEqual(
+        responseProvided: LaunchMetadata?,
+        requestProvided: LaunchMetadata?
+    ): Boolean {
+        if (requestProvided == null && responseProvided == null) {
+            return true
+        }
+
+        return requestProvided?.isEqualTo(responseProvided) == true
     }
 
     private fun delegatePermissionResultHandling(
