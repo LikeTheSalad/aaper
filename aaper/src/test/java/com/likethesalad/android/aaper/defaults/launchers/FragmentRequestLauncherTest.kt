@@ -9,24 +9,25 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.powermock.api.mockito.PowerMockito
+import org.powermock.core.classloader.annotations.PrepareForTest
+import org.powermock.modules.junit4.PowerMockRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(PowerMockRunner::class)
+@PrepareForTest(Fragment::class)
 class FragmentRequestLauncherTest {
 
-    @Mock
-    lateinit var host: Fragment
-
     private val requestCode = 12345
+    private lateinit var host: Fragment
     private lateinit var fragmentRequestLauncher: FragmentRequestLauncher
 
     @Before
     fun setUp() {
+        host = PowerMockito.mock(Fragment::class.java)
         fragmentRequestLauncher = FragmentRequestLauncher()
     }
 
