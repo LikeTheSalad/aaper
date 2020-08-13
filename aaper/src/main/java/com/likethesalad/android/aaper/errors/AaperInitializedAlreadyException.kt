@@ -1,9 +1,10 @@
 package com.likethesalad.android.aaper.errors
 
+import com.likethesalad.android.aaper.Aaper
 import com.likethesalad.android.aaper.api.errors.AaperException
 
 /**
- * Created by César Muñoz on 03/08/20.
+ * This exception is thrown whenever [Aaper.init] is called more than once.
  */
 class AaperInitializedAlreadyException
     : AaperException(

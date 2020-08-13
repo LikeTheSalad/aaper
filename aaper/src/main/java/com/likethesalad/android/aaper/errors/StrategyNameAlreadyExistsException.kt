@@ -1,9 +1,11 @@
 package com.likethesalad.android.aaper.errors
 
 import com.likethesalad.android.aaper.api.errors.AaperException
+import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 
 /**
- * Created by César Muñoz on 29/07/20.
+ * This exception is thrown whenever there's an attempt to register a new Strategy in
+ * [DefaultRequestStrategyProvider] which name is already registered.
  */
 class StrategyNameAlreadyExistsException(strategyName: String) :
     AaperException(

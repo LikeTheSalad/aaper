@@ -5,7 +5,8 @@ import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
 
 /**
- * Created by César Muñoz on 13/08/20.
+ * Base [RequestStrategy] for common Android component requests in which a numeric code
+ * must be provided as identifier of the request.
  */
 abstract class RequestWithCodeMetadataStrategy<T> : RequestStrategy<T>() {
 

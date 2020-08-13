@@ -5,7 +5,8 @@ import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
 
 /**
- * Created by César Muñoz on 13/08/20.
+ * Base [RequestLauncher] for common Android component requests in which a numeric code
+ * must be provided as identifier of the request.
  */
 abstract class RequestWithCodeLauncher<T> : RequestLauncher<T>() {
 
@@ -18,6 +19,11 @@ abstract class RequestWithCodeLauncher<T> : RequestLauncher<T>() {
         launchPermissionsRequest(host, permissions, requestCode)
     }
 
+    /**
+     * @param host - The class that contains the original method, e.g. Activity or Fragment.
+     * @param permissions - The permissions being requested.
+     * @param requestCode - The request code needed to launch the request.
+     */
     abstract fun launchPermissionsRequest(
         host: T,
         permissions: List<String>,

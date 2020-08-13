@@ -3,7 +3,8 @@ package com.likethesalad.android.aaper.data
 import com.likethesalad.android.aaper.api.base.LaunchMetadata
 
 /**
- * Created by César Muñoz on 13/08/20.
+ * This is the [LaunchMetadata] used for common android permissions requests in which a code
+ * must be provided as an identifier of the request.
  */
 class RequestCodeLaunchMetadata(val code: Int) : LaunchMetadata {
 
