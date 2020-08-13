@@ -3,7 +3,6 @@ package com.likethesalad.android.aaper.strategies.base
 import android.app.Activity
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.strategies.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.strategies.defaults.statusproviders.ActivityPermissionStatusProvider
 
@@ -14,7 +13,7 @@ import com.likethesalad.android.aaper.strategies.defaults.statusproviders.Activi
  * this will cause the app to crash. In order to create a Strategy that works for both, Activities
  * and Fragments, you must extend from [AllRequestStrategy] instead.
  */
-abstract class ActivityRequestStrategy : RequestStrategy<Activity>() {
+abstract class ActivityRequestStrategy : RequestWithCodeMetadataStrategy<Activity>() {
 
     override fun getRequestLauncher(host: Activity): RequestLauncher<Activity> {
         return ActivityRequestLauncher()

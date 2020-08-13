@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.api
 
+import com.likethesalad.android.aaper.api.base.LaunchMetadata
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
@@ -81,19 +82,19 @@ object PermissionManager {
      * the request and then it cleans up any trace of such request.
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
-     * @param requestCode - The request code used to launch the permission request.
      * @param permissionsRequested - The array of permissions that the original method requires.
+     * @param launchMetadata - The request launch metadata used to launch the permission request.
      */
     fun processPermissionResponse(
         host: Any,
-        requestCode: Int,
-        permissionsRequested: Array<out String>
+        permissionsRequested: Array<out String>,
+        launchMetadata: LaunchMetadata?
     ) {
         val request = currentRequest ?: return
         if (host != request.host) {
             return
         }
-        if (requestCode != request.strategy.getRequestCode()) {
+        if (launchMetadata?.isEqualTo(request.strategy.internalGetLaunchMetadata(host)) != true) {
             return
         }
 
@@ -186,7 +187,7 @@ object PermissionManager {
             .internalLaunchPermissionsRequest(
                 host,
                 data.missingPermissions,
-                strategy.getRequestCode()
+                strategy.internalGetLaunchMetadata(host)
             )
     }
 

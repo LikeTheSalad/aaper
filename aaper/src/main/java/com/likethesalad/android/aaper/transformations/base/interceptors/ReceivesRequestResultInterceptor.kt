@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.transformations.base.interceptors
 
 import com.likethesalad.android.aaper.api.PermissionManager
+import com.likethesalad.android.aaper.launchmetadata.RequestCodeLaunchMetadata
 import net.bytebuddy.implementation.bind.annotation.AllArguments
 import net.bytebuddy.implementation.bind.annotation.SuperCall
 import net.bytebuddy.implementation.bind.annotation.This
@@ -21,8 +22,8 @@ object ReceivesRequestResultInterceptor {
     ) {
         PermissionManager.processPermissionResponse(
             host,
-            arguments[0] as Int,
-            arguments[1] as Array<out String>
+            arguments[1] as Array<out String>,
+            RequestCodeLaunchMetadata(arguments[0] as Int)
         )
         originalMethodCall.run()
     }

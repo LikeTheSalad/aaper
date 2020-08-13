@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.strategies.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.strategies.defaults.launchers.FragmentRequestLauncher
 import com.likethesalad.android.aaper.strategies.defaults.statusproviders.ActivityPermissionStatusProvider
@@ -15,7 +14,7 @@ import com.likethesalad.android.aaper.strategies.defaults.statusproviders.Fragme
  * meaning that all of the annotated functions in either an Activity or a Fragment will be
  * handled by this Strategy.
  */
-abstract class AllRequestStrategy : RequestStrategy<Any>() {
+abstract class AllRequestStrategy : RequestWithCodeMetadataStrategy<Any>() {
 
     @Suppress("UNCHECKED_CAST")
     override fun getRequestLauncher(host: Any): RequestLauncher<Any> {

@@ -9,15 +9,19 @@ abstract class RequestLauncher<T> {
     internal fun internalLaunchPermissionsRequest(
         host: Any,
         permissions: List<String>,
-        requestCode: Int
+        launchMetadata: LaunchMetadata?
     ) {
-        launchPermissionsRequest(host as T, permissions, requestCode)
+        launchPermissionsRequest(host as T, permissions, launchMetadata)
     }
 
     /**
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      * @param permissions - The permissions being requested.
-     * @param requestCode - The request code.
+     * @param launchMetadata - The metadata needed, if any, to launch the request.
      */
-    abstract fun launchPermissionsRequest(host: T, permissions: List<String>, requestCode: Int)
+    abstract fun launchPermissionsRequest(
+        host: T,
+        permissions: List<String>,
+        launchMetadata: LaunchMetadata?
+    )
 }

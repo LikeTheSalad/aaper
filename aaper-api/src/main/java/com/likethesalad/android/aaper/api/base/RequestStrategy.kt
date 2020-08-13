@@ -10,10 +10,6 @@ import com.likethesalad.android.aaper.internal.utils.RequestRunner
  */
 abstract class RequestStrategy<T> {
 
-    companion object {
-        const val DEFAULT_REQUEST_CODE = 1202
-    }
-
     @Suppress("UNCHECKED_CAST")
     internal fun internalOnBeforeLaunchingRequest(
         host: Any,
@@ -41,14 +37,9 @@ abstract class RequestStrategy<T> {
         return getRequestLauncher(host as T)
     }
 
-    /**
-     * This getter is called before launching the request and it must provide
-     * the request code that will be used for it.
-     *
-     * @return - The permission request code.
-     */
-    open fun getRequestCode(): Int {
-        return DEFAULT_REQUEST_CODE
+    @Suppress("UNCHECKED_CAST")
+    fun internalGetLaunchMetadata(host: Any): LaunchMetadata? {
+        return getLaunchMetadata(host as T)
     }
 
     /**
@@ -111,4 +102,12 @@ abstract class RequestStrategy<T> {
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      */
     abstract fun getPermissionStatusProvider(host: T): PermissionStatusProvider<T>
+
+    /**
+     * This getter is called before launching the request and it must provide
+     * the metadata needed, if any, to launch the request. For example, a request code number.
+     *
+     * @return - The metadata needed, if any, to launch the request.
+     */
+    abstract fun getLaunchMetadata(host: T): LaunchMetadata?
 }
