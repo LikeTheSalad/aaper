@@ -42,7 +42,7 @@ dependencies {
 
 androidBuddyLibrary {
     pluginNames = [
-            "com.likethesalad.android.aaper.transformations.ActivityTransformation",
-            "com.likethesalad.android.aaper.transformations.FragmentTransformation"
+            "com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation",
+            "com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation"
     ]
 }

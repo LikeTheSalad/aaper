@@ -4,8 +4,8 @@ import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
-import com.likethesalad.android.aaper.strategies.DefaultRequestStrategy
-import com.likethesalad.android.aaper.strategies.DefaultRequestStrategyProvider
+import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
+import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 
 /**
  * Aaper entry point.
