@@ -10,7 +10,7 @@ import com.likethesalad.android.aaper.defaults.statusproviders.FragmentPermissio
 /**
  * Base class to create a strategy for Fragments-only as host, meaning that only the annotated
  * functions on Fragments can be handled by this Strategy. If for example, there's an attempt
- * to use this strategy to handle annotated functions on a non-Fragment class, e.g. An Activity then
+ * to use this strategy to handle annotated functions on a non-Fragment class, e.g. An Activity, then
  * this will cause the app to crash. In order to create a Strategy that works for both, Activities
  * and Fragments, you must extend from [AllRequestStrategy] instead.
  */
