@@ -7,7 +7,7 @@ import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
  * This exception is thrown whenever there's an attempt to register a new Strategy in
  * [DefaultRequestStrategyProvider] which name is already registered.
  */
-class StrategyNameAlreadyExistsException(strategyName: String) :
+class StrategyNameAlreadyExistsException(val strategyName: String) :
     AaperException(
         "There is already a request strategy registered with the name $strategyName",
         null

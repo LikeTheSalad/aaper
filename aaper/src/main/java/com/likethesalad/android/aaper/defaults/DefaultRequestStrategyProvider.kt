@@ -3,8 +3,8 @@ package com.likethesalad.android.aaper.defaults
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
-import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
+import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
 
 /**
  * Default strategy provider, it contains only the [DefaultRequestStrategy] by default
@@ -31,12 +31,18 @@ class DefaultRequestStrategyProvider : RequestStrategyProvider() {
     }
 
     /**
-     * Registers a new Strategy to make it available for the [EnsurePermissions] annotation.
+     * Registers new Strategy/ies to make it available for the [EnsurePermissions] annotation.
      *
-     * @param strategy - The new Strategy, its name must be different from any other
+     * @param strategies - The new Strategy/ies, their name must be different from any other
      * Strategy already registered.
      */
-    fun register(strategy: RequestStrategy<out Any>) {
+    fun register(vararg strategies: RequestStrategy<out Any>) {
+        strategies.forEach {
+            registerSingle(it)
+        }
+    }
+
+    private fun registerSingle(strategy: RequestStrategy<out Any>) {
         val name = strategy.getName()
         if (strategies.containsKey(name)) {
             throw StrategyNameAlreadyExistsException(name)
