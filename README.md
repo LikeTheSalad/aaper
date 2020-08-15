@@ -153,7 +153,7 @@ strategyProvider.register(FinishActivityOnDeniedStrategy())
 strategyProvider.setDefaultStrategyName("FinishActivityOnDenied") // The name that we return in our custom strategy's `getName()` method.
 ```
 
-After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to the `EnsurePermissions` annotation in order to use this custom one, as it will be the default one.
+After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to the `EnsurePermissions` annotation in order to use this custom strategy, as it will be the default one.
 
 License
 ---
