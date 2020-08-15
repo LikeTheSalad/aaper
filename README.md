@@ -40,6 +40,7 @@ Just by adding the `EnsurePermissions` annotation to `takePhoto()`, what will ha
 Changing the default behavior
 ---
 Aaper's permission requests behavior is fully customizable, you can define what to do before and after a permission request is executed, and even how the request is executed, by creating your own `RequestStrategy` class. The way Aaper works is by delegating the request actions to a `RequestStrategy` instance, you can tell Aaper which strategy to use by:
+
 - Specifying the strategy name on the @EnsurePermissions annotation.
 - Defining your own `RequestStrategy` as default.
 
