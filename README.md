@@ -138,7 +138,7 @@ This can be achieved by passing our strategy's name into the `EnsurePermissions`
 ```kotlin
 @EnsurePermissions(
     permissions = [(PERMISSION NAMES)],
-    strategyName = "FinishActivityOnDenied"
+    strategyName = "FinishActivityOnDenied" // The name that we return in our custom strategy's `getName()` method.
 )
 ```
 
@@ -149,7 +149,7 @@ We can set our RequestStrategy as default for all the annotated methods by doing
 // Application.onCreate
 // ...
 strategyProvider.register(FinishActivityOnDeniedStrategy())
-strategyProvider.setDefaultStrategyName("FinishActivityOnDenied")
+strategyProvider.setDefaultStrategyName("FinishActivityOnDenied") // The name that we return in our custom strategy's `getName()` method.
 ```
 
 After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to the `EnsurePermissions` annotation in order to use this custom one, as it will be the default one.
