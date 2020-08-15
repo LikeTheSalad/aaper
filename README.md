@@ -101,7 +101,7 @@ class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
     }
 
     override fun getName(): String {
-        // We can return anything here, as long as there is no other Strategy with the same name.
+        // We can return anything here, as long as there is no other RequestStrategy with the same name.
         return "FinishActivityOnDenied"
     }
 }
@@ -128,7 +128,8 @@ class MyApp : Application() {
 
 We can register as many Strategies as we like, as long as they all have unique names. After registering our new `RequestStrategy`, we can either:
 
-#### Use it on our annotation only.** This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
+#### Use it on our annotation only
+This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
 
     ```kotlin
     @EnsurePermissions(
@@ -136,7 +137,8 @@ We can register as many Strategies as we like, as long as they all have unique n
         strategyName = "FinishActivityOnDenied"
     )
     ```
-#### Or, Set it as the `default` strategy** for all the annotated methods by doing the following after registering our custom Strategy:
+#### Or, Set it as the `default` strategy
+We can set our RequestStrategy as default for all the annotated methods by doing the following after registering our custom Strategy:
 
     ```kotlin
     // ...
