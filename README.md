@@ -112,6 +112,8 @@ As we can see in `onPermissionsRequestResults`, we check the `denied` permission
 If the `denied` permissions list is empty, it means that all of the requested permissions were approved, therefore our Strategy will treat the request process as successful and will return `true` in order to proceed to call the annotated method.
 
 ### Using our custom Strategy
+
+#### Registering it
 In order to use our new `FinishActivityOnDeniedStrategy` request strategy, we must first register it right after Aaper's initialization:
 
 
