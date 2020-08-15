@@ -72,6 +72,7 @@ There are three types of `RequestStrategy` base classes that we can choose from 
 - `AllRequestStrategy` -  Supports both Activities and Fragment classes' EnsurePermissions-annotated methods.
 
 
+
     All three have the same structure and same base methods, the main difference from an implementation point of view, would be the type of `host` provided in its base functions, for example in the method `onPermissionsRequestResults` we see that our host is of type `Activity`, because we extend from `ActivityRequestStrategy`, whereas if we extend from `FragmentRequestStrategy`, the host will be a `Fragment`. For `AllRequestStrategy`, the host is `Any` or `Object` and you'd have to check its type manually in order to verify whether the current request is for an Activity or a Fragment.
 
 In this example, we want to close an Activity if at least one requested permission is denied, therefore `ActivityRequestStrategy` seems to suit better for this case.
