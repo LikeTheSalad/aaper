@@ -11,5 +11,8 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Aaper.init()
+//        val strategyProvider = Aaper.getRequestStrategyProvider() as DefaultRequestStrategyProvider
+//        strategyProvider.register(FinishActivityOnDeniedStrategy())
+//        strategyProvider.setDefaultStrategyName("FinishActivityOnDenied")
     }
 }

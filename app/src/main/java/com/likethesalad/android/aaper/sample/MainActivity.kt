@@ -13,12 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         txt.setOnClickListener {
-            takePicture()
+            takePhoto()
         }
     }
 
     @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
-    fun takePicture() {
+    private fun takePhoto() {
         Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
     }
 }
