@@ -72,8 +72,8 @@ There are three types of `RequestStrategy` base classes that we can choose from 
 - `AllRequestStrategy` -  Supports both Activities and Fragment classes' EnsurePermissions-annotated methods.
 
 
-
     All three have the same structure and same base methods, the main difference from an implementation point of view, would be the type of `host` provided in its base functions, for example in the method `onPermissionsRequestResults` we see that our host is of type `Activity`, because we extend from `ActivityRequestStrategy`, whereas if we extend from `FragmentRequestStrategy`, the host will be a `Fragment`. For `AllRequestStrategy`, the host is `Any` or `Object` and you'd have to check its type manually in order to verify whether the current request is for an Activity or a Fragment.
+
 
 In this example, we want to close an Activity if at least one requested permission is denied, therefore `ActivityRequestStrategy` seems to suit better for this case.
 
@@ -128,14 +128,16 @@ class MyApp : Application() {
 
 We can register as many Strategies as we like, as long as they all have unique names. After registering our new `RequestStrategy`, we can either:
 
-- **Use it on our annotation only.** This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
+#### Use it on our annotation only.** This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
+
     ```kotlin
     @EnsurePermissions(
         permissions = [(PERMISSION NAMES)],
         strategyName = "FinishActivityOnDenied"
     )
     ```
-- **Or, Set it as the `default` strategy** for all the annotated methods by doing the following after registering our custom Strategy:
+#### Or, Set it as the `default` strategy** for all the annotated methods by doing the following after registering our custom Strategy:
+
     ```kotlin
     // ...
     strategyProvider.register(FinishActivityOnDeniedStrategy())
