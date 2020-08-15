@@ -140,6 +140,7 @@ This can be achieved by passing our strategy's name into the `EnsurePermissions`
     permissions = [(PERMISSION NAMES)],
     strategyName = "FinishActivityOnDenied" // The name that we return in our custom strategy's `getName()` method.
 )
+fun methodThatNeedsThePermissions() {...}
 ```
 
 #### Or, Set it as the `default` strategy
