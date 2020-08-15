@@ -114,6 +114,7 @@ If the `denied` permissions list is empty, it means that all of the requested pe
 ### Using our custom Strategy
 In order to use our new `FinishActivityOnDeniedStrategy` request strategy, we must first register it right after Aaper's initialization:
 
+
 ```kotlin
 class MyApp : Application() {
 
@@ -131,12 +132,14 @@ We can register as many Strategies as we like, as long as they all have unique n
 #### Use it on our annotation only
 This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
 
-    ```kotlin
-    @EnsurePermissions(
-        permissions = [(PERMISSION NAMES)],
-        strategyName = "FinishActivityOnDenied"
-    )
-    ```
+
+```kotlin
+@EnsurePermissions(
+    permissions = [(PERMISSION NAMES)],
+    strategyName = "FinishActivityOnDenied"
+)
+```
+
 #### Or, Set it as the `default` strategy
 We can set our RequestStrategy as default for all the annotated methods by doing the following after registering our custom Strategy:
 
