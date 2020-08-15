@@ -131,7 +131,7 @@ class MyApp : Application() {
 
 We can register as many Strategies as we like, as long as they all have unique names. After registering our new `RequestStrategy`, we can either:
 
-#### Use it on our annotation only
+#### Use it per annotation param only
 This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
 
 
@@ -154,6 +154,60 @@ strategyProvider.setDefaultStrategyName("FinishActivityOnDenied") // The name th
 ```
 
 After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to the `EnsurePermissions` annotation in order to use this custom strategy, as it will be the default one.
+
+### Changing pre-request behavior
+Sometimes we want to do something right before launching our permissions request, such as displaying an information message that explains the users why our app needs the permissions that it is about to request.
+
+In order to make our custom `RequestStrategy` able to handle those cases, we can override the method `onBeforeLaunchingRequest`, which is called right before launching the System's permissions request dialog. Following our previous example, if we override such method, our custom strategy will look like the following:
+
+```kotlin
+class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
+
+    // Other methods...
+
+    override fun onBeforeLaunchingRequest(
+        host: Activity,
+        data: PermissionsRequest,
+        request: RequestRunner
+    ): Boolean {
+        return super.onBeforeLaunchingRequest(host, data, request)
+    }
+}
+```
+
+The `onBeforeLaunchingRequest` method returns a `boolean` which by default is `FALSE`.
+
+- When `onBeforeLaunchingRequest` returns FALSE, it allows Aaper to proceed to launch the System's permissions request dialog.
+- When `onBeforeLaunchingRequest` returns TRUE, Aaper won't launch the System's permission request dialog, and rather **it'll have to be run manually** by the `RequestStrategy` at some point, this is achieved by calling the `RequestRunner.run()` method of the `request` parameter passed to `onBeforeLaunchingRequest`.
+
+The `onBeforeLaunchingRequest` provides us with three parameters, host, data (contains the permissions requested for the annotated method) and, the most important one, the `RequestRunner`.
+
+The `RequestRunner` is a runnable object that, when is run, it launches the System's permission request dialog. This method should only be called if the `onBeforeLaunchingRequest` method returns `TRUE`, which means that the Strategy will do some operation prior to the permission request. When the pre-request process is done and the `RequestStrategy` wants to proceed launching the System's permission dialog, it then must call `RequestRunner.run()`.
+
+#### Example
+In this pretty simple example, we use a dialog with a single button, if the user clicks on it, then we launch the permissions request, otherwise we don't.
+
+```kotlin
+// My custom RequestStrategy
+
+// ...
+override fun onBeforeLaunchingRequest(
+        host: Activity,
+        data: PermissionsRequest,
+        request: RequestRunner
+    ): Boolean {
+        val infoDialog = AlertDialog.Builder(host).setPositiveButton("CONTINUE") { _, _ ->
+            // When the user has read the information and wants to continue.
+            request.run() // Execute the runnable to launch the System's permission dialog.
+        }.setTitle("We need these permissions")
+            .setMessage("Please approve the permissions, because it's important")
+            .create()
+
+        infoDialog.show()
+
+        return true // This is so that Aaper doesn't launch the permissions request as we're going to launch them manually.
+    }
+```
 
 License
 ---
