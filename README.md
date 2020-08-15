@@ -66,6 +66,7 @@ class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
 ```
 
 There are three types of `RequestStrategy` base classes that we can choose from when creating our custom `RequestStrategy`, those are:
+
 - `ActivityRequestStrategy` - Only supports EnsurePermissions-annotated methods inside Activities.
 - `FragmentRequestStrategy` - Only supports EnsurePermissions-annotated methods inside Fragments.
 - `AllRequestStrategy` -  Supports both Activities and Fragment classes' EnsurePermissions-annotated methods.
@@ -76,6 +77,7 @@ There are three types of `RequestStrategy` base classes that we can choose from 
 In this example, we want to close an Activity if at least one requested permission is denied, therefore `ActivityRequestStrategy` seems to suit better for this case.
 
 We must provide for every custom `RequestStrategy` 2 things, a name (which will serve as an ID for our Strategy) and a boolean as response for `onPermissionsRequestResults` method, depending on what we return there, this is what will happen after a permission request is executed:
+
 - If `onPermissionsRequestResults` retuns TRUE, it means that the request was successful in our Strategy and therefore the EnsurePermissions-annotated method will get executed.
 - If `onPermissionsRequestResults` returns FALSE, it means that the request failed in our Strategy and therefore the EnsurePermissions-annotated method will NOT get executed.
 
@@ -124,6 +126,7 @@ class MyApp : Application() {
 ```
 
 We can register as many Strategies as we like, as long as they all have unique names. After registering our new `RequestStrategy`, we can either:
+
 - **Use it on our annotation only.** This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a method, like so:
     ```kotlin
     @EnsurePermissions(
