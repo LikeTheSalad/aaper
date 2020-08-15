@@ -30,6 +30,7 @@ class MyActivity/MyFragment {
 }
 ```
 Just by adding the `EnsurePermissions` annotation to `takePhoto()`, what will happen (by default) when we run that code and click on the `takePhotoButton` button is:
+
 - Aaper will check if your app has the CAMERA permission already granted.
 - If already granted, Aaper will proceed to run `takePhoto()` right away and it will all end there.
 - If NOT granted, Aaper will NOT run `takePhoto()` right away, and rather will proceed to run the default permission `RequestStrategy` which is to launch the System's permission dialog asking the user to grant the CAMERA permission.
