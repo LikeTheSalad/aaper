@@ -1,8 +1,10 @@
 # Aaper
 
-Annotated Android Permissions takes care of ensuring Android runtime permissions for an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do so without having to write any code nor override any Activity and/or Fragment method related to runtime permissions.
+What it is
+---
+Annotated Android Permissions takes care of ensuring Android runtime permissions for an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do so without having to write any code nor override any Activity and/or Fragment method related to runtime permission requests.
 
-#### Default behavior example
+### Default behavior example
 
 ```kotlin
 // Aaper initialization
@@ -36,6 +38,14 @@ Just by adding the `EnsurePermissions` annotation to `takePhoto()`, what will ha
 - If NOT granted, Aaper will NOT run `takePhoto()` right away, and rather will proceed to run the default permission `RequestStrategy` which is to launch the System's permission dialog asking the user to grant the CAMERA permission.
 - If the user approves it, Aaper will proceed to run `takePhoto()`.
 - If the user denies it, the default behavior is just not running `takePhoto()`.
+
+Aaper's default behavior can be easily changed if you wanted to, you can find more details below under `Changing the default behavior`.
+
+Aaper's usage
+---
+As we could see above in the default behavior example, theres only two things we need to do in order to use Aaper into our Activities or Fragments:
+- Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a great place to do it is in your app's `Application.onCreate` method, as shown in the example above.
+- Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation where you provide a list of permissions that such method needs in order to work properly. Alternatively, you can also pass an optional parameter named `strategyName`, where you can specify the behavior of handling such permissions' request. More info below under `Changing the default behavior`.
 
 Changing the default behavior
 ---
@@ -155,7 +165,7 @@ strategyProvider.setDefaultStrategyName("FinishActivityOnDenied") // The name th
 
 After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to the `EnsurePermissions` annotation in order to use this custom strategy, as it will be the default one.
 
-### Changing pre-request behavior
+### Changing the pre-request behavior
 Sometimes we want to do something right before launching our permissions request, such as displaying an information message that explains the users why our app needs the permissions that it is about to request.
 
 In order to make our custom `RequestStrategy` able to handle those cases, we can override the method `onBeforeLaunchingRequest`, which is called right before launching the System's permissions request dialog. Following our previous example, if we override such method, our custom strategy will look like the following:
@@ -205,13 +215,13 @@ override fun onBeforeLaunchingRequest(
 
         infoDialog.show()
 
-        return true // This is so that Aaper doesn't launch the permissions request as we're going to launch them manually.
+        return true // This is so that Aaper doesn't launch the permissions request as we're going to launch it manually.
     }
 ```
 
-### Advanced configuration
-
-#### Creating a custom RequestStrategyProvider
+Advanced configuration
+---
+### Creating a custom RequestStrategyProvider
 Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them, is through an instance of `RequestStrategyProvider`. By default, when you initialize Aaper like so: `Aaper.init()`, the `RequestStrategyProvider` that Aaper will use in that case, would be `DefaultRequestStrategyProvider`.
 
 The `DefaultRequestStrategyProvider` implementation contains a map of `RequestStrategy` instances to which Aaper can access later on by providing the name of the Strategy it needs, such default provider can let you register your own Strategies and also override the default's Strategy name, as we saw above under `Using our custom Strategy`, so in essence, the `DefaultRequestStrategyProvider` should suffice for most cases.
