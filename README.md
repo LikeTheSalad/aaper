@@ -50,6 +50,8 @@ As we could see above in the default behavior example, theres only two things we
 - Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a great place to do it is in your app's `Application.onCreate` method, as shown in the example above.
 - Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation where you provide a list of permissions that such method needs in order to work properly. Alternatively, you can also pass an optional parameter named `strategyName`, where you can specify the behavior of handling such permissions' request. More info below under `Changing the default behavior`.
 
+    It is very important to bear in mind that, the @EnsurePermissions only works on methods inside either an `Activity` or a` Fragment`, more specifically, a `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment, will be ignored.
+
 Changing the default behavior
 ---
 Aaper's permission requests behavior is fully customizable, you can define what to do before and after a permission request is executed, and even how the request is executed, by creating your own `RequestStrategy` class. The way Aaper works is by delegating the request actions to a `RequestStrategy` instance, you can tell Aaper which strategy to use by:
@@ -127,7 +129,7 @@ If the `denied` permissions list is empty, it means that all of the requested pe
 #### Other configurable aspects of a RequestStrategy
 You can customize other things in your custom `RequestStrategy`, such as the `requestCode` of the permission's request for example, by overriding the `getRequestCode()` method. You can also change the behavior of the pre-request action, for example if you want to display some information before requesting for some permissions, you can do so as well. More info on this, below under `Changing the pre-request behavior`.
 
-Finally, you can even change things such as how to launch a System's permission dialog request, and also how to change the way your Strategy queries the current enabled permissions, by overriding the respective `RequestStrategy` getters. More info on this, below under `Advanced configuration`.
+Finally, you can even change things such as how to launch a System's permission dialog request, and also how to change the way your Strategy queries the current granted permissions of your app, by overriding the respective `RequestStrategy` getters. More info on this, below under `Advanced configuration`.
 
 ### Using our custom Strategy
 
