@@ -220,6 +220,23 @@ override fun onBeforeLaunchingRequest(
     }
 ```
 
+Adding it into your project
+---
+### Prerequisites
+#### AndroidX
+Aaper uses AndroidX tools under the hood, such as `androidx.core.app.ActivityCompat` and `androidx.core.content.ContextCompat` for permissions request related actions, also, **the only type of Fragment** that Aaper supports is `androidx.fragment.app.Fragment`. So you must have AndroidX tools enabled for your project in order to use it.
+
+#### Android Buddy
+Aaper relies on Android Buddy (which uses ByteBuddy[INSERT LINK]) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement Android Buddy into your project before you can use Aaper. You can implement it (I you don't have it already) by following the steps described here: [INSERT LINK].
+
+### Gradle dependency
+In order to add Aaper as one of your project's dependencies, you just have to add the following line into your build.gradle `dependencies` block:
+
+```groovy
+implementation "com.likethesalad.android:aaper:1.0.0"
+// If you have Android Buddy's "stricMode" enabled, you must use `androidBuddyImplementation` instead of `implementation`.
+```
+
 Advanced configuration
 ---
 ### Creating a custom RequestStrategyProvider
