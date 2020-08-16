@@ -127,7 +127,7 @@ If the `denied` permissions list is empty, it means that all of the requested pe
 #### Other configurable aspects of a RequestStrategy
 You can customize other things in your custom `RequestStrategy`, such as the `requestCode` of the permission's request for example, by overriding the `getRequestCode()` method. You can also change the behavior of the pre-request action, for example if you want to display some information before requesting for some permissions, you can do so as well. More info on this, below under `Changing the pre-request behavior`.
 
-Finally, you can even change things such as how to launch a System's permission dialog request, and also how to change the way your Strategy queries the current enabled permissions, by overriding the specific `RequestStrategy` getters. More info on this, below under `Advanced configuration`.
+Finally, you can even change things such as how to launch a System's permission dialog request, and also how to change the way your Strategy queries the current enabled permissions, by overriding the respective `RequestStrategy` getters. More info on this, below under `Advanced configuration`.
 
 ### Using our custom Strategy
 
