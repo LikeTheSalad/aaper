@@ -229,7 +229,7 @@ override fun onBeforeLaunchingRequest(
     }
 ```
 
-Adding it into your project
+Adding Aaper into your project
 ---
 ### Prerequisites
 #### AndroidX
