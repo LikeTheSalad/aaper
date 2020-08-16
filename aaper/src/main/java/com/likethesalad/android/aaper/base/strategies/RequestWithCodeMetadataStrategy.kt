@@ -11,7 +11,7 @@ import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
 abstract class RequestWithCodeMetadataStrategy<T> : RequestStrategy<T>() {
 
     companion object {
-        private const val DEFAULT_REQUEST_CODE = 1202
+        private const val DEFAULT_REQUEST_CODE = 21293
     }
 
     override fun getLaunchMetadata(host: T): LaunchMetadata? {

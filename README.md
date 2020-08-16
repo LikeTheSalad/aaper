@@ -9,6 +9,7 @@ Annotated Android Permissions takes care of ensuring Android runtime permissions
 ```kotlin
 // Aaper initialization
 class MyApplication {
+
     override fun onCreate() {
         super.onCreate()
         Aaper.init()
@@ -19,6 +20,7 @@ class MyApplication {
 // Aaper usage
 
 class MyActivity/MyFragment {
+
     override fun onCreate/onViewCreated(...) {
         takePhotoButton.setOnClickListener {
             takePhoto()
@@ -121,6 +123,11 @@ class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
 As we can see in `onPermissionsRequestResults`, we check the `denied` permissions list we get from `data`, and we verify if it is not empty, which would mean that there are some denied permissions, therefore our Strategy will treat the request process as failed and will return `false` so that the annotated method won't get called, and before that, we call `host.finish()`, in order to close our Activity too.
 
 If the `denied` permissions list is empty, it means that all of the requested permissions were approved, therefore our Strategy will treat the request process as successful and will return `true` in order to proceed to call the annotated method.
+
+#### Other configurable aspects of a RequestStrategy
+You can customize other things in your custom `RequestStrategy`, such as the `requestCode` of the permission's request for example, by overriding the `getRequestCode()` method. You can also change the behavior of the pre-request action, for example if you want to display some information before requesting for the permissions, you can do so as well. More info on this, below under `Changing the pre-request behavior`.
+
+Finally, you can even change things such as how to launch a System's permission dialog request, and also how to change the way your Strategy queries the current enabled permissions by overriding their specific getter. More info on this, below under `Advanced configuration`.
 
 ### Using our custom Strategy
 
@@ -266,6 +273,7 @@ After you've created your own `RequestStrategyProvider`, you can set it into Aap
 
 ```kotlin
 class MyApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
         val myRequestStrategyProvider = MyRequestStrategyProvider()
