@@ -45,7 +45,7 @@ Aaper's permission requests behavior is fully customizable, you can define what 
 - Defining your own `RequestStrategy` as default.
 
 ### Custom Strategy example
-We'll create a custom strategy that will finish an activity in the case that at least one of the permissions requested by Aaper is denied.
+We'll create a custom strategy that will finish the host Activity in the case that at least one of the permissions requested by Aaper is denied.
 
 We'll start by creating our class that extends from `ActivityRequestStrategy`:
 
@@ -77,7 +77,7 @@ There are three types of `RequestStrategy` base classes that we can choose from 
 
 In this example, we want to close an Activity if at least one requested permission is denied, therefore `ActivityRequestStrategy` seems to suit better for this case.
 
-We must provide for every custom `RequestStrategy` 2 things, a name (which will serve as an ID for our Strategy) and a boolean as response for `onPermissionsRequestResults` method, depending on what we return there, this is what will happen after a permission request is executed:
+We must provide for every custom `RequestStrategy` two things, a name (which will serve as an ID for our Strategy) and a boolean as response for `onPermissionsRequestResults` method, depending on what we return there, this is what will happen after a permission request is executed:
 
 - If `onPermissionsRequestResults` retuns TRUE, it means that the request was successful in our Strategy and therefore the EnsurePermissions-annotated method will get executed.
 - If `onPermissionsRequestResults` returns FALSE, it means that the request failed in our Strategy and therefore the EnsurePermissions-annotated method will NOT get executed.
@@ -200,7 +200,7 @@ override fun onBeforeLaunchingRequest(
             // When the user has read the information and wants to continue.
             request.run() // Execute the runnable to launch the System's permission dialog.
         }.setTitle("We need these permissions")
-            .setMessage("Please approve the permissions, because it's important")
+            .setMessage("Pretty please approve the permissions :(")
             .create()
 
         infoDialog.show()
@@ -208,6 +208,45 @@ override fun onBeforeLaunchingRequest(
         return true // This is so that Aaper doesn't launch the permissions request as we're going to launch them manually.
     }
 ```
+
+### Advanced configuration
+
+#### Creating a custom RequestStrategyProvider
+Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them, is through an instance of `RequestStrategyProvider`. By default, when you initialize Aaper like so: `Aaper.init()`, the `RequestStrategyProvider` that Aaper will use in that case, would be `DefaultRequestStrategyProvider`.
+
+The `DefaultRequestStrategyProvider` implementation contains a map of `RequestStrategy` instances to which Aaper can access later on by providing the name of the Strategy it needs, such default provider can also let you override the default's Strategy name, as we saw above under `Using our custom Strategy`, so in essence, the `DefaultRequestStrategyProvider` should suffice for most cases.
+
+Sometimes, when for whatever reason providing instances of custom `RequestStrategy` classes as part of Aaper's initialization might not be possible, or just not good for your App's performance (in the case that there's a lot of custom Strategies). For these cases, you can create your own implementation of `RequestStrategyProvider`, where you'd be able to provide your own `RequestStrategy` instances the way you'd like the most, either by creating them on-demand or just by storing them in memory, or both. Implementing from `RequestStrategyProvider` is pretty straightforward as it only requires you to override two methods:
+
+```kotlin
+class MyRequestStrategyProvider : RequestStrategyProvider() {
+
+    override fun getStrategyForName(host: Any, name: String): RequestStrategy<out Any> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getDefaultStrategy(host: Any): RequestStrategy<out Any> {
+        TODO("Not yet implemented")
+    }
+}
+```
+
+As you can see, both methods are related to providing a `RequestStrategy` instance, one for the default one, and the other for every other case. You can take a look at the javadoc for mor details on the class and its methods: [INSERT LINK].
+
+#### Using you custom RequestStrategyProvider
+After you've created your own `RequestStrategyProvider`, you can set it into Aaper's initialization method like so:
+
+```kotlin
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        val myRequestStrategyProvider = MyRequestStrategyProvider()
+        Aaper.init(myRequestStrategyProvider)
+    }
+}
+```
+
+And that's it, Aaper will now use your custom `RequestStrategyProvider` in order to get all of the Strategies it needs.
 
 License
 ---

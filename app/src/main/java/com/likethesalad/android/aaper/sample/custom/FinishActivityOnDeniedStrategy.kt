@@ -5,7 +5,8 @@ import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.base.strategies.impl.ActivityRequestStrategy
 
 /**
- * Created by César Muñoz on 15/08/20.
+ * Example of a RequestStrategy that closes the host Activity if at least one permission
+ * is denied. Take a look at the README.md for more information.
  */
 class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
 
