@@ -239,7 +239,7 @@ Aaper uses AndroidX tools under the hood, such as `androidx.core.app.ActivityCom
 Aaper relies on Android Buddy (which uses ByteBuddy[INSERT LINK]) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement Android Buddy into your project before you can use Aaper. You can implement it (If you don't have it already) by following the steps described here: [INSERT LINK].
 
 ### Gradle dependency
-In order to add Aaper as one of your project's dependencies, you just have to add the following line into your build.gradle `dependencies` block:
+In order to add Aaper as one of your app's dependencies, you just have to add the following line into your app's build.gradle `dependencies` block:
 
 ```groovy
 implementation "com.likethesalad.android:aaper:1.0.0"
