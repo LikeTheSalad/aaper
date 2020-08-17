@@ -1,5 +1,25 @@
 # Aaper
 
+Table of Contents
+=================
+
+  * [What it is](#what-it-is)
+     * [Default behavior example](#default-behavior-example)
+  * [Aaper's usage](#aapers-usage)
+  * [Changing the default behavior](#changing-the-default-behavior)
+     * [Custom Strategy example](#custom-strategy-example)
+     * [Using our custom Strategy](#using-our-custom-strategy)
+     * [Changing the pre-request behavior](#changing-the-pre-request-behavior)
+  * [Adding Aaper into your project](#adding-aaper-into-your-project)
+     * [Prerequisites](#prerequisites)
+     * [Gradle dependency](#gradle-dependency)
+  * [Advanced configuration](#advanced-configuration)
+     * [Creating a custom RequestStrategyProvider](#creating-a-custom-requeststrategyprovider)
+     * [Overriding permission's status query and request launch](#overriding-permissions-status-query-and-request-launch)
+     * [What else](#what-else)
+  * [License](#license)
+
+
 What it is
 ---
 Annotated Android Permissions takes care of ensuring Android runtime permissions for an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do so without having to write any code nor override any Activity and/or Fragment method related to runtime permission requests.
