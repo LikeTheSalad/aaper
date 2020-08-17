@@ -220,7 +220,7 @@ The `onBeforeLaunchingRequest` method returns a `boolean` which by default is `F
 - When `onBeforeLaunchingRequest` returns FALSE, it allows Aaper to proceed to launch the System's permissions request dialog.
 - When `onBeforeLaunchingRequest` returns TRUE, Aaper won't launch the System's permission request dialog, and rather **it'll have to be run manually** by the `RequestStrategy` at some point, this is achieved by calling the `RequestRunner.run()` method of the `request` parameter passed to `onBeforeLaunchingRequest`.
 
-The `onBeforeLaunchingRequest` provides us with three parameters, host, data (contains the permissions requested for the annotated method) and, the most important one, the `RequestRunner`.
+The `onBeforeLaunchingRequest` method provides us with three parameters, host, data (contains the permissions requested for the annotated method) and, the most important one, the `RequestRunner`.
 
 The `RequestRunner` is a runnable object that, when is run, it launches the System's permission request dialog. This method should only be called if the `onBeforeLaunchingRequest` method returns `TRUE`, which means that the Strategy will do some operation prior to the permission request. When the pre-request process is done and the `RequestStrategy` wants to proceed launching the System's permission dialog, it then must call `RequestRunner.run()`.
 
