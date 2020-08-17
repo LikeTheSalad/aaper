@@ -29,6 +29,7 @@ object PermissionManager {
      *
      * @param source - The source for the [RequestStrategyProvider] instance.
      */
+    @JvmStatic
     fun setStrategyProviderSource(source: RequestStrategyProviderSource) {
         if (strategyProviderSource != null) {
             throw IllegalStateException("There's a source already set")
@@ -49,6 +50,7 @@ object PermissionManager {
      * @param strategyName - The strategy name that will take care of the process for the
      * originalMethod.
      */
+    @JvmStatic
     fun processPermissionRequest(
         host: Any,
         permissions: Array<String>,
@@ -85,6 +87,7 @@ object PermissionManager {
      * @param permissionsRequested - The array of permissions that the original method requires.
      * @param launchMetadata - The request launch metadata used to launch the permission request.
      */
+    @JvmStatic
     fun processPermissionResponse(
         host: Any,
         permissionsRequested: Array<out String>,

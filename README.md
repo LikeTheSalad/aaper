@@ -286,6 +286,16 @@ class MyApp : Application() {
 
 And that's it, Aaper will now use your custom `RequestStrategyProvider` in order to get all of the Strategies it needs.
 
+### Overriding permission's status query and request launch
+There are two methods in every `RequestStrategy` that provide the tools to both query if a permission is granted and also to launch a set of permissions' request, those methods are `getPermissionStatusProvider`, which provides an instance of `PermissionStatusProvider`, and `getRequestLauncher`, which provides an instance of `RequestLauncher`. More info on these classes in the javadoc: [INSERT LINK]
+
+For the `PermissionStatusProvider` class, the defaults for both `Activiy` and `Fragment` is to use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one, the Activity's implementation makes use of `ActivityCompat.requestPermissions`, whereas for Fragment's implementation, the `requestPermissions` method is called straight from the host Fragment itself.
+
+The defaults for both Activity and Framgmet operations should suffice for all cases, though if for whatever reason you'd like to customize these actions, you can just override the aforementioned getters in your custom `RequestStrategy` and provide your own implementaions for these classes.
+
+### What else
+Aaper allows you to override all of the aspects of a `RequestStrategy` so that it can work the way you'd like to, however, by default Aaper can only work with annotated methods inside Activities and Fragments, for the latter, more specifically `androidx.fragment.app.Fragment`. You can add support for other classes yourself if you'd like to, however, you'd have to provide your own local `ByteBuddy` transformations for them, in order to attach the same type of behavior of getting the methods with `EnsurePermissions` annotations and their parameters so that you can pass them to `PermissionManager.processPermissionRequest` for request, and later on calling `PermissionManager.processPermissionResponse` when the request receives a response. If you want to do this, it's highly recommended that you take a look at the javadoc, especially for `PermissionManager`, and also, you should take a look at the default Activity and Fragment transformations which are `com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation` and `com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation` respectively so that you can get an idea of how they are making the connection between the `EnsurePermissions` annotations and the `PermissionManager` object.
+
 License
 ---
     MIT License
