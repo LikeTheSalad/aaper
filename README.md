@@ -65,7 +65,7 @@ Aaper's default behavior can be easily changed if you wanted to, you can find mo
 
 Aaper's usage
 ---
-As we could see above in the default behavior example, theres only two things we need to do in order to use Aaper into our Activities or Fragments:
+As we could see above in the default behavior example, there are only two things we need to do in order to use Aaper into our Activities or Fragments:
 
 - Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a great place to do it is in your app's `Application.onCreate` method, as shown in the example above.
 - Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation where you provide a list of permissions that such method needs in order to work properly. Alternatively, you can also pass an optional parameter named `strategyName`, where you can specify the behavior of handling such permissions' request. More info below under `Changing the default behavior`.
