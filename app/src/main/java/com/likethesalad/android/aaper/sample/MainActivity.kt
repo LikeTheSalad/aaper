@@ -12,13 +12,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        txt.setOnClickListener {
+
+        btn.setOnClickListener {
             takePhoto()
         }
+
+        addFragment()
     }
 
     @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
     private fun takePhoto() {
-        Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun addFragment() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, MyFragment())
+            .commit()
     }
 }
