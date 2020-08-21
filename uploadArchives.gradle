@@ -1,0 +1,96 @@
+apply plugin: "maven-publish"
+apply plugin: "com.jfrog.bintray"
+
+project.group = rootProject.group
+project.version = rootProject.version
+project.description = "Ensure Android runtime permissions using annotations only."
+ext {
+    publicName = "Aaper"
+    url = "https://github.com/LikeTheSalad/aaper"
+    vcsUrl = "https://github.com/LikeTheSalad/aaper.git"
+    issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
+    tags = ['android', 'runtime', 'permissions', 'annotations'.'aaper']
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = project.group
+                version = project.version
+
+                artifact androidJavadocsJar
+                artifact androidSourcesJar
+                from components.release
+
+                pom {
+                    name = project.publicName
+                    description = project.description
+                    url = project.url
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'LikeTheSalad'
+                            name = 'Cesar Munoz'
+                            email = 'likethesalad@gmail.com'
+                        }
+                    }
+                    scm {
+                        url = project.url
+                    }
+                }
+            }
+        }
+    }
+
+    bintray {
+        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        publications = ['maven']
+        pkg {
+            repo = 'public-repo'
+            name = project.name
+            licenses = ['MIT']
+            desc = project.description
+            websiteUrl = project.url
+            issueTrackerUrl = project.issueTrackerUrl
+            vcsUrl = project.vcsUrl
+            labels = project.tags
+            publicDownloadNumbers = true
+            version {
+                name = project.version
+                gpg {
+                    sign = true
+                    passphrase = project.hasProperty('passphrase') ? project.property('passphrase') : System.getenv('PASSPHRASE')
+                }
+            }
+        }
+    }
+
+}
