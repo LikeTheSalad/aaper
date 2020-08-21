@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/aaper/images/download.svg) ](https://bintray.com/likethesalad/public-repo/aaper/_latestVersion)
+
 # Aaper
 
 Table of Contents
