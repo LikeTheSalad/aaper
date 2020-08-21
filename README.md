@@ -255,8 +255,8 @@ Adding Aaper into your project
 #### AndroidX
 Aaper uses AndroidX tools under the hood, such as `androidx.core.app.ActivityCompat` and `androidx.core.content.ContextCompat` for permissions request related actions, also, **the only type of Fragment** that Aaper supports is `androidx.fragment.app.Fragment`. So you must have AndroidX tools enabled for your project in order to use it.
 
-#### AndroidBuddy
-Aaper relies on AndroidBuddy (which uses [Byte Buddy](https://bytebuddy.net/)) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement AndroidBuddy into your project, as **consumer**, before you can use Aaper. You can implement it (If you don't have it already) by following the steps described here: [Adding AndroidBuddy into your project](https://github.com/LikeTheSalad/android-buddy#adding-it-into-your-project).
+#### Android Buddy
+Aaper relies on Android Buddy (which uses [Byte Buddy](https://bytebuddy.net/)) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement Android Buddy into your project, as **consumer**, before you can use Aaper. You can implement it (If you don't have it already) by following the steps described here: [Adding Android Buddy into your project](https://github.com/LikeTheSalad/android-buddy#adding-it-into-your-project).
 
 ### Gradle dependency
 In order to add Aaper as one of your app's dependencies, you just have to add the following line into your app's build.gradle `dependencies` block:
