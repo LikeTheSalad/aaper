@@ -9,31 +9,67 @@ ext {
     url = "https://github.com/LikeTheSalad/aaper"
     vcsUrl = "https://github.com/LikeTheSalad/aaper.git"
     issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
-    tags = ['android', 'runtime', 'permissions', 'annotations'.'aaper']
+    tags = ['android', 'runtime', 'permissions', 'annotations', 'aaper']
 }
 
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all { variant ->
-        if (variant.name == 'release') {
-            owner.classpath += variant.javaCompileProvider.get().classpath
+task androidJavadocs {
+    group "reporting"
+    description "Generates Javadoc."
+}
+
+android.libraryVariants.all { variant ->
+
+    def task = project.tasks.create("generate${variant.name.capitalize()}Javadoc", Javadoc) {
+        title "API Documentation (${project.version})"
+        group "doc"
+        description "Generates Javadoc for $variant.name."
+
+        // Source files from the variant
+        source = variant.sourceSets.collect { it.java.sourceFiles }.inject { m, i -> m + i }
+
+        // To fix issue: Error: Can not create variant 'android-lint' after configuration ': library: debugRuntimeElements' has been resolved
+        doFirst {
+            classpath = project.files(variant.javaCompileProvider.get().classpath.files,
+                    project.android.getBootClasspath())
         }
+
+        if (JavaVersion.current().isJava8Compatible()) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+
+        exclude "**/R"
+        exclude "**/R.**"
+        exclude "**/R\$**"
+        exclude "**/BuildConfig*"
+
+        if (JavaVersion.current().isJava8Compatible()) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+
+        options.windowTitle = "API Documentation (${project.version})"
+        options.memberLevel = JavadocMemberLevel.PROTECTED
+        options.linkSource false
+        options.author = false
+
+        failOnError true
     }
-    exclude '**/R.html', '**/R.*.html', '**/index.html'
-}
 
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    archiveClassifier.set('javadoc')
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from android.sourceSets.main.java.srcDirs
+    task.dependsOn "assemble${variant.name.capitalize()}"
+    androidJavadocs.dependsOn task
 }
 
 afterEvaluate {
+
+    task androidJavadocsJar(type: Jar) {
+        archiveClassifier.set('javadoc')
+        from generateReleaseJavadoc.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar) {
+        archiveClassifier.set('sources')
+        from android.sourceSets.main.java.srcDirs
+    }
+
     publishing {
         publications {
             maven(MavenPublication) {
