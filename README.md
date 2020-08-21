@@ -288,7 +288,7 @@ class MyRequestStrategyProvider : RequestStrategyProvider() {
 }
 ```
 
-As you can see, both methods are related to providing a `RequestStrategy` instance, one for the default one, and the other for every other case. You can take a look at the javadoc for mor details on the class and its methods: [INSERT LINK].
+As you can see, both methods are related to providing a `RequestStrategy` instance, one for the default one, and the other for every other case. You can take a look at the javadoc for mor details on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
 
 #### Using you custom RequestStrategyProvider
 After you've created your own `RequestStrategyProvider`, you can set it into Aaper's initialization method like so:
@@ -307,7 +307,7 @@ class MyApp : Application() {
 And that's it, Aaper will now use your custom `RequestStrategyProvider` in order to get all of the Strategies it needs.
 
 ### Overriding permission's status query and request launch
-There are two methods in every `RequestStrategy` that provide the tools to both query if a permission is granted and also to launch a set of permissions' request, those methods are `getPermissionStatusProvider`, which provides an instance of `PermissionStatusProvider`, and `getRequestLauncher`, which provides an instance of `RequestLauncher`. More info on these classes in the javadoc: [INSERT LINK]
+There are two methods in every `RequestStrategy` that provide the tools to both query if a permission is granted and also to launch a set of permissions' request, those methods are `getPermissionStatusProvider`, which provides an instance of `PermissionStatusProvider`, and `getRequestLauncher`, which provides an instance of `RequestLauncher`. More info on these classes in the javadoc: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
 
 For the `PermissionStatusProvider` class, the defaults for both `Activiy` and `Fragment` is to use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one, the Activity's implementation makes use of `ActivityCompat.requestPermissions`, whereas for Fragment's implementation, the `requestPermissions` method is called straight from the host Fragment itself.
 
