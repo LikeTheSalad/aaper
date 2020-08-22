@@ -1,4 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/aaper/images/download.svg) ](https://bintray.com/likethesalad/public-repo/aaper/_latestVersion)
+[![aaper-api-javadoc](https://javadoc.io/badge2/com.likethesalad.android/aaper-api/javadoc.svg)](https://javadoc.io/doc/com.likethesalad.android/aaper-api)
+[![aaper-javadoc](https://javadoc.io/badge2/com.likethesalad.android/aaper/javadoc.svg)](https://javadoc.io/doc/com.likethesalad.android/aaper)
 
 # Aaper
 
