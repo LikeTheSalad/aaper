@@ -264,7 +264,7 @@ Aaper relies on Android Buddy (which uses [Byte Buddy](https://bytebuddy.net/)) 
 In order to add Aaper as one of your app's dependencies, you just have to add the following line into your app's build.gradle `dependencies` block:
 
 ```groovy
-implementation "com.likethesalad.android:aaper:1.0.0"
+implementation "com.likethesalad.android:aaper:1.0.1"
 // If you have Android Buddy's "strictMode" enabled, you must use `androidBuddyImplementation` instead of `implementation`.
 ```
 
