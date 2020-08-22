@@ -1,0 +1,22 @@
+apply plugin: 'org.jetbrains.dokka'
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/dokka"
+}
+
+task dokkaIndexGenerator {
+    inputs.property("dokkaIndexRedirectName", project.name)
+    outputs.dir(file("build/generatedDokkaIndex"))
+    doLast {
+        def rootIndex = new File(outputs.files.first(), "index.html")
+        def moduleName = inputs.properties.get("dokkaIndexRedirectName")
+        rootIndex.write "<meta http-equiv=\"refresh\" content=\"0; URL=./$moduleName/index.html\" />"
+    }
+}
+
+task dokkaIndexed(type: Copy) {
+    from dokka.outputs.files
+    from dokkaIndexGenerator
+    into "$buildDir/dokkaIndexed"
+}

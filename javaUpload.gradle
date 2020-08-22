@@ -1,6 +1,6 @@
 apply plugin: "maven-publish"
 apply plugin: "com.jfrog.bintray"
-apply plugin: 'org.jetbrains.dokka'
+apply from: '../dokkaCommon.gradle'
 
 project.group = rootProject.group
 project.version = rootProject.version
@@ -13,18 +13,13 @@ ext {
     tags = ['android', 'runtime', 'permissions', 'annotations', 'aaper']
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/dokka"
-}
-
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
     classifier 'sources'
 }
 
 task javadocJar(type: Jar) {
-    from dokka.outputs.files
+    from dokkaIndexed
     classifier 'javadoc'
 }
 
