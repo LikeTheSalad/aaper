@@ -260,14 +260,59 @@ Adding Aaper into your project
 Aaper uses AndroidX tools under the hood, such as `androidx.core.app.ActivityCompat` and `androidx.core.content.ContextCompat` for permissions request related actions, also, **the only type of Fragment** that Aaper supports is `androidx.fragment.app.Fragment`. So you must have AndroidX tools enabled for your project in order to use it.
 
 #### Android Buddy
-Aaper relies on Android Buddy (which uses [Byte Buddy](https://bytebuddy.net/)) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement Android Buddy into your project before you can use Aaper. You can implement it (If you don't have it already) by following the steps to **Setting up a consumer project** described here: [Adding Android Buddy into your project](https://github.com/LikeTheSalad/android-buddy#adding-it-into-your-project).
+Aaper relies on the Android Buddy plugin (which uses [Byte Buddy](https://bytebuddy.net/)) in order to "inject" at compile time into your Activities and Fragments, the code needed to handle their permission requests. Therefore you have to implement the Android Buddy plugin into your project before you can use Aaper (please bear in mind that, since it's a plugin, it won't be part of your APK file, as it's only used at compile time, so Android Buddy isn't considered a dependency for your app but rather a compilation tool). You can implement it (If you don't have it already) by following the steps to **Setting up a consumer project** described here: [Adding Android Buddy into your project](https://github.com/LikeTheSalad/android-buddy#adding-it-into-your-project). Or, by taking a look at the example below.
 
-### Gradle dependency
+**Example**
+This is an example of how to include the Android Buddy plugin into your project.
+
+For your Root Gradle file, you'll need to add this classpath: `classpath "com.likethesalad.android:android-buddy-plugin:LATEST_VERSION"` like so:
+```groovy
+// root build.gradle file
+buildscript {
+    repositories {
+        jcenter()
+        // OR
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.+' // Requires Android build plugin version 3.3.0 or higher.
+        classpath "com.likethesalad.android:android-buddy-plugin:0.8.4"
+    }
+}
+```
+
+Then, for your App Gradle file, you'd need to apply the Android Buddy plugin, by adding `apply plugin: 'android-buddy'` to it, like so:
+
+```groovy
+// Your app's build.gradle file
+apply plugin: 'com.android.application' // OR 'com.android.library'
+apply plugin: 'android-buddy'
+
+// ...
+```
+
+And that's it, you have now added the Android Buddy plugin into your application, please bear in mind that Android Buddy won't be part of your APK, as it's only used for compilation. So the Android Buddy plugin is not a dependency for your app, but rather a compilation tool.
+
+### Aaper Gradle dependency
 In order to add Aaper as one of your app's dependencies, you just have to add the following line into your app's build.gradle `dependencies` block:
 
 ```groovy
 implementation "com.likethesalad.android:aaper:1.0.1"
-// If you have Android Buddy's "strictMode" enabled, you must use `androidBuddyImplementation` instead of `implementation`.
+```
+
+**Example**
+```groovy
+// Your app's build.gradle file
+apply plugin: 'com.android.application'
+apply plugin: 'android-buddy' // With the Android Buddy plugin
+
+// ...
+
+dependencies {
+    // ...
+    implementation "com.likethesalad.android:aaper:1.0.1"
+}
 ```
 
 Advanced configuration
