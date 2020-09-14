@@ -118,7 +118,7 @@ In this example, we want to close an Activity if at least one requested permissi
 
 We must provide for every custom `RequestStrategy` two things, a name (which will serve as an ID for our Strategy) and a boolean as response for `onPermissionsRequestResults` method, depending on what we return there, this is what will happen after a permission request is executed:
 
-- If `onPermissionsRequestResults` retuns TRUE, it means that the request was successful in our Strategy and therefore the EnsurePermissions-annotated method will get executed.
+- If `onPermissionsRequestResults` returns TRUE, it means that the request was successful in our Strategy and therefore the EnsurePermissions-annotated method will get executed.
 - If `onPermissionsRequestResults` returns FALSE, it means that the request failed in our Strategy and therefore the EnsurePermissions-annotated method will NOT get executed.
 
 For our example, this is what it will end up looking like:
@@ -337,7 +337,7 @@ class MyRequestStrategyProvider : RequestStrategyProvider() {
 }
 ```
 
-As you can see, both methods are related to providing a `RequestStrategy` instance, one for the default one, and the other for every other case. You can take a look at the javadoc for mor details on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
+As you can see, both methods are related to providing a `RequestStrategy` instance, one for the default one, and the other for every other case. You can take a look at the javadoc for more details on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
 
 #### Using you custom RequestStrategyProvider
 After you've created your own `RequestStrategyProvider`, you can set it into Aaper's initialization method like so:
@@ -358,9 +358,9 @@ And that's it, Aaper will now use your custom `RequestStrategyProvider` in order
 ### Overriding permission's status query and request launch
 There are two methods in every `RequestStrategy` that provide the tools to both query if a permission is granted and also to launch a set of permissions' request, those methods are `getPermissionStatusProvider`, which provides an instance of `PermissionStatusProvider`, and `getRequestLauncher`, which provides an instance of `RequestLauncher`. More info on these classes in the javadoc: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
 
-For the `PermissionStatusProvider` class, the defaults for both `Activiy` and `Fragment` is to use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one, the Activity's implementation makes use of `ActivityCompat.requestPermissions`, whereas for Fragment's implementation, the `requestPermissions` method is called straight from the host Fragment itself.
+For the `PermissionStatusProvider` class, the defaults for both `Activity` and `Fragment` is to use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one, the Activity's implementation makes use of `ActivityCompat.requestPermissions`, whereas for Fragment's implementation, the `requestPermissions` method is called straight from the host Fragment itself.
 
-The defaults for both Activity and Fragment operations should suffice for all cases, though if for whatever reason you'd like to customize these actions, you can just override the aforementioned getters in your custom `RequestStrategy` and provide your own implementaions for these classes.
+The defaults for both Activity and Fragment operations should suffice for all cases, though if for whatever reason you'd like to customize these actions, you can just override the aforementioned getters in your custom `RequestStrategy` and provide your own implementations for these classes.
 
 ### What else
 Aaper allows you to override all of the aspects of a `RequestStrategy` so that it can work the way you'd like to, however, by default Aaper can only work with annotated methods inside Activities and Fragments, for the latter, more specifically `androidx.fragment.app.Fragment`. You can add support for other classes yourself if you'd like to, however, you'd have to provide your own local `Byte Buddy` transformations for them, in order to attach the same type of behavior of getting the methods with `EnsurePermissions` annotations and their parameters so that you can pass them to `PermissionManager.processPermissionRequest` for request, and later on calling `PermissionManager.processPermissionResponse` when the request receives a response. If you want to do this, it's highly recommended that you take a look at the javadoc, especially for `PermissionManager`, and also, you should take a look at the default Activity and Fragment transformations which are `com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation` and `com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation` respectively, so that you can get an idea of how they are making the connection between the `EnsurePermissions` annotations and the `PermissionManager` object.
