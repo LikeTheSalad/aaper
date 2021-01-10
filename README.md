@@ -1,6 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/aaper/images/download.svg) ](https://bintray.com/likethesalad/public-repo/aaper/_latestVersion)
-[![aaper-api-doc](https://img.shields.io/badge/javadoc-1.0.1-brightgreen.svg?label=aaper-api-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper-api)
-[![aaper-doc](https://img.shields.io/badge/javadoc-1.0.1-brightgreen.svg?label=aaper-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper)
+[![aaper-api-doc](https://img.shields.io/badge/javadoc-1.0.2-brightgreen.svg?label=aaper-api-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper-api)
+[![aaper-doc](https://img.shields.io/badge/javadoc-1.0.2-brightgreen.svg?label=aaper-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper)
 
 # Aaper
 
@@ -276,8 +276,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.+' // Requires Android build plugin version 3.3.0 or higher.
-        classpath "com.likethesalad.android:android-buddy-plugin:0.8.4"
+        classpath 'com.android.tools.build:gradle:3.5.+' // Requires Android build plugin version 3.5.4 or higher.
+        classpath "com.likethesalad.android:android-buddy-plugin:0.8.5"
     }
 }
 ```
@@ -298,7 +298,7 @@ And that's it, you have now added the Android Buddy plugin into your application
 In order to add Aaper as one of your app's dependencies, you just have to add the following line into your app's build.gradle `dependencies` block:
 
 ```groovy
-implementation "com.likethesalad.android:aaper:1.0.1"
+implementation "com.likethesalad.android:aaper:1.0.2"
 ```
 
 **Example**
@@ -311,7 +311,7 @@ apply plugin: 'android-buddy' // With the Android Buddy plugin
 
 dependencies {
     // ...
-    implementation "com.likethesalad.android:aaper:1.0.1"
+    implementation "com.likethesalad.android:aaper:1.0.2"
 }
 ```
 
