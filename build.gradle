@@ -20,7 +20,7 @@ buildscript {
 apply plugin: "io.github.gradle-nexus.publish-plugin"
 
 group = 'com.likethesalad.android'
-version = '1.0.2'
+version = '1.1.0'
 
 ext {
     powerMock_version = '2.0.7'
