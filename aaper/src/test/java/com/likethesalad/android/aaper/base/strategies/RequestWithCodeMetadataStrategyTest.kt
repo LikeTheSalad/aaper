@@ -29,7 +29,7 @@ class RequestWithCodeMetadataStrategyTest {
 
         val result = requestWithCodeMetadataStrategy.getLaunchMetadata(host)
 
-        verifyRequestCodeLaunchMetadata(result!!, 1202)
+        verifyRequestCodeLaunchMetadata(result!!, 21293)
     }
 
     @Test
