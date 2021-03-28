@@ -1,5 +1,5 @@
 apply plugin: "maven-publish"
-apply plugin: "com.jfrog.bintray"
+apply plugin: "signing"
 apply from: '../dokkaCommon.gradle'
 
 project.group = rootProject.group
@@ -10,7 +10,6 @@ ext {
     url = "https://github.com/LikeTheSalad/aaper"
     vcsUrl = "https://github.com/LikeTheSalad/aaper.git"
     issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
-    tags = ['android', 'runtime', 'permissions', 'annotations', 'aaper']
 }
 
 task sourcesJar(type: Jar) {
@@ -57,32 +56,16 @@ publishing {
                 }
                 scm {
                     url = project.url
+                    connection = project.vcsUrl
+                }
+                issueManagement {
+                    url = project.issueTrackerUrl
                 }
             }
         }
     }
 }
 
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    publications = ['maven']
-    pkg {
-        repo = 'public-repo'
-        name = project.name
-        licenses = ['MIT']
-        desc = project.description
-        websiteUrl = project.url
-        issueTrackerUrl = project.issueTrackerUrl
-        vcsUrl = project.vcsUrl
-        labels = project.tags
-        publicDownloadNumbers = true
-        version {
-            name = project.version
-            gpg {
-                sign = true
-                passphrase = project.hasProperty('passphrase') ? project.property('passphrase') : System.getenv('PASSPHRASE')
-            }
-        }
-    }
+signing {
+    sign publishing.publications.maven
 }

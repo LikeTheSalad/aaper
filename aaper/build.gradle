@@ -45,6 +45,7 @@ dependencies {
 }
 
 androidBuddyLibrary {
+    id = "com.likethesalad.android.aaper"
     exposedTransformationNames = [
             "com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation",
             "com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation"
