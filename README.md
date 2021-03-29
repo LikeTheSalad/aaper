@@ -272,7 +272,7 @@ buildscript {
   
     dependencies {  
         classpath 'com.android.tools.build:gradle:3.5.+' // Requires Android build plugin version 3.5.4 or higher.  
-        classpath "com.likethesalad.android:android-buddy-plugin:1.0.1"
+        classpath "com.likethesalad.android:android-buddy-plugin:1.0.2"
     }  
 }  
 ```  
