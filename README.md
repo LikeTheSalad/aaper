@@ -290,6 +290,9 @@ apply plugin: 'android-buddy'
 And that's it, you have now added the Android Buddy plugin into your application, please bear in mind that Android Buddy won't be part of your APK, as it's only used for compilation. So the Android Buddy plugin is not a dependency for your app, but rather a compilation tool.  
   
 ### Aaper Gradle dependency  
+
+After [adding Android Buddy as explained above](https://github.com/LikeTheSalad/aaper#android-buddy), then you can proceed to add Aaper's dependency in your project's build.gradle file as shown below.
+
 Android Buddy Aaper's ID (optional)
 `com.likethesalad.android.aaper` [What's this for?](https://github.com/LikeTheSalad/android-buddy#whats-the-android-buddy-id-for)
 
