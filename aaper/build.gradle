@@ -2,15 +2,14 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.jvm'
 }
-apply from: '../androidUpload.gradle'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -42,12 +41,4 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:$powerMock_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-}
-
-androidBuddyLibrary {
-    id = "com.likethesalad.android.aaper"
-    exposedTransformationNames = [
-            "com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation",
-            "com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation"
-    ]
 }
