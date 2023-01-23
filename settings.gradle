@@ -14,9 +14,6 @@ dependencyResolutionManagement {
         mavenLocal()
         mavenCentral()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
     }
 }
 rootProject.name = 'Annotated permission'
