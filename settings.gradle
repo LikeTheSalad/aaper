@@ -1,2 +1,2 @@
 include ':app', ':aaper-api', ':aaper'
-rootProject.name='Annotated permission'
+rootProject.name = 'Annotated permission'
