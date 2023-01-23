@@ -1,2 +1,25 @@
-include ':app', ':aaper-api', ':aaper'
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+}
 rootProject.name = 'Annotated permission'
+include ':app'
+include ':aaper-api'
+include ':aaper'

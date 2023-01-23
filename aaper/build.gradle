@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.jvm'
-    id 'android-buddy-library'
 }
 apply from: '../androidUpload.gradle'
 
