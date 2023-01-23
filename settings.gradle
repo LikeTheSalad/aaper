@@ -16,6 +16,16 @@ dependencyResolutionManagement {
         google()
     }
 }
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
+    }
+}
 rootProject.name = 'Annotated permission'
 include ':app'
 include ':aaper-api'
