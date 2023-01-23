@@ -2,8 +2,6 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
 }
-apply from: '../javaUpload.gradle'
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
