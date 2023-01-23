@@ -1,5 +1,7 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
 apply from: '../javaUpload.gradle'
 
 

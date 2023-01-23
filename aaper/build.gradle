@@ -1,7 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'android-buddy-library'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'android-buddy-library'
+}
 apply from: '../androidUpload.gradle'
 
 android {
