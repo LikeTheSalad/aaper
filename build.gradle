@@ -19,6 +19,7 @@ artifactPublisher {
 ext {
     powerMock_version = '2.0.7'
     mockito_version = '2.28.2'
+    testingUtilities_version = '1.0.8'
 }
 
 task clean(type: Delete) {
