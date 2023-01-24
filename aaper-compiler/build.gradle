@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+    testImplementation "com.google.testing.compile:compile-testing:0.21.0"
 }
 
 compileKotlin {
