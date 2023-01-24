@@ -15,6 +15,11 @@ class AaperProcessor : AbstractProcessor() {
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
     ): Boolean {
+
+        annotations.forEach { typeElement ->
+            val annotatedMethods = roundEnv.getElementsAnnotatedWith(typeElement)
+        }
+
         return true
     }
 }
