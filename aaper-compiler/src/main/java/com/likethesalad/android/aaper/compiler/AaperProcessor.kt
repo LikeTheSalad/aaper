@@ -5,8 +5,10 @@ import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
+import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 
+@Suppress("UNCHECKED_CAST")
 @SupportedAnnotationTypes("com.likethesalad.android.aaper.api.EnsurePermissions")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 class AaperProcessor : AbstractProcessor() {
@@ -17,7 +19,14 @@ class AaperProcessor : AbstractProcessor() {
     ): Boolean {
 
         annotations.forEach { typeElement ->
-            val annotatedMethods = roundEnv.getElementsAnnotatedWith(typeElement)
+            val annotatedMethods: Set<ExecutableElement> =
+                roundEnv.getElementsAnnotatedWith(typeElement) as Set<ExecutableElement>
+
+            annotatedMethods.forEach { method ->
+                if (method.returnType.kind.name != "void") {
+                    throw UnsupportedOperationException("EnsurePermission annotated methods must return void")
+                }
+            }
         }
 
         return true
