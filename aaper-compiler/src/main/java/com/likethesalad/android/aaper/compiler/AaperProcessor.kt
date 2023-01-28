@@ -15,7 +15,6 @@ import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
-import javax.lang.model.element.Name
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
@@ -58,7 +57,7 @@ class AaperProcessor : AbstractProcessor() {
         val parameters = method.parameters
 
         val constructor = createConstructor(containerTypeName, parameters)
-        val runMethod = createRunMethod(methodName, parameters)
+        val runMethod = createRunMethod()
 
         val packageName = getPackageName(containerClass)
         val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
@@ -80,17 +79,10 @@ class AaperProcessor : AbstractProcessor() {
         writer.close()
     }
 
-    private fun createRunMethod(
-        methodName: Name,
-        parameters: List<VariableElement>
-    ): MethodSpec {
+    private fun createRunMethod(): MethodSpec {
         return MethodSpec.methodBuilder("run")
             .addModifiers(Modifier.PUBLIC)
-            .addStatement(
-                "\$N.$methodName(${
-                    parameters.joinToString(", ") { it.simpleName }
-                })", "instance"
-            ).build()
+            .build()
     }
 
     private fun createGeneratedType(

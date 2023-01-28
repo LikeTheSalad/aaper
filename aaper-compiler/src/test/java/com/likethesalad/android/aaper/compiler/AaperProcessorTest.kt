@@ -64,7 +64,6 @@ class AaperProcessorTest {
                     }
                 
                     public void run() {
-                         instance.someMethod();
                     }
                 }
             """.trimIndent()
@@ -110,7 +109,6 @@ class AaperProcessorTest {
                     }
                 
                     public void run() {
-                         instance.someMethod(value);
                     }
                 }
             """.trimIndent()
@@ -157,7 +155,6 @@ class AaperProcessorTest {
                     }
                 
                     public void run() {
-                         instance.someMethod(value);
                     }
                 }
             """.trimIndent()
@@ -206,7 +203,6 @@ class AaperProcessorTest {
                     }
                 
                     public void run() {
-                         instance.someMethod(value, someInt);
                     }
                 }
             """.trimIndent()
