@@ -165,6 +165,55 @@ class AaperProcessorTest {
             )
     }
 
+    @Test
+    fun `Generate runnable class for an annotated method with multiple parameters`() {
+        val compile = javac()
+            .withProcessors(AaperProcessor())
+            .compile(
+                JavaFileObjects.forSourceString(
+                    "com.example.MyClass", """
+                package com.example;
+                        
+                class MyClass {
+                    ${getAnnotation("somePermission")}
+                    public void someMethod(String value, int someInt) {
+                        System.out.println("Some text with value: " + value + " and some other: " + someInt);
+                    }
+                }
+            """.trimIndent()
+                )
+            )
+        assertThat(compile).succeeded()
+        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+            .hasSourceEquivalentTo(
+                JavaFileObjects.forSourceString(
+                    "com.example.Aaper_MyClass__someMethod",
+                    """
+                package com.example;
+                
+                import java.lang.Runnable;
+                import java.lang.String;
+                
+                class Aaper_MyClass__someMethod implements Runnable {
+                    private final MyClass instance;
+                    private final String value;
+                    private final int someInt;
+                    
+                    public Aaper_MyClass__someMethod(MyClass instance, String value, int someInt) {
+                        this.instance = instance;
+                        this.value = value;
+                        this.someInt = someInt;
+                    }
+                
+                    public void run() {
+                         instance.someMethod(value, someInt);
+                    }
+                }
+            """.trimIndent()
+                )
+            )
+    }
+
     private fun getAnnotation(vararg permissions: String): String {
         return "@com.likethesalad.android.aaper.api.EnsurePermissions(permissions={${
             permissions.joinToString(

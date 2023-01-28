@@ -53,7 +53,7 @@ class AaperProcessor : AbstractProcessor() {
             .addModifiers(Modifier.PUBLIC)
             .addStatement(
                 "\$N.$methodName(${
-                    method.parameters.joinToString(",") { it.simpleName }
+                    method.parameters.joinToString(", ") { it.simpleName }
                 })", "instance"
             )
             .build()
