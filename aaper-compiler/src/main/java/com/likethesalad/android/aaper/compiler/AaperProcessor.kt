@@ -7,6 +7,7 @@ import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
+import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic
 
 @Suppress("UNCHECKED_CAST")
@@ -24,7 +25,7 @@ class AaperProcessor : AbstractProcessor() {
                 roundEnv.getElementsAnnotatedWith(typeElement) as Set<ExecutableElement>
 
             annotatedMethods.forEach { method ->
-                if (method.returnType.kind.name != "void") {
+                if (TypeKind.VOID != method.returnType.kind) {
                     processingEnv.messager.printMessage(
                         Diagnostic.Kind.ERROR,
                         "EnsurePermissions annotated methods must return void", method
