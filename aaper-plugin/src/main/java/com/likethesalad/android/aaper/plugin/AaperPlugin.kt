@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.plugin
 
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.likethesalad.android.aaper.plugin.instrumentation.AaperAsmClassVisitorFactory
+import com.likethesalad.android.aaper.plugin.instrumentation.TargetAsmClassVisitorFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -20,7 +20,7 @@ class AaperPlugin : Plugin<Project> {
 
         componentsExtension.onVariants { variant ->
             variant.instrumentation.transformClassesWith(
-                AaperAsmClassVisitorFactory::class.java,
+                TargetAsmClassVisitorFactory::class.java,
                 InstrumentationScope.PROJECT
             ) { }
         }

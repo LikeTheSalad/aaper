@@ -7,7 +7,7 @@ import com.android.build.api.instrumentation.InstrumentationParameters
 import com.likethesalad.android.aaper.plugin.instrumentation.visitor.AaperClassVisitor
 import org.objectweb.asm.ClassVisitor
 
-abstract class AaperAsmClassVisitorFactory :
+abstract class TargetAsmClassVisitorFactory :
     AsmClassVisitorFactory<InstrumentationParameters.None> {
 
     override fun createClassVisitor(
