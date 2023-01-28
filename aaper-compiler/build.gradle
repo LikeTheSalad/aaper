@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':aaper-api')
+    implementation 'com.squareup:javapoet:1.13.0'
     testImplementation "com.google.testing.compile:compile-testing:0.21.0"
 }
 
