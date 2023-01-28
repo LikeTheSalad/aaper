@@ -1,15 +1,14 @@
 package com.likethesalad.android.aaper.compiler
 
+import com.google.auto.service.AutoService
 import com.squareup.javapoet.*
-import javax.annotation.processing.AbstractProcessor
-import javax.annotation.processing.RoundEnvironment
-import javax.annotation.processing.SupportedAnnotationTypes
-import javax.annotation.processing.SupportedSourceVersion
+import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.*
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic
 
+@AutoService(Processor::class)
 @Suppress("UNCHECKED_CAST")
 @SupportedAnnotationTypes("com.likethesalad.android.aaper.api.EnsurePermissions")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
