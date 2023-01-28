@@ -54,9 +54,9 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
-                import java.lang.Runnable;
+                import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
                 
-                class Aaper_MyClass__someMethod implements Runnable {
+                class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     
                     public Aaper_MyClass__someMethod(MyClass instance) {
@@ -98,9 +98,9 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
-                import java.lang.Runnable;
+                import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
                 
-                class Aaper_MyClass__someMethod implements Runnable {
+                class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final int value;
                     
@@ -144,10 +144,10 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
-                import java.lang.Runnable;
+                import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
                 import java.lang.String;
                 
-                class Aaper_MyClass__someMethod implements Runnable {
+                class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
                     
@@ -191,10 +191,10 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
-                import java.lang.Runnable;
+                import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
                 import java.lang.String;
                 
-                class Aaper_MyClass__someMethod implements Runnable {
+                class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
                     private final int someInt;

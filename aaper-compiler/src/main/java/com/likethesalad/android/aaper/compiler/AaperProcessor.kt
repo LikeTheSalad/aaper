@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.compiler
 
 import com.google.auto.service.AutoService
+import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
@@ -99,7 +100,7 @@ class AaperProcessor : AbstractProcessor() {
         vararg methods: MethodSpec
     ): TypeSpec {
         val typeClass = TypeSpec.classBuilder(generatedSimpleName)
-            .addSuperinterface(Runnable::class.java)
+            .addSuperinterface(AaperRunnable::class.java)
             .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
             .addMethods(methods.asList())
 
