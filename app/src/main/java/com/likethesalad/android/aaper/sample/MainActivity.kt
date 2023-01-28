@@ -2,11 +2,12 @@ package com.likethesalad.android.aaper.sample
 
 import android.Manifest
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.likethesalad.android.aaper.api.EnsurePermissions
-import com.likethesalad.android.aaper.sample.custom.AlertDialogStrategy
-import kotlinx.android.synthetic.main.activity_main.*
+
+//import com.likethesalad.android.aaper.sample.custom.AlertDialogStrategy
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,11 +15,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn.setOnClickListener {
+        findViewById<Button>(R.id.btn).setOnClickListener {
             takePhoto()
         }
 
-        btn_alert_dialog.setOnClickListener {
+        findViewById<Button>(R.id.btn_alert_dialog).setOnClickListener {
             showToast()
         }
 
@@ -31,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     @EnsurePermissions(
-        permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE],
-        strategyName = AlertDialogStrategy.NAME
+        permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE]
+//        strategyName = AlertDialogStrategy.NAME
     )
     private fun showToast() {
         Toast.makeText(this, "All permissions are granted", Toast.LENGTH_SHORT).show()
