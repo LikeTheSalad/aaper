@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.jvm'
 }
 
@@ -7,6 +8,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':aaper-api')
     implementation 'com.squareup:javapoet:1.13.0'
+    compileOnly "com.google.auto.service:auto-service-annotations:$autoService_version"
+    kapt "com.google.auto.service:auto-service:$autoService_version"
     testImplementation "com.google.testing.compile:compile-testing:0.21.0"
 }
 
