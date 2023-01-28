@@ -54,6 +54,8 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
+                import java.lang.Runnable;
+                
                 class Aaper_MyClass__someMethod implements Runnable {
                     private final MyClass instance;
                     

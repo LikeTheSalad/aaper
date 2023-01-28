@@ -47,6 +47,7 @@ class AaperProcessor : AbstractProcessor() {
     private fun createClassForMethod(method: ExecutableElement) {
         val containerClass = method.enclosingElement as TypeElement
         val containerTypeName = TypeName.get(containerClass.asType())
+        val methodName = method.simpleName
 
         val constructor = MethodSpec.constructorBuilder()
             .addModifiers(Modifier.PUBLIC)
@@ -54,13 +55,19 @@ class AaperProcessor : AbstractProcessor() {
             .addStatement("this.\$N = \$N", "instance", "instance")
             .build()
 
+        val runMethod = MethodSpec.methodBuilder("run")
+            .addModifiers(Modifier.PUBLIC)
+            .addStatement("\$N.$methodName()", "instance")
+            .build()
+
         val packageName = getPackageName(containerClass)
 
-        val generatedSimpleName = "Aaper_${containerClass.simpleName}__${method.simpleName}"
+        val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
         val typeClass = TypeSpec.classBuilder(generatedSimpleName)
-            .addModifiers(Modifier.PUBLIC)
+            .addSuperinterface(Runnable::class.java)
             .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(constructor)
+            .addMethod(runMethod)
             .build()
 
         val javaFile = JavaFile.builder(packageName, typeClass).build()
