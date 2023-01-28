@@ -6,10 +6,7 @@ import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
-import javax.lang.model.element.ExecutableElement
-import javax.lang.model.element.Modifier
-import javax.lang.model.element.TypeElement
-import javax.lang.model.element.VariableElement
+import javax.lang.model.element.*
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic
 
@@ -46,28 +43,56 @@ class AaperProcessor : AbstractProcessor() {
         val containerClass = method.enclosingElement as TypeElement
         val containerTypeName = TypeName.get(containerClass.asType())
         val methodName = method.simpleName
+        val parameters = method.parameters
 
-        val constructor = createConstructor(containerTypeName, method.parameters)
+        val constructor = createConstructor(containerTypeName, parameters)
+        val runMethod = createRunMethod(methodName, parameters)
 
-        val runMethod = MethodSpec.methodBuilder("run")
+        val packageName = getPackageName(containerClass)
+        val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
+
+        val typeClass = createGeneratedType(
+            generatedSimpleName,
+            containerTypeName,
+            parameters,
+            constructor,
+            runMethod
+        )
+
+        val javaFile = JavaFile.builder(packageName, typeClass).build()
+        val javaWriter = processingEnv.filer.createSourceFile("${packageName}.$generatedSimpleName")
+        val writer = javaWriter.openWriter()
+
+        javaFile.writeTo(writer)
+
+        writer.close()
+    }
+
+    private fun createRunMethod(
+        methodName: Name,
+        parameters: List<VariableElement>
+    ): MethodSpec {
+        return MethodSpec.methodBuilder("run")
             .addModifiers(Modifier.PUBLIC)
             .addStatement(
                 "\$N.$methodName(${
-                    method.parameters.joinToString(", ") { it.simpleName }
+                    parameters.joinToString(", ") { it.simpleName }
                 })", "instance"
-            )
-            .build()
+            ).build()
+    }
 
-        val packageName = getPackageName(containerClass)
-
-        val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
+    private fun createGeneratedType(
+        generatedSimpleName: String,
+        containerTypeName: TypeName?,
+        parameters: List<VariableElement>,
+        vararg methods: MethodSpec
+    ): TypeSpec {
         val typeClass = TypeSpec.classBuilder(generatedSimpleName)
             .addSuperinterface(Runnable::class.java)
             .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
-            .addMethod(constructor)
-            .addMethod(runMethod)
+            .addMethods(methods.asList())
 
-        method.parameters.forEach {
+        parameters.forEach {
             typeClass.addField(
                 TypeName.get(it.asType()),
                 it.simpleName.toString(),
@@ -75,14 +100,7 @@ class AaperProcessor : AbstractProcessor() {
                 Modifier.FINAL
             )
         }
-
-        val javaFile = JavaFile.builder(packageName, typeClass.build()).build()
-        val javaWriter = processingEnv.filer.createSourceFile("${packageName}.$generatedSimpleName")
-        val writer = javaWriter.openWriter()
-
-        javaFile.writeTo(writer)
-
-        writer.close()
+        return typeClass.build()
     }
 
     private fun createConstructor(
