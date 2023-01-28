@@ -35,6 +35,8 @@ class AaperProcessorTest {
             .compile(
                 JavaFileObjects.forSourceString(
                     "com.example.MyClass", """
+                package com.example;
+                        
                 class MyClass {
                     ${getAnnotation("somePermission")}
                     public void someMethod() {
@@ -50,6 +52,8 @@ class AaperProcessorTest {
                 JavaFileObjects.forSourceString(
                     "com.example.Aaper_MyClass__someMethod",
                     """
+                package com.example;
+                
                 class Aaper_MyClass__someMethod implements Runnable {
                     private final MyClass instance;
                     
