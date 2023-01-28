@@ -15,7 +15,7 @@ class AaperProcessorTest {
                 JavaFileObjects.forSourceString(
                     "com.example.MyClass", """
                 class MyClass {
-                    @com.likethesalad.android.aaper.api.EnsurePermissions(permissions={"somePermission"})
+                    ${getAnnotation("somePermission")}
                     public String someMethod() {
                         return "Something";
                     }
@@ -25,5 +25,52 @@ class AaperProcessorTest {
             )
         assertThat(compile).failed()
         assertThat(compile).hadErrorContaining("EnsurePermissions annotated methods must return void")
+    }
+
+
+    @Test
+    fun `Generate runnable class for an annotated method`() {
+        val compile = javac()
+            .withProcessors(AaperProcessor())
+            .compile(
+                JavaFileObjects.forSourceString(
+                    "com.example.MyClass", """
+                class MyClass {
+                    ${getAnnotation("somePermission")}
+                    public void someMethod() {
+                        System.out.println("Some text");
+                    }
+                }
+            """.trimIndent()
+                )
+            )
+        assertThat(compile).succeeded()
+        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+            .hasSourceEquivalentTo(
+                JavaFileObjects.forSourceString(
+                    "com.example.Aaper_MyClass__someMethod",
+                    """
+                class Aaper_MyClass__someMethod implements Runnable {
+                    private final MyClass instance;
+                    
+                    public Aaper_MyClass__someMethod(MyClass instance) {
+                        this.instance = instance;
+                    }
+                
+                    public void run() {
+                         instance.someMethod();
+                    }
+                }
+            """.trimIndent()
+                )
+            )
+    }
+
+    private fun getAnnotation(vararg permissions: String): String {
+        return "@com.likethesalad.android.aaper.api.EnsurePermissions(permissions={${
+            permissions.map { "\"$it\"" }.joinToString(
+                ","
+            )
+        }})"
     }
 }
