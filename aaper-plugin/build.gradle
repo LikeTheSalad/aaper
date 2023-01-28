@@ -2,3 +2,12 @@ plugins {
     id "java-gradle-plugin"
     id 'org.jetbrains.kotlin.jvm'
 }
+
+gradlePlugin {
+    plugins {
+        aaperPlugin {
+            id = 'com.likethesalad.aaper'
+            implementationClass = 'com.likethesalad.android.aaper.plugin.AaperPlugin'
+        }
+    }
+}
