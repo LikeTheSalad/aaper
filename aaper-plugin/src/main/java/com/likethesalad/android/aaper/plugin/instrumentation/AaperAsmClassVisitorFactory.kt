@@ -4,6 +4,7 @@ import com.android.build.api.instrumentation.AsmClassVisitorFactory
 import com.android.build.api.instrumentation.ClassContext
 import com.android.build.api.instrumentation.ClassData
 import com.android.build.api.instrumentation.InstrumentationParameters
+import com.likethesalad.android.aaper.plugin.instrumentation.visitor.AaperClassVisitor
 import org.objectweb.asm.ClassVisitor
 
 abstract class AaperAsmClassVisitorFactory :
@@ -13,7 +14,7 @@ abstract class AaperAsmClassVisitorFactory :
         classContext: ClassContext,
         nextClassVisitor: ClassVisitor
     ): ClassVisitor {
-        TODO("Not yet implemented")
+        return AaperClassVisitor(nextClassVisitor)
     }
 
     override fun isInstrumentable(classData: ClassData): Boolean {
