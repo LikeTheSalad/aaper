@@ -24,6 +24,6 @@ class AaperProcessorTest {
                 )
             )
         assertThat(compile).failed()
-        assertThat(compile).hadErrorContaining("EnsurePermission annotated methods must return void")
+        assertThat(compile).hadErrorContaining("EnsurePermissions annotated methods must return void")
     }
 }

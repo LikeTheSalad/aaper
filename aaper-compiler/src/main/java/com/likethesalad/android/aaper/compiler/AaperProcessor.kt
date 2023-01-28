@@ -27,7 +27,7 @@ class AaperProcessor : AbstractProcessor() {
                 if (method.returnType.kind.name != "void") {
                     processingEnv.messager.printMessage(
                         Diagnostic.Kind.ERROR,
-                        "EnsurePermission annotated methods must return void", method
+                        "EnsurePermissions annotated methods must return void", method
                     )
                 }
             }
