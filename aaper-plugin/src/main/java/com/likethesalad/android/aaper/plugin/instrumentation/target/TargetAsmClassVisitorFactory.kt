@@ -1,10 +1,10 @@
-package com.likethesalad.android.aaper.plugin.instrumentation
+package com.likethesalad.android.aaper.plugin.instrumentation.target
 
 import com.android.build.api.instrumentation.AsmClassVisitorFactory
 import com.android.build.api.instrumentation.ClassContext
 import com.android.build.api.instrumentation.ClassData
 import com.android.build.api.instrumentation.InstrumentationParameters
-import com.likethesalad.android.aaper.plugin.instrumentation.visitor.AaperClassVisitor
+import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.AaperClassVisitor
 import org.objectweb.asm.ClassVisitor
 
 abstract class TargetAsmClassVisitorFactory :

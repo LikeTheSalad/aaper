@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.plugin
 
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.likethesalad.android.aaper.plugin.instrumentation.TargetAsmClassVisitorFactory
+import com.likethesalad.android.aaper.plugin.instrumentation.target.TargetAsmClassVisitorFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

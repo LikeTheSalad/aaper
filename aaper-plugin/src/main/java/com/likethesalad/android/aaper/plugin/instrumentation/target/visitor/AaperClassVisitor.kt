@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.plugin.instrumentation.visitor
+package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
 import java.io.PrintStream
 import org.objectweb.asm.ClassVisitor
