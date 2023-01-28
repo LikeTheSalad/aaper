@@ -1,9 +1,6 @@
 package com.likethesalad.android.aaper.compiler
 
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.*
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
@@ -12,6 +9,7 @@ import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic
 
@@ -49,11 +47,7 @@ class AaperProcessor : AbstractProcessor() {
         val containerTypeName = TypeName.get(containerClass.asType())
         val methodName = method.simpleName
 
-        val constructor = MethodSpec.constructorBuilder()
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(containerTypeName, "instance")
-            .addStatement("this.\$N = \$N", "instance", "instance")
-            .build()
+        val constructor = createConstructor(containerTypeName, method.parameters)
 
         val runMethod = MethodSpec.methodBuilder("run")
             .addModifiers(Modifier.PUBLIC)
@@ -77,6 +71,23 @@ class AaperProcessor : AbstractProcessor() {
         javaFile.writeTo(writer)
 
         writer.close()
+    }
+
+    private fun createConstructor(
+        containerTypeName: TypeName,
+        parameters: List<VariableElement>
+    ): MethodSpec {
+        val builder = MethodSpec.constructorBuilder()
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(containerTypeName, "instance")
+            .addStatement("this.\$N = \$N", "instance", "instance")
+
+        parameters.forEach {
+            builder.addParameter(ParameterSpec.get(it))
+            builder.addStatement("this.\$N = \$N", it.simpleName, it.simpleName)
+        }
+
+        return builder.build()
     }
 
     private fun getPackageName(containerClass: TypeElement): String {
