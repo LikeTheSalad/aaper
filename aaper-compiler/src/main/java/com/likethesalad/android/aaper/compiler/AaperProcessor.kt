@@ -54,11 +54,7 @@ class AaperProcessor : AbstractProcessor() {
             .addStatement("this.\$N = \$N", "instance", "instance")
             .build()
 
-        var packageName = containerClass.qualifiedName.toString()
-        val lastDot = packageName.indexOfLast { it == '.' }
-        if (lastDot > 0) {
-            packageName = packageName.substring(0, lastDot)
-        }
+        val packageName = getPackageName(containerClass)
 
         val generatedSimpleName = "Aaper_${containerClass.simpleName}__${method.simpleName}"
         val typeClass =
@@ -75,5 +71,14 @@ class AaperProcessor : AbstractProcessor() {
         javaFile.writeTo(writer)
 
         writer.close()
+    }
+
+    private fun getPackageName(containerClass: TypeElement): String {
+        var packageName = containerClass.qualifiedName.toString()
+        val lastDot = packageName.indexOfLast { it == '.' }
+        if (lastDot > 0) {
+            packageName = packageName.substring(0, lastDot)
+        }
+        return packageName
     }
 }
