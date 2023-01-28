@@ -102,7 +102,6 @@ class AaperProcessorTest {
                 
                 class Aaper_MyClass__someMethod implements Runnable {
                     private final MyClass instance;
-                    
                     private final int value;
                     
                     public Aaper_MyClass__someMethod(MyClass instance, int value) {

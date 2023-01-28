@@ -51,7 +51,11 @@ class AaperProcessor : AbstractProcessor() {
 
         val runMethod = MethodSpec.methodBuilder("run")
             .addModifiers(Modifier.PUBLIC)
-            .addStatement("\$N.$methodName()", "instance")
+            .addStatement(
+                "\$N.$methodName(${
+                    method.parameters.joinToString(",") { it.simpleName }
+                })", "instance"
+            )
             .build()
 
         val packageName = getPackageName(containerClass)
