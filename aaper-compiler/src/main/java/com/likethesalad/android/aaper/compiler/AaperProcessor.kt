@@ -7,6 +7,7 @@ import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
+import javax.tools.Diagnostic
 
 @Suppress("UNCHECKED_CAST")
 @SupportedAnnotationTypes("com.likethesalad.android.aaper.api.EnsurePermissions")
@@ -24,7 +25,10 @@ class AaperProcessor : AbstractProcessor() {
 
             annotatedMethods.forEach { method ->
                 if (method.returnType.kind.name != "void") {
-                    throw UnsupportedOperationException("EnsurePermission annotated methods must return void")
+                    processingEnv.messager.printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "EnsurePermission annotated methods must return void", method
+                    )
                 }
             }
         }
