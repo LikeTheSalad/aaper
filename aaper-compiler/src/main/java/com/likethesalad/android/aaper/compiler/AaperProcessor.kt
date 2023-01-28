@@ -57,12 +57,11 @@ class AaperProcessor : AbstractProcessor() {
         val packageName = getPackageName(containerClass)
 
         val generatedSimpleName = "Aaper_${containerClass.simpleName}__${method.simpleName}"
-        val typeClass =
-            TypeSpec.classBuilder(generatedSimpleName)
-                .addModifiers(Modifier.PUBLIC)
-                .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
-                .addMethod(constructor)
-                .build()
+        val typeClass = TypeSpec.classBuilder(generatedSimpleName)
+            .addModifiers(Modifier.PUBLIC)
+            .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
+            .addMethod(constructor)
+            .build()
 
         val javaFile = JavaFile.builder(packageName, typeClass).build()
         val javaWriter = processingEnv.filer.createSourceFile("${packageName}.$generatedSimpleName")
