@@ -68,9 +68,9 @@ class AaperProcessorTest {
 
     private fun getAnnotation(vararg permissions: String): String {
         return "@com.likethesalad.android.aaper.api.EnsurePermissions(permissions={${
-            permissions.map { "\"$it\"" }.joinToString(
+            permissions.joinToString(
                 ","
-            )
+            ) { "\"$it\"" }
         }})"
     }
 }
