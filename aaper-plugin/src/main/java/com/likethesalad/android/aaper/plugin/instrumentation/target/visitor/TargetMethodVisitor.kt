@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
+import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getMaxStackSize
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
@@ -41,10 +42,33 @@ class TargetMethodVisitor(
     }
 
     private fun replaceOriginalCode(originalMv: MethodVisitor) {
-        originalMv.visitCode()
-        originalMv.visitTypeInsn(Opcodes.NEW, getGeneratedInternalName())
+        val generatedInternalName = getGeneratedInternalName()
+        val argTypes = mutableListOf<Type>(Type.getObjectType(typeInternalName))
+        argTypes.addAll(Type.getArgumentTypes(methodDescriptor))
 
+        originalMv.visitCode()
+        originalMv.visitTypeInsn(Opcodes.NEW, generatedInternalName)
+
+        argTypes.forEachIndexed { index, type ->
+            originalMv.visitVarInsn(getLoadOpCode(type), index)
+        }
+
+        originalMv.visitMethodInsn(
+            Opcodes.INVOKESPECIAL,
+            generatedInternalName,
+            "<init>",
+            Type.getMethodDescriptor(Type.VOID_TYPE, *argTypes.toTypedArray()),
+            false
+        )
+
+        originalMv.visitInsn(Opcodes.RETURN)
+        val varsSize = getMaxStackSize(argTypes)
+        originalMv.visitMaxs(1 + varsSize, varsSize)
         originalMv.visitEnd()
+    }
+
+    private fun getLoadOpCode(type: Type): Int {
+        return type.getOpcode(Opcodes.ILOAD)
     }
 
     private fun getGeneratedInternalName(): String {

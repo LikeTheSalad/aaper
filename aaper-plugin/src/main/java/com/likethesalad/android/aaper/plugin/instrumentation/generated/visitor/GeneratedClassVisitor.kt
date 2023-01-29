@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.generated.visitor
 
+import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.FieldVisitor
@@ -104,18 +105,8 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
             false
         )
         doRunMv.visitInsn(Opcodes.RETURN)
-        doRunMv.visitMaxs(getMaxStackSize(), 1)
+        doRunMv.visitMaxs(AsmUtils.getMaxStackSize(fields.map { it.type }), 1)
         doRunMv.visitEnd()
-    }
-
-    private fun getMaxStackSize(): Int {
-        var size = 0
-
-        fields.forEach {
-            size += it.type.size
-        }
-
-        return size
     }
 
     private fun getTargetMethodDescriptor(parameters: List<Field>): String {
