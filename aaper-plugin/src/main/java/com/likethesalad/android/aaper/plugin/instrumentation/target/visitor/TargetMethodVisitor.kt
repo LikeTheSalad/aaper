@@ -19,11 +19,13 @@ class TargetMethodVisitor(
     private var originalMv: MethodVisitor? = null
 
     override fun visitAnnotation(descriptor: String, visible: Boolean): AnnotationVisitor {
+        val annotationVisitor = super.visitAnnotation(descriptor, visible)
         val annotationType = Type.getType(descriptor)
         if (annotationType.className.equals("com.likethesalad.android.aaper.api.EnsurePermissions")) {
             isAnnotated = true
+            return TargetAnnotationVisitor(annotationVisitor)
         }
-        return super.visitAnnotation(descriptor, visible)
+        return annotationVisitor
     }
 
     override fun visitCode() {
