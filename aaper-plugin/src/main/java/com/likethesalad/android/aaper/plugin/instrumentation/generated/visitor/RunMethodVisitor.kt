@@ -23,7 +23,6 @@ class RunMethodVisitor(
     }
 
     override fun visitMaxs(maxStack: Int, maxLocals: Int) {
-        println("Visiting generated run max with original stack: $maxStack and locals: $maxLocals")//todo delete
         super.visitMaxs(1, 1)
     }
 }
