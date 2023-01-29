@@ -87,8 +87,8 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
             cv.visitMethod(Opcodes.ACC_PRIVATE, GENERATED_RUNNABLE_METHOD_NAME, "()V", null, null)
         val instanceField = fields.first()
         doRunMv.visitCode()
-        doRunMv.visitVarInsn(Opcodes.ALOAD, 0)
         fields.forEach {
+            doRunMv.visitVarInsn(Opcodes.ALOAD, 0)
             doRunMv.visitFieldInsn(
                 Opcodes.GETFIELD,
                 internalClassName,
