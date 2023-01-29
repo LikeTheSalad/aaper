@@ -14,7 +14,7 @@ import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
  * handling the permissions request. A default strategy will be used if not provided.
  */
 
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.FUNCTION)
 annotation class EnsurePermissions(
     val permissions: Array<String>,

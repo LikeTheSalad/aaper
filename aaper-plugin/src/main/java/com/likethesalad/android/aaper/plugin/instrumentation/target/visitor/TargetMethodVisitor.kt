@@ -17,13 +17,15 @@ class TargetMethodVisitor(
 ) : MethodVisitor(Opcodes.ASM9, methodVisitor) {
     private var isAnnotated = false
     private var originalMv: MethodVisitor? = null
+    private lateinit var targetAnnotationVisitor: TargetAnnotationVisitor
 
     override fun visitAnnotation(descriptor: String, visible: Boolean): AnnotationVisitor {
         val annotationVisitor = super.visitAnnotation(descriptor, visible)
         val annotationType = Type.getType(descriptor)
         if (annotationType.className.equals("com.likethesalad.android.aaper.api.EnsurePermissions")) {
             isAnnotated = true
-            return TargetAnnotationVisitor(annotationVisitor)
+            targetAnnotationVisitor = TargetAnnotationVisitor(annotationVisitor)
+            return targetAnnotationVisitor
         }
         return annotationVisitor
     }
@@ -45,6 +47,8 @@ class TargetMethodVisitor(
     }
 
     private fun replaceOriginalCode(originalMv: MethodVisitor) {
+        val strategyName = targetAnnotationVisitor.strategyName
+        val permissions = targetAnnotationVisitor.getPermissions()
         val generatedInternalName = getGeneratedInternalName()
         val argTypes = mutableListOf<Type>(Type.getObjectType(typeInternalName))
         argTypes.addAll(Type.getArgumentTypes(methodDescriptor))
