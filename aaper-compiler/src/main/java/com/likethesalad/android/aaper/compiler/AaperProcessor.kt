@@ -1,7 +1,9 @@
 package com.likethesalad.android.aaper.compiler
 
 import com.google.auto.service.AutoService
+import com.likethesalad.android.aaper.internal.compiler.AaperMethodDef
 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
+import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
@@ -15,6 +17,7 @@ import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
+import javax.lang.model.element.Name
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
@@ -63,6 +66,7 @@ class AaperProcessor : AbstractProcessor() {
         val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
 
         val typeClass = createGeneratedType(
+            methodName,
             generatedSimpleName,
             containerTypeName,
             parameters,
@@ -86,8 +90,9 @@ class AaperProcessor : AbstractProcessor() {
     }
 
     private fun createGeneratedType(
+        methodName: Name,
         generatedSimpleName: String,
-        containerTypeName: TypeName?,
+        containerTypeName: TypeName,
         parameters: List<VariableElement>,
         vararg methods: MethodSpec
     ): TypeSpec {
@@ -104,6 +109,13 @@ class AaperProcessor : AbstractProcessor() {
                 Modifier.FINAL
             )
         }
+
+        typeClass.addAnnotation(
+            AnnotationSpec.builder(AaperMethodDef::class.java)
+                .addMember("name", "\$S", methodName.toString())
+                .build()
+        )
+
         return typeClass.build()
     }
 

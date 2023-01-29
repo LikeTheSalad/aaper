@@ -54,8 +54,12 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
+                import com.likethesalad.android.aaper.internal.compiler.AaperMethodDef;
                 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
-                
+    
+                @AaperMethodDef(
+                    name = "someMethod"
+                )
                 class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     
@@ -97,8 +101,12 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
+                import com.likethesalad.android.aaper.internal.compiler.AaperMethodDef;
                 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
-                
+    
+                @AaperMethodDef(
+                    name = "someMethod"
+                )
                 class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final int value;
@@ -142,9 +150,13 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
+                import com.likethesalad.android.aaper.internal.compiler.AaperMethodDef;
                 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
-                import java.lang.String;
+                import java.lang.String; 
                 
+                @AaperMethodDef(
+                    name = "someMethod"
+                )                
                 class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
@@ -188,9 +200,13 @@ class AaperProcessorTest {
                     """
                 package com.example;
                 
+                import com.likethesalad.android.aaper.internal.compiler.AaperMethodDef;
                 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable;
                 import java.lang.String;
                 
+                @AaperMethodDef(
+                    name = "someMethod"
+                )
                 class Aaper_MyClass__someMethod implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
