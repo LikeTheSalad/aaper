@@ -106,7 +106,7 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
             false
         )
         doRunMv.visitInsn(Opcodes.RETURN)
-        doRunMv.visitMaxs(AsmUtils.getMaxStackSize(fields.map { it.type }), 1)
+        doRunMv.visitMaxs(AsmUtils.getCombinedSize(fields.map { it.type }), 1)
         doRunMv.visitEnd()
     }
 

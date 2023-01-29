@@ -1,6 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getMaxStackSize
+import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
@@ -72,7 +72,7 @@ class TargetMethodVisitor(
         )
 
         originalMv.visitInsn(Opcodes.RETURN)
-        val varsSize = getMaxStackSize(argTypes)
+        val varsSize = getCombinedSize(argTypes)
         originalMv.visitMaxs(2 + varsSize, varsSize)
         originalMv.visitEnd()
     }

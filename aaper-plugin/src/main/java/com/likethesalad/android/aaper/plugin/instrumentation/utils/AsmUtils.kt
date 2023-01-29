@@ -4,7 +4,7 @@ import org.objectweb.asm.Type
 
 object AsmUtils {
 
-    fun getMaxStackSize(types: List<Type>): Int {
+    fun getCombinedSize(types: List<Type>): Int {
         var size = 0
 
         types.forEach {
