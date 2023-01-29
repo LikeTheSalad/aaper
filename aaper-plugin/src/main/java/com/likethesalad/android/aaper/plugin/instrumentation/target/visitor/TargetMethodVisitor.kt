@@ -48,6 +48,7 @@ class TargetMethodVisitor(
 
         originalMv.visitCode()
         originalMv.visitTypeInsn(Opcodes.NEW, generatedInternalName)
+        originalMv.visitInsn(Opcodes.DUP)
 
         argTypes.forEachIndexed { index, type ->
             originalMv.visitVarInsn(getLoadOpCode(type), index)
@@ -61,9 +62,17 @@ class TargetMethodVisitor(
             false
         )
 
+        originalMv.visitMethodInsn(
+            Opcodes.INVOKESTATIC,
+            "com/likethesalad/android/aaper/api/PermissionManager",
+            "temporary",
+            Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(Runnable::class.java)),
+            false
+        )
+
         originalMv.visitInsn(Opcodes.RETURN)
         val varsSize = getMaxStackSize(argTypes)
-        originalMv.visitMaxs(1 + varsSize, varsSize)
+        originalMv.visitMaxs(2 + varsSize, varsSize)
         originalMv.visitEnd()
     }
 
