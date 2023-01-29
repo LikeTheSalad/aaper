@@ -30,6 +30,7 @@ class AaperProcessorTest {
 
     @Test
     fun `Generate runnable class for an annotated method`() {
+        val generatedClassSimpleName = "Aaper_MyClass_someMethod"
         val compile = javac()
             .withProcessors(AaperProcessor())
             .compile(
@@ -47,10 +48,10 @@ class AaperProcessorTest {
                 )
             )
         assertThat(compile).succeeded()
-        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+        assertThat(compile).generatedSourceFile("com.example.$generatedClassSimpleName")
             .hasSourceEquivalentTo(
                 JavaFileObjects.forSourceString(
-                    "com.example.Aaper_MyClass__someMethod",
+                    "com.example.$generatedClassSimpleName",
                     """
                 package com.example;
                 
@@ -60,10 +61,10 @@ class AaperProcessorTest {
                 @AaperMethodDef(
                     name = "someMethod"
                 )
-                class Aaper_MyClass__someMethod implements AaperRunnable {
+                class $generatedClassSimpleName implements AaperRunnable {
                     private final MyClass instance;
                     
-                    public Aaper_MyClass__someMethod(MyClass instance) {
+                    public $generatedClassSimpleName(MyClass instance) {
                         this.instance = instance;
                     }
                 
@@ -77,6 +78,7 @@ class AaperProcessorTest {
 
     @Test
     fun `Generate runnable class for an annotated method with a primitive parameter`() {
+        val generatedClassSimpleName = "Aaper_MyClass_someMethod"
         val compile = javac()
             .withProcessors(AaperProcessor())
             .compile(
@@ -94,10 +96,10 @@ class AaperProcessorTest {
                 )
             )
         assertThat(compile).succeeded()
-        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+        assertThat(compile).generatedSourceFile("com.example.$generatedClassSimpleName")
             .hasSourceEquivalentTo(
                 JavaFileObjects.forSourceString(
-                    "com.example.Aaper_MyClass__someMethod",
+                    "com.example.$generatedClassSimpleName",
                     """
                 package com.example;
                 
@@ -107,11 +109,11 @@ class AaperProcessorTest {
                 @AaperMethodDef(
                     name = "someMethod"
                 )
-                class Aaper_MyClass__someMethod implements AaperRunnable {
+                class $generatedClassSimpleName implements AaperRunnable {
                     private final MyClass instance;
                     private final int value;
                     
-                    public Aaper_MyClass__someMethod(MyClass instance, int value) {
+                    public $generatedClassSimpleName(MyClass instance, int value) {
                         this.instance = instance;
                         this.value = value;
                     }
@@ -126,6 +128,7 @@ class AaperProcessorTest {
 
     @Test
     fun `Generate runnable class for an annotated method with an object parameter`() {
+        val generatedClassSimpleName = "Aaper_MyClass_someMethod"
         val compile = javac()
             .withProcessors(AaperProcessor())
             .compile(
@@ -143,10 +146,10 @@ class AaperProcessorTest {
                 )
             )
         assertThat(compile).succeeded()
-        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+        assertThat(compile).generatedSourceFile("com.example.$generatedClassSimpleName")
             .hasSourceEquivalentTo(
                 JavaFileObjects.forSourceString(
-                    "com.example.Aaper_MyClass__someMethod",
+                    "com.example.$generatedClassSimpleName",
                     """
                 package com.example;
                 
@@ -157,11 +160,11 @@ class AaperProcessorTest {
                 @AaperMethodDef(
                     name = "someMethod"
                 )                
-                class Aaper_MyClass__someMethod implements AaperRunnable {
+                class $generatedClassSimpleName implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
                     
-                    public Aaper_MyClass__someMethod(MyClass instance, String value) {
+                    public $generatedClassSimpleName(MyClass instance, String value) {
                         this.instance = instance;
                         this.value = value;
                     }
@@ -176,6 +179,7 @@ class AaperProcessorTest {
 
     @Test
     fun `Generate runnable class for an annotated method with multiple parameters`() {
+        val generatedClassSimpleName = "Aaper_MyClass_someMethod"
         val compile = javac()
             .withProcessors(AaperProcessor())
             .compile(
@@ -193,10 +197,10 @@ class AaperProcessorTest {
                 )
             )
         assertThat(compile).succeeded()
-        assertThat(compile).generatedSourceFile("com.example.Aaper_MyClass__someMethod")
+        assertThat(compile).generatedSourceFile("com.example.$generatedClassSimpleName")
             .hasSourceEquivalentTo(
                 JavaFileObjects.forSourceString(
-                    "com.example.Aaper_MyClass__someMethod",
+                    "com.example.$generatedClassSimpleName",
                     """
                 package com.example;
                 
@@ -207,12 +211,12 @@ class AaperProcessorTest {
                 @AaperMethodDef(
                     name = "someMethod"
                 )
-                class Aaper_MyClass__someMethod implements AaperRunnable {
+                class $generatedClassSimpleName implements AaperRunnable {
                     private final MyClass instance;
                     private final String value;
                     private final int someInt;
                     
-                    public Aaper_MyClass__someMethod(MyClass instance, String value, int someInt) {
+                    public $generatedClassSimpleName(MyClass instance, String value, int someInt) {
                         this.instance = instance;
                         this.value = value;
                         this.someInt = someInt;

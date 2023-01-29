@@ -63,7 +63,7 @@ class AaperProcessor : AbstractProcessor() {
         val runMethod = createRunMethod()
 
         val packageName = getPackageName(containerClass)
-        val generatedSimpleName = "Aaper_${containerClass.simpleName}__$methodName"
+        val generatedSimpleName = "Aaper_${containerClass.simpleName}_$methodName"
 
         val typeClass = createGeneratedType(
             methodName,
