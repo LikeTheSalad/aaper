@@ -85,8 +85,13 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
     }
 
     private fun createDoRunMethod() {
-        val doRunMv =
-            cv.visitMethod(Opcodes.ACC_PRIVATE, GENERATED_RUNNABLE_METHOD_NAME, "()V", null, null)
+        val doRunMv = cv.visitMethod(
+            Opcodes.ACC_SYNTHETIC or Opcodes.ACC_PRIVATE,
+            GENERATED_RUNNABLE_METHOD_NAME,
+            "()V",
+            null,
+            null
+        )
         val instanceField = fields.first()
         doRunMv.visitCode()
         fields.forEach {
