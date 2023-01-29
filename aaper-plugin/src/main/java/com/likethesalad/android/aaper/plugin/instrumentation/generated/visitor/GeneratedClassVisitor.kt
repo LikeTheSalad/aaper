@@ -49,7 +49,7 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
         signature: String?,
         value: Any?
     ): FieldVisitor {
-        fields.add(Field(name, descriptor))
+        fields.add(Field(name, Type.getType(descriptor)))
         return super.visitField(access, name, descriptor, signature, value)
     }
 
@@ -78,9 +78,43 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
     }
 
     override fun visitEnd() {
-        //todo create doRun method
+        createDoRunMethod()
         super.visitEnd()
     }
 
-    private data class Field(val name: String, val descriptor: String)
+    private fun createDoRunMethod() {
+        val doRunMv =
+            cv.visitMethod(Opcodes.ACC_PRIVATE, GENERATED_RUNNABLE_METHOD_NAME, "()V", null, null)
+        val instanceField = fields.first()
+        doRunMv.visitCode()
+        doRunMv.visitVarInsn(Opcodes.ALOAD, 0)
+        fields.forEach {
+            doRunMv.visitFieldInsn(
+                Opcodes.GETFIELD,
+                internalClassName,
+                it.name,
+                it.type.descriptor
+            )
+        }
+        doRunMv.visitMethodInsn(
+            Opcodes.INVOKEVIRTUAL,
+            instanceField.type.internalName,
+            methodDefAnnotationVisitor.methodName,
+            getTargetMethodDescriptor(fields.minus(instanceField)),
+            false
+        )
+        doRunMv.visitInsn(Opcodes.RETURN)
+        doRunMv.visitMaxs(fields.size, 1)
+        doRunMv.visitEnd()
+    }
+
+    private fun getTargetMethodDescriptor(parameters: List<Field>): String {
+        if (parameters.isEmpty()) {
+            return "()V"
+        }
+        val parameterTypes = parameters.map { it.type }.toTypedArray()
+        return Type.getMethodDescriptor(Type.VOID_TYPE, *parameterTypes)
+    }
+
+    private data class Field(val name: String, val type: Type)
 }
