@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getMaxStackSize
+import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
@@ -98,7 +99,7 @@ class TargetMethodVisitor(
     private fun createWraaper(): MethodVisitor {
         return cv.visitMethod(
             Opcodes.ACC_SYNTHETIC,
-            "wraaper_$methodName",
+            wrapMethodName(methodName),
             methodDescriptor,
             null,
             null
