@@ -104,8 +104,18 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
             false
         )
         doRunMv.visitInsn(Opcodes.RETURN)
-        doRunMv.visitMaxs(fields.size, 1)
+        doRunMv.visitMaxs(getMaxStackSize(), 1)
         doRunMv.visitEnd()
+    }
+
+    private fun getMaxStackSize(): Int {
+        var size = 0
+
+        fields.forEach {
+            size += it.type.size
+        }
+
+        return size
     }
 
     private fun getTargetMethodDescriptor(parameters: List<Field>): String {
