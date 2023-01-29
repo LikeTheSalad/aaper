@@ -23,6 +23,11 @@ object PermissionManager {
     }
     private var currentRequest: CurrentRequest? = null
 
+    @JvmStatic
+    fun temporary(runnable: Runnable) {
+
+    }
+
     /**
      * This setter is to define the source for a [RequestStrategyProvider] instance.
      * It can only be called once.
