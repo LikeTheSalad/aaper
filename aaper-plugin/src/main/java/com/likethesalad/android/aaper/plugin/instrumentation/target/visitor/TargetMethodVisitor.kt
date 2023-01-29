@@ -9,6 +9,7 @@ import org.objectweb.asm.Type
 class TargetMethodVisitor(
     methodVisitor: MethodVisitor,
     private val cv: ClassVisitor,
+    private val typeInternalName: String,
     private val methodName: String,
     private val methodDescriptor: String
 ) : MethodVisitor(Opcodes.ASM9, methodVisitor) {
@@ -29,6 +30,36 @@ class TargetMethodVisitor(
             mv = createWraaper()
         }
         super.visitCode()
+    }
+
+    override fun visitEnd() {
+        if (originalMv != null) {
+            replaceOriginalCode(originalMv!!)
+        }
+
+        super.visitEnd()
+    }
+
+    private fun replaceOriginalCode(originalMv: MethodVisitor) {
+        originalMv.visitCode()
+        originalMv.visitTypeInsn(Opcodes.NEW, getGeneratedInternalName())
+
+        originalMv.visitEnd()
+    }
+
+    private fun getGeneratedInternalName(): String {
+        val lastSlash = typeInternalName.indexOfLast { it == '/' }
+        return if (lastSlash > 0) {
+            val prefix = typeInternalName.substring(0, lastSlash)
+            val simpleName = typeInternalName.substring(lastSlash + 1)
+            "$prefix/${wrapSimpleName(simpleName)}"
+        } else {
+            wrapSimpleName(typeInternalName)
+        }
+    }
+
+    private fun wrapSimpleName(simpleName: String): String {
+        return "Aaper_${simpleName}_$methodName"
     }
 
     private fun createWraaper(): MethodVisitor {

@@ -6,6 +6,19 @@ import org.objectweb.asm.Opcodes
 
 class TargetClassVisitor(classVisitor: ClassVisitor) :
     ClassVisitor(Opcodes.ASM9, classVisitor) {
+    private lateinit var internalName: String
+
+    override fun visit(
+        version: Int,
+        access: Int,
+        name: String,
+        signature: String?,
+        superName: String?,
+        interfaces: Array<out String>?
+    ) {
+        internalName = name
+        super.visit(version, access, name, signature, superName, interfaces)
+    }
 
     override fun visitMethod(
         access: Int,
@@ -21,7 +34,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
                 descriptor,
                 signature,
                 exceptions
-            ), cv, name, descriptor
+            ), cv, internalName, name, descriptor
         )
     }
 }
