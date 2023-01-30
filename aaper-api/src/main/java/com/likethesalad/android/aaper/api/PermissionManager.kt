@@ -54,7 +54,7 @@ object PermissionManager {
     fun processPermissionRequest(
         host: Any,
         originalMethod: Runnable,
-        permissions: List<String>,
+        permissions: Array<String>,
         strategyName: String?
     ) {
         val strategy = strategyProvider.getStrategy(
@@ -161,7 +161,7 @@ object PermissionManager {
 
     private fun requestPermissions(
         host: Any,
-        permissions: List<String>,
+        permissions: Array<String>,
         missingPermissions: List<String>,
         originalMethod: Runnable,
         strategy: RequestStrategy<out Any>
@@ -185,7 +185,7 @@ object PermissionManager {
     private fun getMissingPermissions(
         host: Any,
         permissionStatusProvider: PermissionStatusProvider<out Any>,
-        permissions: List<String>
+        permissions: Array<String>
     ): List<String> {
         return permissions.filter {
             !permissionStatusProvider.internalIsPermissionGranted(host, it)
