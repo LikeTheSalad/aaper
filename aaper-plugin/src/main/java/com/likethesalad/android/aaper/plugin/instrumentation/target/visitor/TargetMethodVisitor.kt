@@ -61,6 +61,11 @@ class TargetMethodVisitor(
             argTypes
         ) // Max 2+(argTypes.size), leaves 1
         createStringArrayAndLeaveItInStack(originalMv, permissions) // Max 4, leaves 1
+        if (strategyName != null) {
+            originalMv.visitLdcInsn(strategyName)// 1
+        } else {
+            originalMv.visitInsn(Opcodes.ACONST_NULL) // 1
+        }
 
         originalMv.visitMethodInsn(
             Opcodes.INVOKESTATIC,
@@ -78,7 +83,7 @@ class TargetMethodVisitor(
 
         originalMv.visitInsn(Opcodes.RETURN)
         val varsSize = getCombinedSize(argTypes)
-        originalMv.visitMaxs(Math.max(6, 3 + varsSize), varsSize)
+        originalMv.visitMaxs(Math.max(7, 3 + varsSize), varsSize)
         originalMv.visitEnd()
     }
 
