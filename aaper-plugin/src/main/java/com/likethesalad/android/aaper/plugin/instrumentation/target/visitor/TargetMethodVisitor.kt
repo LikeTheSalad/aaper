@@ -54,6 +54,28 @@ class TargetMethodVisitor(
         argTypes.addAll(Type.getArgumentTypes(methodDescriptor))
 
         originalMv.visitCode()
+
+        createRunnableObjectAndPushItToTheStack(originalMv, generatedInternalName, argTypes)
+
+        originalMv.visitMethodInsn(
+            Opcodes.INVOKESTATIC,
+            "com/likethesalad/android/aaper/api/PermissionManager",
+            "temporary",
+            Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(Runnable::class.java)),
+            false
+        )
+
+        originalMv.visitInsn(Opcodes.RETURN)
+        val varsSize = getCombinedSize(argTypes)
+        originalMv.visitMaxs(2 + varsSize, varsSize)
+        originalMv.visitEnd()
+    }
+
+    private fun createRunnableObjectAndPushItToTheStack(
+        originalMv: MethodVisitor,
+        generatedInternalName: String,
+        argTypes: List<Type>
+    ) {
         originalMv.visitTypeInsn(Opcodes.NEW, generatedInternalName)
         originalMv.visitInsn(Opcodes.DUP)
 
@@ -68,19 +90,6 @@ class TargetMethodVisitor(
             Type.getMethodDescriptor(Type.VOID_TYPE, *argTypes.toTypedArray()),
             false
         )
-
-        originalMv.visitMethodInsn(
-            Opcodes.INVOKESTATIC,
-            "com/likethesalad/android/aaper/api/PermissionManager",
-            "temporary",
-            Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(Runnable::class.java)),
-            false
-        )
-
-        originalMv.visitInsn(Opcodes.RETURN)
-        val varsSize = getCombinedSize(argTypes)
-        originalMv.visitMaxs(2 + varsSize, varsSize)
-        originalMv.visitEnd()
     }
 
     private fun getLoadOpCode(type: Type): Int {
