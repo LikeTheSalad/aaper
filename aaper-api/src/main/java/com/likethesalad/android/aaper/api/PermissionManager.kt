@@ -23,11 +23,6 @@ object PermissionManager {
     }
     private var currentRequest: CurrentRequest? = null
 
-    @JvmStatic
-    fun temporary(runnable: Runnable) {
-
-    }
-
     /**
      * This setter is to define the source for a [RequestStrategyProvider] instance.
      * It can only be called once.
@@ -50,19 +45,22 @@ object PermissionManager {
      * request process.
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
-     * @param permissions - The array of permissions that the original method needs.
      * @param originalMethod - The method annotated with [EnsurePermissions].
+     * @param permissions - The array of permissions that the original method needs.
      * @param strategyName - The strategy name that will take care of the process for the
      * originalMethod.
      */
     @JvmStatic
     fun processPermissionRequest(
         host: Any,
-        permissions: Array<String>,
         originalMethod: Runnable,
-        strategyName: String
+        permissions: List<String>,
+        strategyName: String?
     ) {
-        val strategy = strategyProvider.getStrategy(host, strategyName)
+        val strategy = strategyProvider.getStrategy(
+            host,
+            strategyName ?: RequestStrategyProvider.DEFAULT_STRATEGY
+        )
         val missingPermissions = getMissingPermissions(
             host,
             strategy.internalGetPermissionStatusProvider(host),
@@ -163,7 +161,7 @@ object PermissionManager {
 
     private fun requestPermissions(
         host: Any,
-        permissions: Array<String>,
+        permissions: List<String>,
         missingPermissions: List<String>,
         originalMethod: Runnable,
         strategy: RequestStrategy<out Any>
@@ -187,7 +185,7 @@ object PermissionManager {
     private fun getMissingPermissions(
         host: Any,
         permissionStatusProvider: PermissionStatusProvider<out Any>,
-        permissions: Array<String>
+        permissions: List<String>
     ): List<String> {
         return permissions.filter {
             !permissionStatusProvider.internalIsPermissionGranted(host, it)
