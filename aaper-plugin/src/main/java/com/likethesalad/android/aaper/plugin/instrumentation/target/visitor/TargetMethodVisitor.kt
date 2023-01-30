@@ -71,13 +71,7 @@ class TargetMethodVisitor(
             Opcodes.INVOKESTATIC,
             "com/likethesalad/android/aaper/api/PermissionManager",
             "processPermissionRequest",
-            Type.getMethodDescriptor(
-                Type.VOID_TYPE,
-                Type.getType(Any::class.java),
-                Type.getType(Runnable::class.java),
-                Type.getType(Array::class.java),
-                Type.getType(String::class.java)
-            ),
+            "(Ljava/lang/Object;Ljava/lang/Runnable;[Ljava/lang/String;Ljava/lang/String;)V",
             false
         )
 
