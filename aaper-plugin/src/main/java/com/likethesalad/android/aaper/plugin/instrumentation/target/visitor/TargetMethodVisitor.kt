@@ -54,8 +54,13 @@ class TargetMethodVisitor(
         argTypes.addAll(Type.getArgumentTypes(methodDescriptor))
 
         originalMv.visitCode()
-        originalMv.visitVarInsn(Opcodes.ALOAD, 0) // this
-        createRunnableObjectAndPushItToTheStack(originalMv, generatedInternalName, argTypes)
+        originalMv.visitVarInsn(Opcodes.ALOAD, 0) // this (1)
+        createRunnableObjectAndPushItToTheStack(
+            originalMv,
+            generatedInternalName,
+            argTypes
+        ) // Max 2+(argTypes.size), leaves 1
+        createStringArrayAndLeaveItInStack(originalMv, permissions) // Max 4, leaves 1
 
         originalMv.visitMethodInsn(
             Opcodes.INVOKESTATIC,
@@ -73,7 +78,7 @@ class TargetMethodVisitor(
 
         originalMv.visitInsn(Opcodes.RETURN)
         val varsSize = getCombinedSize(argTypes)
-        originalMv.visitMaxs(3 + varsSize, varsSize)
+        originalMv.visitMaxs(Math.max(6, 3 + varsSize), varsSize)
         originalMv.visitEnd()
     }
 
@@ -96,6 +101,20 @@ class TargetMethodVisitor(
             Type.getMethodDescriptor(Type.VOID_TYPE, *argTypes.toTypedArray()),
             false
         )
+    }
+
+    private fun createStringArrayAndLeaveItInStack(
+        originalMv: MethodVisitor,
+        permissions: List<String>
+    ) {
+        originalMv.visitIntInsn(Opcodes.BIPUSH, permissions.size)
+        originalMv.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/String")
+        permissions.forEachIndexed { index, string ->
+            originalMv.visitInsn(Opcodes.DUP)
+            originalMv.visitIntInsn(Opcodes.BIPUSH, index)
+            originalMv.visitLdcInsn(string)
+            originalMv.visitInsn(Opcodes.AASTORE)
+        }
     }
 
     private fun getLoadOpCode(type: Type): Int {
