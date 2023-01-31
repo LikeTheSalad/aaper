@@ -1,12 +1,14 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
+import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 class TargetClassVisitor(classVisitor: ClassVisitor) :
-    ClassVisitor(Opcodes.ASM9, classVisitor) {
+    ClassVisitor(Opcodes.ASM9, classVisitor), AnnotatedMethodNotifier {
     private lateinit var internalName: String
+    private var hasAnnotatedMethod = false
 
     override fun visit(
         version: Int,
@@ -34,7 +36,11 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
                 descriptor,
                 signature,
                 exceptions
-            ), cv, internalName, name, descriptor
+            ), cv, internalName, name, descriptor, this
         )
+    }
+
+    override fun foundAnnotatedMethod() {
+        hasAnnotatedMethod = true
     }
 }

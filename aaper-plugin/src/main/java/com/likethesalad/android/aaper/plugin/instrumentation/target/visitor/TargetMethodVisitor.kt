@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
+import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
 import org.objectweb.asm.AnnotationVisitor
@@ -13,7 +14,8 @@ class TargetMethodVisitor(
     private val cv: ClassVisitor,
     private val typeInternalName: String,
     private val methodName: String,
-    private val methodDescriptor: String
+    private val methodDescriptor: String,
+    private val annotatedMethodNotifier: AnnotatedMethodNotifier
 ) : MethodVisitor(Opcodes.ASM9, methodVisitor) {
     private var isAnnotated = false
     private var originalMv: MethodVisitor? = null
@@ -24,6 +26,7 @@ class TargetMethodVisitor(
         val annotationType = Type.getType(descriptor)
         if (annotationType.className.equals("com.likethesalad.android.aaper.api.EnsurePermissions")) {
             isAnnotated = true
+            annotatedMethodNotifier.foundAnnotatedMethod()
             targetAnnotationVisitor = TargetAnnotationVisitor(annotationVisitor)
             return targetAnnotationVisitor
         }
