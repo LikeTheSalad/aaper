@@ -39,7 +39,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
         )
 
         if (isResultMethod(name, descriptor)) {
-            return originalMv;
+            return originalMv
         }
 
         return TargetMethodVisitor(
