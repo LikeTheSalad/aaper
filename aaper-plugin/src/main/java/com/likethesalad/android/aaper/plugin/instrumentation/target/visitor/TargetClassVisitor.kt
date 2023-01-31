@@ -29,15 +29,26 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        return TargetMethodVisitor(
-            super.visitMethod(
-                access,
-                name,
-                descriptor,
-                signature,
-                exceptions
-            ), cv, internalName, name, descriptor, this
+
+        val originalMv = super.visitMethod(
+            access,
+            name,
+            descriptor,
+            signature,
+            exceptions
         )
+
+        if (isResultMethod(name, descriptor)) {
+            return originalMv;
+        }
+
+        return TargetMethodVisitor(
+            originalMv, cv, internalName, name, descriptor, this
+        )
+    }
+
+    private fun isResultMethod(name: String, descriptor: String): Boolean {
+        return name == "onRequestPermissionsResult" && descriptor == "(I[Ljava/lang/String;[I)V"
     }
 
     override fun foundAnnotatedMethod() {
