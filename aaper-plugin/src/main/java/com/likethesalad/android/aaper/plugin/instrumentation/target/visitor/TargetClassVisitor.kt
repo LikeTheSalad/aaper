@@ -103,6 +103,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
         )
         mv.visitInsn(Opcodes.RETURN)
         mv.visitMaxs(5, 4)
+        mv.visitEnd()
     }
 
     private fun isResultMethod(name: String, descriptor: String): Boolean {
