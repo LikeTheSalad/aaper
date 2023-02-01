@@ -75,8 +75,8 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
         // Super call
         mv.visitVarInsn(Opcodes.ALOAD, 0) // this
         mv.visitVarInsn(Opcodes.ILOAD, 1) // requestCode
-        mv.visitVarInsn(Opcodes.AALOAD, 2) // permissions
-        mv.visitVarInsn(Opcodes.IALOAD, 3) // grantResults
+        mv.visitVarInsn(Opcodes.ALOAD, 2) // permissions
+        mv.visitVarInsn(Opcodes.ALOAD, 3) // grantResults
         mv.visitMethodInsn(
             Opcodes.INVOKESPECIAL,
             superInternalName,
@@ -87,7 +87,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
 
         // Aaper call
         mv.visitVarInsn(Opcodes.ALOAD, 0) // this
-        mv.visitVarInsn(Opcodes.AALOAD, 2) // permissions
+        mv.visitVarInsn(Opcodes.ALOAD, 2) // permissions
         val requestCodeMetadataType =
             "com/likethesalad/android/aaper/data/RequestCodeLaunchMetadata"
         mv.visitTypeInsn(Opcodes.NEW, requestCodeMetadataType)
