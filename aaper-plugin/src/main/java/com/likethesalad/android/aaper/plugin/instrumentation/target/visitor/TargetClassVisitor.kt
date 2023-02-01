@@ -9,6 +9,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
     ClassVisitor(Opcodes.ASM9, classVisitor), AnnotatedMethodNotifier {
     private lateinit var internalName: String
     private var hasAnnotatedMethod = false
+    private var hasFoundResultMethod = false
 
     override fun visit(
         version: Int,
@@ -39,6 +40,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
         )
 
         if (isResultMethod(name, descriptor)) {
+            hasFoundResultMethod = true
             return originalMv
         }
 
