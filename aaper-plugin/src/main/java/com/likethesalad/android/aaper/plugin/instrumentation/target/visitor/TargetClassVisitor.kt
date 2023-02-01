@@ -84,6 +84,25 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
             RESULT_METHOD_DESCRIPTOR,
             false
         )
+
+        // Aaper call
+        mv.visitVarInsn(Opcodes.ALOAD, 0) // this
+        mv.visitVarInsn(Opcodes.AALOAD, 2) // permissions
+        val requestCodeMetadataType =
+            "com/likethesalad/android/aaper/data/RequestCodeLaunchMetadata"
+        mv.visitTypeInsn(Opcodes.NEW, requestCodeMetadataType)
+        mv.visitInsn(Opcodes.DUP)
+        mv.visitVarInsn(Opcodes.ILOAD, 1) // requestCode
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, requestCodeMetadataType, "<init>", "(I)V", false)
+        mv.visitMethodInsn(
+            Opcodes.INVOKESTATIC,
+            "com/likethesalad/android/aaper/api/PermissionManager",
+            "processPermissionResponse",
+            "(Ljava/lang/Object;[Ljava/lang/String;Lcom/likethesalad/android/aaper/api/base/LaunchMetadata;)V",
+            false
+        )
+        mv.visitInsn(Opcodes.RETURN)
+        mv.visitMaxs(5, 4)
     }
 
     private fun isResultMethod(name: String, descriptor: String): Boolean {
