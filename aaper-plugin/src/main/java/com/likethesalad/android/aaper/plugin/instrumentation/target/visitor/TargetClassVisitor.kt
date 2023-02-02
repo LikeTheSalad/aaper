@@ -48,7 +48,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
 
         if (isResultMethod(name, descriptor)) {
             hasFoundResultMethod = true
-            return originalMv
+            return ResultMethodWrapper(originalMv)
         }
 
         return TargetMethodVisitor(
@@ -64,7 +64,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
     }
 
     private fun overrideResultMethod() {
-        val mv = cv.visitMethod(
+        val mv = visitMethod(
             Opcodes.ACC_PUBLIC,
             RESULT_METHOD_NAME,
             RESULT_METHOD_DESCRIPTOR,
@@ -72,6 +72,7 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
             null
         )
         mv.visitCode()
+
         // Super call
         mv.visitVarInsn(Opcodes.ALOAD, 0) // this
         mv.visitVarInsn(Opcodes.ILOAD, 1) // requestCode
@@ -85,24 +86,8 @@ class TargetClassVisitor(classVisitor: ClassVisitor) :
             false
         )
 
-        // Aaper call
-        mv.visitVarInsn(Opcodes.ALOAD, 0) // this
-        mv.visitVarInsn(Opcodes.ALOAD, 2) // permissions
-        val requestCodeMetadataType =
-            "com/likethesalad/android/aaper/data/RequestCodeLaunchMetadata"
-        mv.visitTypeInsn(Opcodes.NEW, requestCodeMetadataType)
-        mv.visitInsn(Opcodes.DUP)
-        mv.visitVarInsn(Opcodes.ILOAD, 1) // requestCode
-        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, requestCodeMetadataType, "<init>", "(I)V", false)
-        mv.visitMethodInsn(
-            Opcodes.INVOKESTATIC,
-            "com/likethesalad/android/aaper/api/PermissionManager",
-            "processPermissionResponse",
-            "(Ljava/lang/Object;[Ljava/lang/String;Lcom/likethesalad/android/aaper/api/base/LaunchMetadata;)V",
-            false
-        )
         mv.visitInsn(Opcodes.RETURN)
-        mv.visitMaxs(5, 4)
+        mv.visitMaxs(4, 4)
         mv.visitEnd()
     }
 
