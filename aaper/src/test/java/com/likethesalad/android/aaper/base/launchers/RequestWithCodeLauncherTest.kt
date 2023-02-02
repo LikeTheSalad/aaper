@@ -1,20 +1,18 @@
 package com.likethesalad.android.aaper.base.launchers
 
 import com.google.common.truth.Truth
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class RequestWithCodeLauncherTest {
+class RequestWithCodeLauncherTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var host: Any
 
     private lateinit var launcher: TestRequestWithCodeLauncher

@@ -6,19 +6,17 @@ import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.impl.annotations.MockK
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class RequestWithCodeMetadataStrategyTest {
+class RequestWithCodeMetadataStrategyTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var host: Any
 
     private lateinit var requestWithCodeMetadataStrategy: TestRequestWithCodeMetadataStrategy

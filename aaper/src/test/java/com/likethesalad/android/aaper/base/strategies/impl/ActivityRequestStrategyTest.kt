@@ -5,20 +5,18 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class ActivityRequestStrategyTest {
+class ActivityRequestStrategyTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var host: Activity
 
     private lateinit var activityRequestStrategy: ActivityRequestStrategy

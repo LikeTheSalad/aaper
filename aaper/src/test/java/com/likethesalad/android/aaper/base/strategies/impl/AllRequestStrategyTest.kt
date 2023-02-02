@@ -8,26 +8,22 @@ import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.launchers.FragmentRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
 import com.likethesalad.android.aaper.defaults.statusproviders.FragmentPermissionStatusProvider
-import com.nhaarman.mockitokotlin2.mock
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.impl.annotations.MockK
 import org.junit.Assert.fail
 import org.junit.Before
-
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class AllRequestStrategyTest {
+class AllRequestStrategyTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var fragmentHost: Fragment
 
-    @Mock
+    @MockK
     lateinit var activityHost: Activity
 
     private lateinit var allRequestStrategy: AllRequestStrategy
@@ -79,7 +75,7 @@ class AllRequestStrategyTest {
     @Test
     fun `Verify request launcher exception for unknown host`() {
         try {
-            allRequestStrategy.getRequestLauncher(mock())
+            allRequestStrategy.getRequestLauncher(mockk())
             fail("Should've gone into the catch block")
         } catch (e: UnsupportedOperationException) {
         }
@@ -88,7 +84,7 @@ class AllRequestStrategyTest {
     @Test
     fun `Verify permission status provider exception for unknown host`() {
         try {
-            allRequestStrategy.getPermissionStatusProvider(mock())
+            allRequestStrategy.getPermissionStatusProvider(mockk())
             fail("Should've gone into the catch block")
         } catch (e: UnsupportedOperationException) {
         }

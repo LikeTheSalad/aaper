@@ -3,24 +3,20 @@ package com.likethesalad.android.aaper.defaults
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 14/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class DefaultRequestStrategyProviderTest {
+class DefaultRequestStrategyProviderTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var host: Any
 
     private lateinit var defaultRequestStrategyProvider: DefaultRequestStrategyProvider
@@ -90,8 +86,10 @@ class DefaultRequestStrategyProviderTest {
     }
 
     private fun createStrategyMock(name: String): RequestStrategy<Any> {
-        val strategy = mock<RequestStrategy<Any>>()
-        doReturn(name).whenever(strategy).getName()
+        val strategy = mockk<RequestStrategy<Any>>()
+        every {
+            strategy.getName()
+        }.returns(name)
         return strategy
     }
 }
