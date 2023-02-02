@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
+import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.annotations.TargetAnnotationVisitor
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName

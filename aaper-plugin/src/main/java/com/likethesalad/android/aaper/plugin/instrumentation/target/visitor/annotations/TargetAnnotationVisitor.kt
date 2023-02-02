@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
+package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.annotations
 
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes
