@@ -1,45 +1,39 @@
 package com.likethesalad.android.aaper.defaults.statusproviders
 
-import android.app.Activity
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import com.google.common.truth.Truth
-import com.nhaarman.mockitokotlin2.mock
+import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
+import com.likethesalad.android.aaper.testutils.RobolectricActivity
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
+import org.robolectric.Robolectric
+import org.robolectric.Shadows
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(ContextCompat::class)
-class ActivityPermissionStatusProviderTest {
+class ActivityPermissionStatusProviderTest : BaseRobolectricTest() {
 
-    private lateinit var host: Activity
     private lateinit var activityPermissionStatusProvider: ActivityPermissionStatusProvider
 
     @Before
     fun setUp() {
-        host = mock()
         activityPermissionStatusProvider = ActivityPermissionStatusProvider()
     }
 
     @Test
-    fun `Delegate query to ContextCompat`() {
+    fun `Return permission grant status`() {
         val permissionName = "somePermission"
-        PowerMockito.mockStatic(ContextCompat::class.java)
-        PowerMockito.`when`(ContextCompat.checkSelfPermission(host, permissionName))
-            .thenReturn(PackageManager.PERMISSION_GRANTED)
+        Robolectric.buildActivity(RobolectricActivity::class.java).use { controller ->
+            controller.setup()
+            val activity = controller.get()
 
-        val result = activityPermissionStatusProvider.isPermissionGranted(host, permissionName)
+            Shadows.shadowOf(activity).grantPermissions(permissionName)
 
-        Truth.assertThat(result).isTrue()
-        PowerMockito.verifyStatic(ContextCompat::class.java)
-        ContextCompat.checkSelfPermission(host, permissionName)
+            val result =
+                activityPermissionStatusProvider.isPermissionGranted(activity, permissionName)
+
+            Truth.assertThat(result).isTrue()
+        }
     }
 }

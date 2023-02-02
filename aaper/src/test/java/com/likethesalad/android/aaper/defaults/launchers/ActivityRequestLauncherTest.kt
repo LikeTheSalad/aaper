@@ -22,7 +22,7 @@ class ActivityRequestLauncherTest : BaseRobolectricTest() {
     }
 
     @Test
-    fun `Delegate request to ActivityCompat`() {
+    fun `Launch permission request from activity`() {
         Robolectric.buildActivity(RobolectricActivity::class.java).use { controller ->
             controller.setup()
             val permissions = listOf("one", "two")
