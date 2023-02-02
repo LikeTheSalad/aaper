@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.likethesalad.android.aaper.api.EnsurePermissions
-
 import com.likethesalad.android.aaper.sample.custom.AlertDialogStrategy
 
 class MainActivity : AppCompatActivity() {
