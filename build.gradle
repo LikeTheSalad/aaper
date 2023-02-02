@@ -19,6 +19,7 @@ artifactPublisher {
 ext {
     testingUtilities_version = '1.0.8'
     autoService_version = '1.0.1'
+    fragment_version = '1.5.5'
 }
 
 task clean(type: Delete) {
