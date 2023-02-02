@@ -211,4 +211,8 @@ object PermissionManager {
     private fun cleanUp() {
         currentRequest = null
     }
+
+    fun resetForTest() {
+        strategyProviderSource = null
+    }
 }
