@@ -50,6 +50,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method with signature`() {
+        run { activity ->
+            val callMe = createCallMeWithArgsMock<String>()
+
+            activity.methodWithSignature(callMe, "some value")
+
+            verifyCalled(callMe, "some value")
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }

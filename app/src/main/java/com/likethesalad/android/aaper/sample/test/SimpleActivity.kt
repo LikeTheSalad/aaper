@@ -32,4 +32,9 @@ class SimpleActivity : AppCompatActivity() {
     ) {
         callMeWithArg.callMe("Sum result: ${long + double}")
     }
+
+    @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
+    fun <T : Any> methodWithSignature(callMe: CallMeWithArg<T>, someObject: T) {
+        callMe.callMe(someObject)
+    }
 }

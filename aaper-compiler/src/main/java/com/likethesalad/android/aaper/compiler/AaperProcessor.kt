@@ -9,6 +9,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.TypeVariableName
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -19,6 +20,7 @@ import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.Name
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.TypeParameterElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic
@@ -70,6 +72,7 @@ class AaperProcessor : AbstractProcessor() {
             generatedSimpleName,
             containerTypeName,
             parameters,
+            method.typeParameters,
             constructor,
             runMethod
         )
@@ -94,12 +97,17 @@ class AaperProcessor : AbstractProcessor() {
         generatedSimpleName: String,
         containerTypeName: TypeName,
         parameters: List<VariableElement>,
+        typeParameters: List<TypeParameterElement>,
         vararg methods: MethodSpec
     ): TypeSpec {
         val typeClass = TypeSpec.classBuilder(generatedSimpleName)
             .addSuperinterface(AaperRunnable::class.java)
             .addField(containerTypeName, "instance", Modifier.PRIVATE, Modifier.FINAL)
             .addMethods(methods.asList())
+
+        typeParameters.forEach { typeParam ->
+            typeClass.addTypeVariable(TypeVariableName.get(typeParam))
+        }
 
         parameters.forEach {
             typeClass.addField(
