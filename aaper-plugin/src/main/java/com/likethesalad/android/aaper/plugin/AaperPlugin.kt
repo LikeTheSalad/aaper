@@ -19,10 +19,15 @@ class AaperPlugin : Plugin<Project> {
     private fun setUp(project: Project) {
         setUpAndroidTransformation(project)
         addSdkDependency(project)
+        addCompilerDependency(project)
     }
 
     private fun addSdkDependency(project: Project) {
         project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
+    }
+
+    private fun addCompilerDependency(project: Project) {
+        project.dependencies.add("kapt", BuildConfig.COMPILER_DEPENDENCY_URI)
     }
 
     private fun setUpAndroidTransformation(project: Project) {
