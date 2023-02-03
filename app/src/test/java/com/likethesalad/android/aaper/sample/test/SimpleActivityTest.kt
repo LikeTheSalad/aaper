@@ -17,6 +17,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method with single param`() {
+        run { activity ->
+            val callMe = createCallMeMock()
+
+            activity.methodWithSingleParam(callMe)
+
+            verifyCalled(callMe)
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }
