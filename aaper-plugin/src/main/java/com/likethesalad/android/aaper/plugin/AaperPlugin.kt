@@ -5,6 +5,7 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.android.aaper.plugin.instrumentation.generated.GeneratedAsmClassVisitorFactory
 import com.likethesalad.android.aaper.plugin.instrumentation.target.TargetAsmClassVisitorFactory
 import com.likethesalad.android.generated.BuildConfig
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -23,12 +24,21 @@ class AaperPlugin : Plugin<Project> {
         project.plugins.withId(KOTLIN_PLUGIN_ID) {
             addKotlinCompilerDependency(project)
         }
+        checkProjectIsValid(project)
     }
 
     private fun setUp(project: Project) {
         setUpAndroidTransformation(project)
         addSdkDependency(project)
         addAnnotationProcessor(project)
+    }
+
+    private fun checkProjectIsValid(project: Project) {
+        project.afterEvaluate {
+            if (!project.plugins.hasPlugin(ANDROID_APP_PLUGIN_ID)) {
+                throw GradleException("No Android application found, Aaper must be added into an Android application project.")
+            }
+        }
     }
 
     private fun addSdkDependency(project: Project) {
