@@ -20,6 +20,7 @@ ext {
     testingUtilities_version = '1.0.8'
     autoService_version = '1.0.1'
     fragment_version = '1.5.5'
+    robolectric_version = '4.9'
 }
 
 task clean(type: Delete) {
