@@ -11,14 +11,16 @@ import org.gradle.api.Project
 class AaperPlugin : Plugin<Project> {
 
     companion object {
+        private const val ANDROID_APP_PLUGIN_ID = "com.android.application"
+        private const val KOTLIN_PLUGIN_ID = "org.jetbrains.kotlin.android"
         private const val KOTLIN_KAPT_PLUGIN_ID = "kotlin-kapt"
     }
 
     override fun apply(project: Project) {
-        project.plugins.withId("com.android.application") {
+        project.plugins.withId(ANDROID_APP_PLUGIN_ID) {
             setUp(project)
         }
-        project.plugins.withId("org.jetbrains.kotlin.android") {
+        project.plugins.withId(KOTLIN_PLUGIN_ID) {
             addKotlinCompilerDependency(project)
         }
     }
@@ -26,10 +28,15 @@ class AaperPlugin : Plugin<Project> {
     private fun setUp(project: Project) {
         setUpAndroidTransformation(project)
         addSdkDependency(project)
+        addAnnotationProcessor(project)
     }
 
     private fun addSdkDependency(project: Project) {
         project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
+    }
+
+    private fun addAnnotationProcessor(project: Project) {
+        project.dependencies.add("annotationProcessor", BuildConfig.COMPILER_DEPENDENCY_URI)
     }
 
     private fun addKotlinCompilerDependency(project: Project) {
@@ -49,7 +56,7 @@ class AaperPlugin : Plugin<Project> {
             variant.instrumentation.transformClassesWith(
                 TargetAsmClassVisitorFactory::class.java,
                 InstrumentationScope.PROJECT
-            ) { }
+            ) {}
             variant.instrumentation.transformClassesWith(
                 GeneratedAsmClassVisitorFactory::class.java,
                 InstrumentationScope.PROJECT
