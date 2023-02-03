@@ -61,18 +61,30 @@ class GeneratedClassVisitor(classVisitor: ClassVisitor) :
         descriptor: String,
         signature: String?,
         exceptions: Array<out String>?
-    ): MethodVisitor {
-        val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+    ): MethodVisitor? {
 
         if (isRunMethod(name, descriptor)) {
-            return RunMethodVisitor(
-                methodVisitor,
-                internalClassName,
-                GENERATED_RUNNABLE_METHOD_NAME
-            )
+            createRunMethod(name, descriptor)
+            return null
         }
 
-        return methodVisitor
+        return super.visitMethod(access, name, descriptor, signature, exceptions)
+    }
+
+    private fun createRunMethod(name: String, descriptor: String) {
+        val mv = cv.visitMethod(Opcodes.ACC_PUBLIC, name, descriptor, null, null)
+        mv.visitCode()
+        mv.visitVarInsn(Opcodes.ALOAD, 0)
+        mv.visitMethodInsn(
+            Opcodes.INVOKEVIRTUAL,
+            internalClassName,
+            GENERATED_RUNNABLE_METHOD_NAME,
+            "()V",
+            false
+        )
+        mv.visitInsn(Opcodes.RETURN)
+        mv.visitMaxs(1, 1)
+        mv.visitEnd()
     }
 
     private fun isRunMethod(name: String, descriptor: String): Boolean {
