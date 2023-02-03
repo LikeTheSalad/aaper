@@ -46,7 +46,7 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
 
             activity.methodWithLongAndDoubleParams(2, 5.0, callMe)
 
-            verifyCalled(callMe, "Sum result: 7")
+            verifyCalled(callMe, "Sum result: 7.0")
         }
     }
 
