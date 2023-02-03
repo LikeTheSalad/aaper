@@ -37,4 +37,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 }
