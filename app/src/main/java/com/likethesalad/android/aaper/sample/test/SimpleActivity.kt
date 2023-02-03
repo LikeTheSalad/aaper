@@ -12,4 +12,9 @@ class SimpleActivity : AppCompatActivity() {
     fun simpleMethod() {
         callMe?.call()
     }
+
+    @EnsurePermissions(permissions = [Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION])
+    fun methodWithSingleParam(callMe: CallMe) {
+        callMe.call()
+    }
 }
