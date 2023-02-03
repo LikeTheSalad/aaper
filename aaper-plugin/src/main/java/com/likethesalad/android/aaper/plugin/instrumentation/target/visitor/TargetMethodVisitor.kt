@@ -82,7 +82,7 @@ class TargetMethodVisitor(
 
         originalMv.visitInsn(Opcodes.RETURN)
         val varsSize = getCombinedSize(argTypes)
-        originalMv.visitMaxs(max(7, 3 + varsSize), varsSize)
+        originalMv.visitMaxs(max(6, 3 + varsSize), varsSize)
         originalMv.visitEnd()
     }
 
