@@ -10,24 +10,35 @@ import org.gradle.api.Project
 
 class AaperPlugin : Plugin<Project> {
 
+    companion object {
+        private const val KOTLIN_KAPT_PLUGIN_ID = "kotlin-kapt"
+    }
+
     override fun apply(project: Project) {
         project.plugins.withId("com.android.application") {
             setUp(project)
+        }
+        project.plugins.withId("org.jetbrains.kotlin.android") {
+            addKotlinCompilerDependency(project)
         }
     }
 
     private fun setUp(project: Project) {
         setUpAndroidTransformation(project)
         addSdkDependency(project)
-        addCompilerDependency(project)
     }
 
     private fun addSdkDependency(project: Project) {
         project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
     }
 
-    private fun addCompilerDependency(project: Project) {
+    private fun addKotlinCompilerDependency(project: Project) {
+        addKaptPlugin(project)
         project.dependencies.add("kapt", BuildConfig.COMPILER_DEPENDENCY_URI)
+    }
+
+    private fun addKaptPlugin(project: Project) {
+        project.plugins.apply(KOTLIN_KAPT_PLUGIN_ID)
     }
 
     private fun setUpAndroidTransformation(project: Project) {
