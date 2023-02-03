@@ -46,4 +46,10 @@ class SimpleActivity : AppCompatActivity() {
     ) {
         callMe.callMe("First: $someObject, second: $someOther")
     }
+
+    @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
+    @kotlin.jvm.Throws(java.lang.IllegalArgumentException::class)
+    fun someMethodThatThrowsException(callMe: CallMe) {
+        callMe.call()
+    }
 }

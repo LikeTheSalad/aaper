@@ -72,6 +72,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method that throws exception`() {
+        run { activity ->
+            val callMe = createCallMeMock()
+
+            activity.someMethodThatThrowsException(callMe)
+
+            verifyCalled(callMe)
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }
