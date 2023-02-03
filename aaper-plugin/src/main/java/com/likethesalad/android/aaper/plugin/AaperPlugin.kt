@@ -4,6 +4,7 @@ import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.android.aaper.plugin.instrumentation.generated.GeneratedAsmClassVisitorFactory
 import com.likethesalad.android.aaper.plugin.instrumentation.target.TargetAsmClassVisitorFactory
+import com.likethesalad.android.generated.BuildConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -16,6 +17,15 @@ class AaperPlugin : Plugin<Project> {
     }
 
     private fun setUp(project: Project) {
+        setUpAndroidTransformation(project)
+        addSdkDependency(project)
+    }
+
+    private fun addSdkDependency(project: Project) {
+        project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
+    }
+
+    private fun setUpAndroidTransformation(project: Project) {
         val componentsExtension =
             project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
 
