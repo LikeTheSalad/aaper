@@ -37,4 +37,13 @@ class SimpleActivity : AppCompatActivity() {
     fun <T : Any> methodWithSignature(callMe: CallMeWithArg<T>, someObject: T) {
         callMe.callMe(someObject)
     }
+
+    @EnsurePermissions(permissions = [Manifest.permission.ACCESS_FINE_LOCATION])
+    fun <T : Any, R> methodWithMultipleGenerics(
+        callMe: CallMeWithArg<String>,
+        someObject: T,
+        someOther: R
+    ) {
+        callMe.callMe("First: $someObject, second: $someOther")
+    }
 }

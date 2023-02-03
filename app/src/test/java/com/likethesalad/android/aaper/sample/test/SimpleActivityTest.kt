@@ -61,6 +61,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method with multiple generics`() {
+        run { activity ->
+            val callMe = createCallMeWithArgsMock<String>()
+
+            activity.methodWithMultipleGenerics(callMe, 2.0, "some string")
+
+            verifyCalled(callMe, "First: 2.0, second: some string")
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }
