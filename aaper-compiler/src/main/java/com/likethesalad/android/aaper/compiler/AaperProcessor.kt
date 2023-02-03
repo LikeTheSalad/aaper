@@ -78,7 +78,8 @@ class AaperProcessor : AbstractProcessor() {
         )
 
         val javaFile = JavaFile.builder(packageName, typeClass).build()
-        val javaWriter = processingEnv.filer.createSourceFile("${packageName}.$generatedSimpleName")
+        val javaWriter =
+            processingEnv.filer.createSourceFile("${packageName}.$generatedSimpleName", method)
         val writer = javaWriter.openWriter()
 
         javaFile.writeTo(writer)
