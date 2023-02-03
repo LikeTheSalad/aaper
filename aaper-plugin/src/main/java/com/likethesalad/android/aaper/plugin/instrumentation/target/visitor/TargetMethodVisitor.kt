@@ -94,8 +94,10 @@ class TargetMethodVisitor(
         originalMv.visitTypeInsn(Opcodes.NEW, generatedInternalName)
         originalMv.visitInsn(Opcodes.DUP)
 
-        argTypes.forEachIndexed { index, type ->
+        var index = 0
+        argTypes.forEach { type ->
             originalMv.visitVarInsn(getLoadOpCode(type), index)
+            index += type.size
         }
 
         originalMv.visitMethodInsn(
