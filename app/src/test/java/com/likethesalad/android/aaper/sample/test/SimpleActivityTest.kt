@@ -16,8 +16,9 @@ class SimpleActivityTest : BaseRobolectricTest() {
             val activity = it.get()
 
             val callMe = mockk<CallMe>(relaxUnitFun = true)
+            activity.callMe = callMe
 
-            activity.simpleMethod(callMe)
+            activity.simpleMethod()
 
             verify {
                 callMe.call()

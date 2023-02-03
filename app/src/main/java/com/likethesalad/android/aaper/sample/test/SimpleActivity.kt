@@ -6,9 +6,10 @@ import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.sample.test.utils.CallMe
 
 class SimpleActivity : AppCompatActivity() {
+    var callMe: CallMe? = null
 
     @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
-    fun simpleMethod(callMe: CallMe) {
-        callMe.call()
+    fun simpleMethod() {
+        callMe?.call()
     }
 }
