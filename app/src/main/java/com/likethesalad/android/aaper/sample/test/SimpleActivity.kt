@@ -23,4 +23,13 @@ class SimpleActivity : AppCompatActivity() {
     fun methodWithMultipleParams(first: Int, second: String, callMeWithArg: CallMeWithArg<String>) {
         callMeWithArg.callMe("First: $first, second: $second")
     }
+
+    @EnsurePermissions(permissions = [Manifest.permission.ACCESS_FINE_LOCATION])
+    fun methodWithLongAndDoubleParams(
+        long: Long,
+        double: Double,
+        callMeWithArg: CallMeWithArg<String>
+    ) {
+        callMeWithArg.callMe("Sum result: ${long + double}")
+    }
 }

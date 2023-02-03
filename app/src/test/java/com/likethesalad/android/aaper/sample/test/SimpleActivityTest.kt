@@ -39,6 +39,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method with long and double params`() {
+        run { activity ->
+            val callMe = createCallMeWithArgsMock<String>()
+
+            activity.methodWithLongAndDoubleParams(2, 5.0, callMe)
+
+            verifyCalled(callMe, "Sum result: 7")
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }
