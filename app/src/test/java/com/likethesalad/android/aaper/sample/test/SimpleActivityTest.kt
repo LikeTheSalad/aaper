@@ -28,6 +28,17 @@ class SimpleActivityTest : BaseActivityTest<SimpleActivity>() {
         }
     }
 
+    @Test
+    fun `Check permissions granted for method with multiple params`() {
+        run { activity ->
+            val callMe = createCallMeWithArgsMock<String>()
+
+            activity.methodWithMultipleParams(5, "Something", callMe)
+
+            verifyCalled(callMe, "First: 5, second: Something")
+        }
+    }
+
     override fun getActivityClass(): Class<SimpleActivity> {
         return SimpleActivity::class.java
     }
