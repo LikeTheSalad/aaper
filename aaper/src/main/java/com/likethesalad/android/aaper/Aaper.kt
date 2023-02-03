@@ -2,10 +2,10 @@ package com.likethesalad.android.aaper
 
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
+import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
-import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 
 /**
  * Aaper entry point.
@@ -48,5 +48,9 @@ object Aaper : RequestStrategyProviderSource {
      */
     override fun getRequestStrategyProvider(): RequestStrategyProvider {
         return strategyProvider
+    }
+
+    fun resetForTest() {
+        initialized = false
     }
 }
