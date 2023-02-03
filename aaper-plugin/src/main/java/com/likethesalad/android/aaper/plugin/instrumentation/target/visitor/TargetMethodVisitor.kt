@@ -4,6 +4,7 @@ import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.anno
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
+import java.lang.Integer.max
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
@@ -81,7 +82,7 @@ class TargetMethodVisitor(
 
         originalMv.visitInsn(Opcodes.RETURN)
         val varsSize = getCombinedSize(argTypes)
-        originalMv.visitMaxs(Math.max(7, 3 + varsSize), varsSize)
+        originalMv.visitMaxs(max(7, 3 + varsSize), varsSize)
         originalMv.visitEnd()
     }
 
