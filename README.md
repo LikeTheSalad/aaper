@@ -48,9 +48,9 @@ class MyApplication {
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--THIS IS VERY IMPORTANT!!, the Android OS will ignore any permission request for -->
-    <!--permissions not listed in your manifest.-->
-    <uses-permission android:name="android.permission.CAMERA" />
+    <!--THIS IS VERY IMPORTANT!!-->
+    <uses-permission
+        android:name="android.permission.CAMERA" />  <!--Declare the permission in your manifest. Otherwise the runtime request won't work.-->
 
     <!--You need to add your application class (shown above) to the manifest too as shown below-->
     <application android:name="my.app.MyApplication">
