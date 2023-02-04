@@ -42,6 +42,17 @@ class MyApplication {
 }  
 ```  
 
+```xml
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.likethesalad.android.aaper.sample">
+
+    <!--    This is very important, the Android OS will ignore any permission request for permissions not-->
+    <!--    listed in your manifest.-->
+    <uses-permission android:name="android.permission.CAMERA" />
+</manifest>
+```
+
 ```kotlin  
 // Aaper usage  
 
