@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin
 
+import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.android.aaper.plugin.instrumentation.generated.GeneratedAsmClassVisitorFactory
@@ -19,12 +20,22 @@ class AaperPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.plugins.withId(ANDROID_APP_PLUGIN_ID) {
+            validateAgpVersion(project)
             setUp(project)
         }
         project.plugins.withId(KOTLIN_PLUGIN_ID) {
             addKotlinCompilerDependency(project)
         }
         checkProjectIsValid(project)
+    }
+
+    private fun validateAgpVersion(project: Project) {
+        val agpVersion =
+            project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java).pluginVersion
+
+        if (agpVersion < AndroidPluginVersion(7, 2, 0)) {
+            throw GradleException("Aaper needs Android Gradle Plugin version >= 7.2.0 to work. The version available in this project is: $agpVersion")
+        }
     }
 
     private fun setUp(project: Project) {
