@@ -44,8 +44,7 @@ class MyApplication {
 
 ```xml
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.likethesalad.android.aaper.sample">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--    This is very important, the Android OS will ignore any permission request for permissions not-->
     <!--    listed in your manifest.-->
