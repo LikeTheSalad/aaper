@@ -342,8 +342,8 @@ plugin or higher.
 
 ### Aaper Gradle dependency
 
-In order to add Aaper as one of your app's dependencies, you just have to add the following line
-into your app's build.gradle `plugins` block:
+In order to add the [Aaper plugin](https://plugins.gradle.org/plugin/com.likethesalad.aaper) into
+your project, you just have to add the following line into your app's build.gradle `plugins` block:
 
 ```groovy  
 id 'com.likethesalad.aaper' version '2.0.0'
