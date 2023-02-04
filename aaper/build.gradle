@@ -1,16 +1,20 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'android-buddy-library'
-apply from: '../androidUpload.gradle'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -30,24 +34,8 @@ android {
 dependencies {
     api project(":aaper-api")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.fragment:fragment-ktx:1.2.5'
-    testImplementation 'junit:junit:4.12'
-    testImplementation "com.google.truth:truth:1.0.1"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.powermock:powermock-core:$powerMock_version"
-    testImplementation "org.powermock:powermock-module-junit4:$powerMock_version"
-    testImplementation "org.powermock:powermock-api-mockito2:$powerMock_version"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-}
-
-androidBuddyLibrary {
-    id = "com.likethesalad.android.aaper"
-    exposedTransformationNames = [
-            "com.likethesalad.android.aaper.defaults.transformations.ActivityTransformation",
-            "com.likethesalad.android.aaper.defaults.transformations.FragmentTransformation"
-    ]
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
 }

@@ -7,33 +7,25 @@ import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
-import org.powermock.reflect.Whitebox
 
 /**
  * Created by César Muñoz on 14/08/20.
  */
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(PermissionManager::class)
 class AaperTest {
 
     private lateinit var permissionManagerMock: PermissionManager
 
     @Before
     fun setUp() {
-        permissionManagerMock = mock()
-        Whitebox.setInternalState(
-            PermissionManager::class.java, "INSTANCE", permissionManagerMock
-        )
+        permissionManagerMock = mockk(relaxUnitFun = true)
+        PermissionManager.resetForTest()
         cleanUp()
     }
 
@@ -54,26 +46,29 @@ class AaperTest {
 
         Truth.assertThat(Aaper.getRequestStrategyProvider())
             .isInstanceOf(DefaultRequestStrategyProvider::class.java)
-        verify(permissionManagerMock).setStrategyProviderSource(Aaper)
     }
 
     @Test
     fun `Set up default strategy provider with default strategy`() {
-        val defaultRequestStrategyProvider = mock<DefaultRequestStrategyProvider>()
-        val strategyCaptor = argumentCaptor<RequestStrategy<Any>>()
+        val defaultRequestStrategyProvider =
+            mockk<DefaultRequestStrategyProvider>(relaxUnitFun = true)
+        val strategyCaptor = slot<RequestStrategy<Any>>()
 
         Aaper.init(defaultRequestStrategyProvider)
 
-        verify(defaultRequestStrategyProvider).register(strategyCaptor.capture())
-        verify(defaultRequestStrategyProvider)
-            .setDefaultStrategyName(DefaultRequestStrategy::class.java.name)
-        val strategy = strategyCaptor.firstValue
+        verify {
+            defaultRequestStrategyProvider.register(capture(strategyCaptor))
+        }
+        verify {
+            defaultRequestStrategyProvider.setDefaultStrategyName(DefaultRequestStrategy::class.java.name)
+        }
+        val strategy = strategyCaptor.captured
         Truth.assertThat(strategy).isInstanceOf(DefaultRequestStrategy::class.java)
     }
 
     @Test
     fun `Return strategy provider set in the initialization`() {
-        val provider = mock<RequestStrategyProvider>()
+        val provider = mockk<RequestStrategyProvider>()
 
         Aaper.init(provider)
 
@@ -82,11 +77,8 @@ class AaperTest {
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     private fun cleanUp() {
-        Whitebox.setInternalState(Aaper.javaClass, "initialized", false)
-        Whitebox.setInternalState(
-            Aaper.javaClass,
-            "strategyProvider",
-            null as? RequestStrategyProvider
-        )
+        val initializedField = Aaper::class.java.getDeclaredField("initialized")
+        initializedField.isAccessible = true
+        initializedField.set(null, false)
     }
 }

@@ -1,42 +1,44 @@
 package com.likethesalad.android.aaper.defaults.launchers
 
-import android.app.Activity
-import androidx.core.app.ActivityCompat
-import com.nhaarman.mockitokotlin2.mock
+import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
+import com.likethesalad.android.aaper.testutils.RobolectricActivity
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
+import org.robolectric.Robolectric
+import org.robolectric.Shadows
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(ActivityCompat::class)
-class ActivityRequestLauncherTest {
-
-
+class ActivityRequestLauncherTest : BaseRobolectricTest() {
     private val requestCode = 12345
-    private lateinit var host: Activity
     private lateinit var activityRequestLauncher: ActivityRequestLauncher
 
     @Before
     fun setUp() {
-        host = mock()
         activityRequestLauncher = ActivityRequestLauncher()
     }
 
     @Test
-    fun `Delegate request to ActivityCompat`() {
-        PowerMockito.mockStatic(ActivityCompat::class.java)
-        val permissions = listOf("one", "two")
+    fun `Launch permission request from activity`() {
+        Robolectric.buildActivity(RobolectricActivity::class.java).use { controller ->
+            controller.setup()
+            val permissions = listOf("one", "two")
 
-        activityRequestLauncher.launchPermissionsRequest(host, permissions, requestCode)
+            activityRequestLauncher.launchPermissionsRequest(
+                controller.get(),
+                permissions,
+                requestCode
+            )
 
-        PowerMockito.verifyStatic(ActivityCompat::class.java)
-        ActivityCompat.requestPermissions(host, permissions.toTypedArray(), requestCode)
+            val shadowActivity = Shadows.shadowOf(controller.get())
+
+            val lastRequestedPermission = shadowActivity.lastRequestedPermission
+            Truth.assertThat(lastRequestedPermission.requestedPermissions.asList())
+                .containsExactlyElementsIn(permissions)
+            Truth.assertThat(lastRequestedPermission.requestCode).isEqualTo(requestCode)
+        }
     }
 }

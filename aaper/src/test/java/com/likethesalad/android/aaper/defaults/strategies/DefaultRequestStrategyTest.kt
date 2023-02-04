@@ -2,25 +2,23 @@ package com.likethesalad.android.aaper.defaults.strategies
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-@RunWith(MockitoJUnitRunner::class)
-class DefaultRequestStrategyTest {
+class DefaultRequestStrategyTest : BaseMockable() {
 
-    @Mock
+    @MockK
     lateinit var host: Any
 
-    @Mock
+    @MockK
     lateinit var data: PermissionsResult
 
     private lateinit var defaultRequestStrategy: DefaultRequestStrategy
@@ -38,19 +36,26 @@ class DefaultRequestStrategyTest {
 
     @Test
     fun `Return true if no permissions were denied`() {
-        whenever(data.denied).thenReturn(emptyList())
+        every {
+            data.denied
+        }.returns(emptyList())
 
         Truth.assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data))
             .isTrue()
-        verify(data).denied
+        verify {
+            data.denied
+        }
     }
 
     @Test
     fun `Return false if at least one permissions was denied`() {
-        whenever(data.denied).thenReturn(listOf("one"))
+        every {
+            data.denied
+        }.returns(listOf("one"))
 
-        Truth.assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data))
-            .isFalse()
-        verify(data).denied
+        Truth.assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data)).isFalse()
+        verify {
+            data.denied
+        }
     }
 }

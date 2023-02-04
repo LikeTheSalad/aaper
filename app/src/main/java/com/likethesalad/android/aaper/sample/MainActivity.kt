@@ -2,11 +2,11 @@ package com.likethesalad.android.aaper.sample
 
 import android.Manifest
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.sample.custom.AlertDialogStrategy
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn.setOnClickListener {
+        findViewById<Button>(R.id.btn).setOnClickListener {
             takePhoto()
         }
 
-        btn_alert_dialog.setOnClickListener {
+        findViewById<Button>(R.id.btn_alert_dialog).setOnClickListener {
             showToast()
         }
 

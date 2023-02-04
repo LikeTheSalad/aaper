@@ -34,7 +34,12 @@ class AlertDialogStrategy : AllRequestStrategy() {
                 data.missingPermissions.forEachIndexed { index, permission ->
                     append("${index + 1}. $permission\n")
                 }
-                setSpan(StyleSpan(Typeface.BOLD), 58, this.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    58,
+                    this.length,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
                 setSpan(RelativeSizeSpan(0.9f), 58, this.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
 

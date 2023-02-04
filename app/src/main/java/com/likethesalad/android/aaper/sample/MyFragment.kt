@@ -3,10 +3,10 @@ package com.likethesalad.android.aaper.sample
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.EnsurePermissions
-import kotlinx.android.synthetic.main.my_fragment.*
 
 /**
  * Created by César Muñoz on 18/08/20.
@@ -15,7 +15,7 @@ class MyFragment : Fragment(R.layout.my_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn.setOnClickListener {
+        view.findViewById<Button>(R.id.btn).setOnClickListener {
             searchMyLocation()
         }
     }

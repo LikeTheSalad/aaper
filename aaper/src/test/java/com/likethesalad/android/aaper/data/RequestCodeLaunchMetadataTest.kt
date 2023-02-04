@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.data
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.nhaarman.mockitokotlin2.mock
+import com.likethesalad.tools.testing.BaseMockable
 import org.junit.Before
 import org.junit.Test
 
@@ -10,7 +10,7 @@ import org.junit.Test
  * Created by César Muñoz on 13/08/20.
  */
 
-class RequestCodeLaunchMetadataTest {
+class RequestCodeLaunchMetadataTest : BaseMockable() {
 
     private val code = 12345
     lateinit var requestCodeLaunchMetadata: RequestCodeLaunchMetadata
@@ -41,7 +41,7 @@ class RequestCodeLaunchMetadataTest {
 
     @Test
     fun `Check if is equal to another metadata type`() {
-        val metadata = mock<LaunchMetadata>()
+        val metadata = mockk<LaunchMetadata>()
 
         Truth.assertThat(requestCodeLaunchMetadata.isEqualTo(metadata)).isFalse()
     }

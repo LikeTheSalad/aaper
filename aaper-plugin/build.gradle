@@ -1,0 +1,24 @@
+plugins {
+    id "java-gradle-plugin"
+    id 'org.jetbrains.kotlin.jvm'
+    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+}
+
+dependencies {
+    compileOnly "com.android.tools.build:gradle:7.2.0"
+}
+
+buildConfig {
+    packageName("${group}.generated")
+    buildConfigField("String", "SDK_DEPENDENCY_URI", "\"$group:aaper:$version\"")
+    buildConfigField("String", "COMPILER_DEPENDENCY_URI", "\"$group:aaper-compiler:$version\"")
+}
+
+gradlePlugin {
+    plugins {
+        aaperPlugin {
+            id = 'com.likethesalad.aaper'
+            implementationClass = 'com.likethesalad.android.aaper.plugin.AaperPlugin'
+        }
+    }
+}

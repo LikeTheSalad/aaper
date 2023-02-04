@@ -1,14 +1,11 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
-apply from: '../javaUpload.gradle'
-
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    testImplementation "com.google.truth:truth:1.0.1"
-    testImplementation "io.mockk:mockk:1.10.0"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
 }
 
 compileKotlin {
@@ -20,4 +17,8 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

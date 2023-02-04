@@ -1,2 +1,34 @@
-include ':app', ':aaper-api', ':aaper'
-rootProject.name='Annotated permission'
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+}
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
+    }
+}
+rootProject.name = 'Annotated permission'
+include ':app'
+include ':aaper-api'
+include ':aaper'
+include ':aaper-compiler'
+include ':aaper-plugin'

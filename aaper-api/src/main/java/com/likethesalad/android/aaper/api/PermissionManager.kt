@@ -45,19 +45,22 @@ object PermissionManager {
      * request process.
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
-     * @param permissions - The array of permissions that the original method needs.
      * @param originalMethod - The method annotated with [EnsurePermissions].
+     * @param permissions - The array of permissions that the original method needs.
      * @param strategyName - The strategy name that will take care of the process for the
      * originalMethod.
      */
     @JvmStatic
     fun processPermissionRequest(
         host: Any,
-        permissions: Array<String>,
         originalMethod: Runnable,
-        strategyName: String
+        permissions: Array<String>,
+        strategyName: String?
     ) {
-        val strategy = strategyProvider.getStrategy(host, strategyName)
+        val strategy = strategyProvider.getStrategy(
+            host,
+            strategyName ?: RequestStrategyProvider.DEFAULT_STRATEGY
+        )
         val missingPermissions = getMissingPermissions(
             host,
             strategy.internalGetPermissionStatusProvider(host),
@@ -207,5 +210,9 @@ object PermissionManager {
 
     private fun cleanUp() {
         currentRequest = null
+    }
+
+    fun resetForTest() {
+        strategyProviderSource = null
     }
 }
