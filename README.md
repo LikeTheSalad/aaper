@@ -20,7 +20,6 @@ Table of Contents
 * [Advanced configuration](#advanced-configuration)
     * [Creating a custom RequestStrategyProvider](#creating-a-custom-requeststrategyprovider)
     * [Overriding permission's status query and request launch](#overriding-permissions-status-query-and-request-launch)
-    * [What else](#what-else)
 * [License](#license)
 
 What it is
