@@ -90,6 +90,9 @@ order to use Aaper into our Activities or Fragments:
   the behavior of handling such permissions' request. More info below
   under `Changing the default behavior`.
 
+That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
+at `Changing the default behavior`.
+
 > It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods inside either an `Activity` or a` Fragment`, more specifically, an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment, will be ignored.
 
 Changing the default behavior
