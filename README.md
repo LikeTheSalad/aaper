@@ -9,7 +9,7 @@ Table of Contents
 
 * [What it is](#what-it-is)
     * [Default behavior example](#default-behavior-example)
-* [Aaper's usage](#aapers-usage)
+* [Hot to use](#how-to-use)
 * [Changing the default behavior](#changing-the-default-behavior)
     * [Custom Strategy example](#custom-strategy-example)
     * [Using our custom Strategy](#using-our-custom-strategy)
@@ -25,7 +25,7 @@ Table of Contents
 
 What it is
 ---  
-Annotated Android Permissions takes care of ensuring Android runtime permissions for
+**A**nnotated **A**ndroid **Per**missions takes care of ensuring Android runtime permissions for
 an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do
 so without having to write any code nor override any Activity and/or Fragment method related to
 runtime permission requests.
@@ -34,18 +34,19 @@ runtime permission requests.
 
 ```kotlin  
 // Aaper initialization  
+
 class MyApplication {  
   
     override fun onCreate() {  
         super.onCreate()  
-        Aaper.init()  
+        Aaper.init()// This must be called only once, therefore the Application.onCreate method is a great place to do so.
     }  
 }  
 ```  
 
 ```kotlin  
 // Aaper usage  
-  
+
 class MyActivity/MyFragment {  
   
     override fun onCreate/onViewCreated(...) {  
@@ -75,22 +76,21 @@ when we run that code and click on the `takePhotoButton` button is:
 Aaper's default behavior can be easily changed if you wanted to, you can find more details below
 under `Changing the default behavior`.
 
-Aaper's usage
+How to use
 ---  
 As we could see above in the default behavior example, there are only two things we need to do in
 order to use Aaper into our Activities or Fragments:
 
-- Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a great place to
-  do it is in your app's `Application.onCreate` method, as shown in the example above.
-- Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation where you provide
-  a list of permissions that such method needs in order to work properly. Alternatively, you can
-  also pass an optional parameter named `strategyName`, where you can specify the behavior of
-  handling such permissions' request. More info below under `Changing the default behavior`.
+- **Step one:** Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a
+  great place to do it is in your app's `Application.onCreate` method, as shown in the example
+  above.
+- **Step two:** Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation
+  where you provide a list of permissions that such method needs in order to work properly.
+  Alternatively, you can also pass an optional parameter named `strategyName`, where you can specify
+  the behavior of handling such permissions' request. More info below
+  under `Changing the default behavior`.
 
-  It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods
-  inside either an `Activity` or a` Fragment`, more specifically,
-  an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't
-  inside of either an Activity or a Fragment, will be ignored.
+> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods inside either an `Activity` or a` Fragment`, more specifically, an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment, will be ignored.
 
 Changing the default behavior
 ---  
