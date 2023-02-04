@@ -47,13 +47,13 @@ class MyApplication {
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--    This is very important, the Android OS will ignore any permission request for permissions not-->
-    <!--    listed in your manifest.-->
+    <!--This is very important, the Android OS will ignore any permission request for permissions not-->
+    <!--listed in your manifest.-->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!--    You need to add your application class (shown above) to the manifest too as shown below-->
+    <!--You need to add your application class (shown above) to the manifest too as shown below-->
     <application android:name="my.app.MyApplication">
-        <!--    yada yada...-->
+        <!--yada yada...-->
     </application>
 </manifest>
 ```
