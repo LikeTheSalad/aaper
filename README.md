@@ -80,7 +80,7 @@ As we could see above in the default behavior example, there are only two things
 order to use Aaper into our Activities or Fragments:
 
 - **Step one:** Make sure that the permissions you'll request with Aaper **are defined in
-  your** `AndroidManifest.xml` file too. If you attempt to request a permission at runtime that
+  your** `AndroidManifest.xml` **file too**. If you attempt to request a permission at runtime that
   isn't in your manifest, the OS will silently ignore your request.
 - **Step two:** Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a
   great place to do it is in your app's `Application.onCreate` method, as shown in the example
