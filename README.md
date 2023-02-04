@@ -93,7 +93,7 @@ order to use Aaper into our Activities or Fragments:
 That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
 at `Changing the default behavior`.
 
-> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods inside either an `Activity` or a` Fragment`, more specifically, an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment, will be ignored.
+> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods inside either an `Activity` or a` Fragment`, more specifically, an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment will be ignored.
 
 Changing the default behavior
 ---  
@@ -144,7 +144,7 @@ custom `RequestStrategy`, those are:
   is `Any` or `Object` and you'd have to check its type manually in order to verify whether the
   current request is for an Activity or a Fragment.
 
-In this example, we want to close an Activity if at least one requested permission is denied,
+In this example, we will annotate a method inside an Activity and nowhere else,
 therefore `ActivityRequestStrategy` seems to suit better for this case.
 
 We must provide for every custom `RequestStrategy` two things, a name (which will serve as an ID for
