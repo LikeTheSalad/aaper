@@ -93,8 +93,8 @@ under `Changing the default behavior`.
 
 How to use
 ---  
-As we could see above in the default behavior example, there are only two things we need to do in
-order to use Aaper into our Activities or Fragments:
+As we could see above in the default behavior example, there are three things we need to do in order
+to use Aaper into our Activities or Fragments:
 
 - **Step one:** Make sure that the permissions you'll request with Aaper **are defined in
   your** `AndroidManifest.xml` **file too**. If you attempt to request a permission at runtime that
