@@ -7,7 +7,7 @@ Table of Contents
 
 * [What it is](#what-it-is)
     * [Default behavior example](#default-behavior-example)
-* [Hot to use](#how-to-use)
+* [How to use](#how-to-use)
 * [Changing the default behavior](#changing-the-default-behavior)
     * [Custom Strategy example](#custom-strategy-example)
     * [Using our custom Strategy](#using-our-custom-strategy)
