@@ -332,12 +332,6 @@ Adding Aaper into your project
 
 ### Prerequisites
 
-#### AndroidX
-
-**The only type of Fragment** that Aaper supports is `androidx.fragment.app.Fragment`. So you must
-have AndroidX tools enabled (instead of the old android support libs) in your project in order to
-use it.
-
 #### Android Gradle plugin >= 7.2
 
 Aaper relies on
