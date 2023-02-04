@@ -343,32 +343,21 @@ plugin or higher.
 
 ### Aaper Gradle dependency
 
-After [adding Android Buddy as explained above](https://github.com/LikeTheSalad/aaper#android-buddy)
-, then you can proceed to add Aaper's dependency in your project's build.gradle file as shown below.
-
-Android Buddy Aaper's ID (optional)
-`com.likethesalad.android.aaper` [What's this for?](https://github.com/LikeTheSalad/android-buddy#whats-the-android-buddy-library-id-for)
-
 In order to add Aaper as one of your app's dependencies, you just have to add the following line
-into your app's build.gradle `dependencies` block:
+into your app's build.gradle `plugins` block:
 
 ```groovy  
-implementation "com.likethesalad.android:aaper:1.1.0"
+id 'com.likethesalad.aaper' version '2.0.0'
 ```
 
 **Full app's build.gradle example:**
 
 ```groovy  
 // Your app's build.gradle file  
-apply plugin: 'com.android.application'  
-apply plugin: 'android-buddy' // With the Android Buddy plugin  
-  
-// ...  
-  
-dependencies {  
-    // ...  
-    implementation "com.likethesalad.android:aaper:1.1.0"
-}  
+plugins {
+    id 'com.android.application'
+    id 'com.likethesalad.aaper' version '2.0.0'
+}
 ```  
 
 Advanced configuration
