@@ -15,6 +15,7 @@ Table of Contents
 * [Adding Aaper into your project](#adding-aaper-into-your-project)
     * [Prerequisites](#prerequisites)
     * [Aaper Gradle dependency](#aaper-gradle-dependency)
+* [Troubleshooting](#troubleshooting)
 * [Advanced configuration](#advanced-configuration)
     * [Creating a custom RequestStrategyProvider](#creating-a-custom-requeststrategyprovider)
     * [Overriding permission's status query and request launch](#overriding-permissions-status-query-and-request-launch)
@@ -359,6 +360,20 @@ plugins {
     id 'com.likethesalad.aaper' version '2.0.0'
 }
 ```  
+
+Troubleshooting
+---  
+
+### I get a NPE when calling my annotated method at runtime
+
+Make sure you've called `Aaper.init()` within your Application class. If you don't initialize Aaper
+it will throw a `java.lang.NullPointerException` when executed.
+
+### The OS permission dialog doesn't show up
+
+Make sure that the permissions you've added to the `EnsurePermissions` annotation are ALSO added to
+your `AndroidManifest.xml` file. The Android OS will ignore any permission request for permissions
+not listed within your app's manifest.
 
 Advanced configuration
 ---  
