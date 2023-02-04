@@ -1,6 +1,4 @@
 ![version](https://img.shields.io/maven-central/v/com.likethesalad.android/aaper)
-[ ![aaper-api-doc](https://javadoc.io/badge2/com.likethesalad.android/aaper-api/javadoc.svg?label=aaper-api-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper-api)  
-[![aaper-doc](https://javadoc.io/badge2/com.likethesalad.android/aaper/javadoc.svg?label=aaper-doc)](https://javadoc.io/doc/com.likethesalad.android/aaper)
 
 # Aaper
 
