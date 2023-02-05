@@ -443,7 +443,7 @@ initialization in your `AndroidManifest.xml` file like so:
 
 > More info on disabling androidx startup initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
 
-Once you disabled the automatic initialization, you can manually call `Aaper.init` to pass your
+Once you disabled the automatic initialization, you can manually call `Aaper.setUp` to pass your
 custom `RequestStrategy`.
 
 ```kotlin  
@@ -452,7 +452,7 @@ class MyApp : Application() {
     override fun onCreate() {  
         super.onCreate()  
         val myRequestStrategyProvider = MyRequestStrategyProvider()  
-        Aaper.init(myRequestStrategyProvider)  
+        Aaper.setUp(this, myRequestStrategyProvider)
     }  
 }  
 ```  
