@@ -4,5 +4,5 @@ import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
 
 interface RequestStrategyProviderSource {
 
-    fun getRequestStrategyProvider(): RequestStrategyProvider
+    fun <T : RequestStrategyProvider> getRequestStrategyProvider(): T
 }
