@@ -38,11 +38,6 @@ runtime permission requests.
     <!--THIS IS VERY IMPORTANT!!-->
     <uses-permission
         android:name="android.permission.CAMERA" />  <!--Declare the permission in your manifest. Otherwise the runtime request won't work.-->
-
-    <!--You need to add your application class (shown above) to the manifest too as shown below-->
-    <application android:name="my.app.MyApplication">
-        <!--yada yada...-->
-    </application>
 </manifest>
 ```
 
@@ -80,16 +75,13 @@ under `Changing the default behavior`.
 
 How to use
 ---  
-As we could see above in the default behavior example, there are three things we need to do in order
+As we could see above in the default behavior example, there are two things we need to do in order
 to use Aaper into our Activities or Fragments:
 
 - **Step one:** Make sure that the permissions you'll request with Aaper **are defined in
   your** `AndroidManifest.xml` **file too**. If you attempt to request a permission at runtime that
   isn't in your manifest, the OS will silently ignore your request.
-- **Step two:** Initialize Aaper, this can be done by calling `Aaper.init()` only once, therefore a
-  great place to do it is in your app's `Application.onCreate` method, as shown in the example
-  above.
-- **Step three:** Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation
+- **Step two:** Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation
   where you provide a list of permissions (that are also defined in your `AndroidManifest.xml`) that
   such method needs in order to work properly. Alternatively, you can also pass an optional
   parameter named `strategyName`, where you can specify the behavior of handling such permissions'
@@ -215,18 +207,36 @@ under `Advanced configuration`.
 #### Registering it
 
 In order to use our new `FinishActivityOnDeniedStrategy` request strategy, we must first register it
-right after Aaper's initialization:
+once, therefore a good place to do so would be in your app's `Application.onCreate` method:
 
 ```kotlin  
+package my.app
+
 class MyApp : Application() {  
   
     override fun onCreate() {  
         super.onCreate()  
-        val strategyProvider = Aaper.getRequestStrategyProvider() as DefaultRequestStrategyProvider  
+        val strategyProvider = Aaper.getRequestStrategyProvider<DefaultRequestStrategyProvider>()
         strategyProvider.register(FinishActivityOnDeniedStrategy())  
     }  
 }  
 ```  
+
+**NOTE**: Make sure your application class is set in your `AndroidManifest.xml` file as shown below:
+
+```xml
+<!--Your AndroidManifest.xml-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--yada yada...-->
+
+    <!--You need to add your application class (shown above) to the manifest too (if you don't have it already) as shown below-->
+    <application android:name="my.app.MyApplication">
+        <!--yada yada...-->
+    </application>
+</manifest>
+```
 
 We can register as many Strategies as we like, as long as they all have unique names. After
 registering our new `RequestStrategy`, we can either:
@@ -425,11 +435,10 @@ After you've created your own `RequestStrategyProvider`, you need to disable the
 initialization in your `AndroidManifest.xml` file
 
 ```xml
+
 <application>
-    <provider
-        android:name="androidx.startup.InitializationProvider"
-        android:authorities="${applicationId}.androidx-startup"
-        android:exported="false"
+    <provider android:name="androidx.startup.InitializationProvider"
+        android:authorities="${applicationId}.androidx-startup" android:exported="false"
         tools:node="merge">
         <meta-data android:name="com.likethesalad.android.aaper.AaperInitializer"
             tools:node="remove" />
