@@ -19,7 +19,7 @@ object PermissionManager {
 
     private var strategyProviderSource: RequestStrategyProviderSource? = null
     private val strategyProvider by lazy {
-        strategyProviderSource!!.getRequestStrategyProvider()
+        strategyProviderSource!!.getRequestStrategyProvider<RequestStrategyProvider>()
     }
     private var currentRequest: CurrentRequest? = null
 

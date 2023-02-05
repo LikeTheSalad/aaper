@@ -55,8 +55,9 @@ object Aaper : RequestStrategyProviderSource {
      * the [init] function. If no custom instance was passed, then this function will return a
      * [DefaultRequestStrategyProvider] one.
      */
-    override fun getRequestStrategyProvider(): RequestStrategyProvider {
-        return strategyProvider
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : RequestStrategyProvider> getRequestStrategyProvider(): T {
+        return strategyProvider as T
     }
 
     fun resetForTest() {
