@@ -31,10 +31,10 @@ class AaperTest {
 
     @Test
     fun `Check initialization valid once only`() {
-        Aaper.init()
+        init()
 
         try {
-            Aaper.init()
+            init()
             fail("Should've gone into the catch block")
         } catch (ignored: AaperInitializedAlreadyException) {
         }
@@ -42,9 +42,9 @@ class AaperTest {
 
     @Test
     fun `Check default initialization strategy provider`() {
-        Aaper.init()
+        init()
 
-        Truth.assertThat(Aaper.getRequestStrategyProvider())
+        Truth.assertThat(Aaper.getRequestStrategyProvider<DefaultRequestStrategyProvider>())
             .isInstanceOf(DefaultRequestStrategyProvider::class.java)
     }
 
@@ -54,7 +54,7 @@ class AaperTest {
             mockk<DefaultRequestStrategyProvider>(relaxUnitFun = true)
         val strategyCaptor = slot<RequestStrategy<Any>>()
 
-        Aaper.init(defaultRequestStrategyProvider)
+        init(defaultRequestStrategyProvider)
 
         verify {
             defaultRequestStrategyProvider.register(capture(strategyCaptor))
@@ -70,9 +70,18 @@ class AaperTest {
     fun `Return strategy provider set in the initialization`() {
         val provider = mockk<RequestStrategyProvider>()
 
-        Aaper.init(provider)
+        init(provider)
 
-        Truth.assertThat(Aaper.getRequestStrategyProvider()).isEqualTo(provider)
+        Truth.assertThat(Aaper.getRequestStrategyProvider<RequestStrategyProvider>())
+            .isEqualTo(provider)
+    }
+
+    private fun init(provider: RequestStrategyProvider = DefaultRequestStrategyProvider()) {
+        if (provider is DefaultRequestStrategyProvider) {
+            provider.register(DefaultRequestStrategy())
+            provider.setDefaultStrategyName(DefaultRequestStrategy.NAME)
+        }
+        Aaper.setUp(mockk(), provider)
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
