@@ -9,8 +9,8 @@ class TestApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Aaper.init()
-        val strategyProvider = Aaper.getRequestStrategyProvider() as DefaultRequestStrategyProvider
+        val strategyProvider = DefaultRequestStrategyProvider()
+        Aaper.setUp(this, strategyProvider)
 
         strategyProvider.register(AlwaysSuccessfulStrategy())
         strategyProvider.setDefaultStrategyName(AlwaysSuccessfulStrategy.NAME)
