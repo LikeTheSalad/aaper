@@ -361,7 +361,7 @@ In order to add the [Aaper plugin](https://plugins.gradle.org/plugin/com.likethe
 your project, you just have to add the following line into your app's build.gradle `plugins` block:
 
 ```groovy  
-id 'com.likethesalad.aaper' version '2.0.0'
+id 'com.likethesalad.aaper' version '2.1.0'
 ```
 
 **Full app's build.gradle example:**
@@ -370,7 +370,7 @@ id 'com.likethesalad.aaper' version '2.0.0'
 // Your app's build.gradle file  
 plugins {
     id 'com.android.application'
-    id 'com.likethesalad.aaper' version '2.0.0'
+    id 'com.likethesalad.aaper' version '2.1.0'
 }
 ```  
 
