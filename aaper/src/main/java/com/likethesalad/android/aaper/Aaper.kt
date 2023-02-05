@@ -24,6 +24,7 @@ object Aaper : RequestStrategyProviderSource {
      * instance by a custom one, you can pass yours here. Otherwise, the default will be
      * [DefaultRequestStrategyProvider].
      */
+    @Deprecated(message = "Deprecated after adding automatic initialization support on version 2.1.0, there's no longer need to manually call this method.")
     @JvmOverloads
     fun init(strategyProvider: RequestStrategyProvider = DefaultRequestStrategyProvider()) {
         if (initialized) {
