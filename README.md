@@ -377,11 +377,6 @@ plugins {
 Troubleshooting
 ---  
 
-### I get a NPE when calling my annotated method at runtime
-
-Make sure you've called `Aaper.init()` within your Application class. If you don't initialize Aaper
-it will throw a `java.lang.NullPointerException` when executed.
-
 ### The OS permission request dialog doesn't show up
 
 Make sure that the permissions you've added to the `EnsurePermissions` annotation are ALSO added to
