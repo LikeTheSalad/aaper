@@ -30,19 +30,6 @@ runtime permission requests.
 
 ### Default behavior example
 
-```kotlin  
-// Aaper initialization  
-package my.app
-
-class MyApplication {  
-  
-    override fun onCreate() {  
-        super.onCreate()  
-        Aaper.init()// This must be called only once, therefore the Application.onCreate method is a great place to do so.
-    }  
-}  
-```  
-
 ```xml
 <!--Your AndroidManifest.xml-->
 
@@ -235,7 +222,6 @@ class MyApp : Application() {
   
     override fun onCreate() {  
         super.onCreate()  
-        Aaper.init()  
         val strategyProvider = Aaper.getRequestStrategyProvider() as DefaultRequestStrategyProvider  
         strategyProvider.register(FinishActivityOnDeniedStrategy())  
     }  
@@ -435,8 +421,24 @@ on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aa
 
 #### Using your custom RequestStrategyProvider
 
-After you've created your own `RequestStrategyProvider`, you can set it into Aaper's initialization
-method like so:
+After you've created your own `RequestStrategyProvider`, you need to disable the Aaper's automatic
+initialization in your `AndroidManifest.xml` file
+
+```xml
+<application>
+    <provider
+        android:name="androidx.startup.InitializationProvider"
+        android:authorities="${applicationId}.androidx-startup"
+        android:exported="false"
+        tools:node="merge">
+        <meta-data android:name="com.likethesalad.android.aaper.AaperInitializer"
+            tools:node="remove" />
+    </provider>
+</application>
+```
+
+Once you disabled the automatic initialization, you can manually call `Aaper.init` to pass your
+custom `RequestStrategy`.
 
 ```kotlin  
 class MyApp : Application() {  
