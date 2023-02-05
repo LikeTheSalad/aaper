@@ -389,9 +389,9 @@ Advanced configuration
 ### Creating a custom RequestStrategyProvider
 
 Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them,
-is through an instance of `RequestStrategyProvider`. By default, when you initialize Aaper like
-so: `Aaper.init()`, the `RequestStrategyProvider` that Aaper will use in that case, would
-be `DefaultRequestStrategyProvider`.
+is through an instance of `RequestStrategyProvider`. By default, the `RequestStrategyProvider` that
+Aaper will use is `DefaultRequestStrategyProvider`, if you need to change it, take a look
+at `Using your custom RequestStrategyProvider`.
 
 The `DefaultRequestStrategyProvider` implementation contains a map of `RequestStrategy` instances to
 which Aaper can access later on by providing the name of the Strategy it needs, such default
@@ -426,8 +426,8 @@ on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aa
 
 #### Using your custom RequestStrategyProvider
 
-After you've created your own `RequestStrategyProvider`, you need to disable the Aaper's automatic
-initialization in your `AndroidManifest.xml` file
+After you've created your own `RequestStrategyProvider`, you need to disable Aaper's automatic
+initialization in your `AndroidManifest.xml` file like so:
 
 ```xml
 
@@ -440,6 +440,8 @@ initialization in your `AndroidManifest.xml` file
     </provider>
 </application>
 ```
+
+> More info on disabling androidx startup initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
 
 Once you disabled the automatic initialization, you can manually call `Aaper.init` to pass your
 custom `RequestStrategy`.
