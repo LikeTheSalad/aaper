@@ -27,6 +27,15 @@ object Aaper : RequestStrategyProviderSource {
     @Deprecated(message = "Deprecated after adding automatic initialization support on version 2.1.0, there's no longer need to manually call this method.")
     @JvmOverloads
     fun init(strategyProvider: RequestStrategyProvider = DefaultRequestStrategyProvider()) {
+        // No operation
+    }
+
+    /**
+     * Sets Aaper's [RequestStrategyProvider] which is needed to handle permission requests later on.
+     * This method is supposed to be called automatically so there's no need for it to be called,
+     * unless you wanted to override the default provider.
+     */
+    fun setRequestStrategyProvider(strategyProvider: RequestStrategyProvider) {
         if (initialized) {
             throw AaperInitializedAlreadyException()
         }
