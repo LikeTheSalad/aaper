@@ -444,7 +444,7 @@ initialization in your `AndroidManifest.xml` file like so:
 > More info on disabling androidx startup initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
 
 Once you disabled the automatic initialization, you can manually call `Aaper.setUp` to pass your
-custom `RequestStrategy`.
+custom `RequestStrategyProvider`.
 
 ```kotlin  
 package my.app
