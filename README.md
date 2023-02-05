@@ -447,8 +447,9 @@ Once you disabled the automatic initialization, you can manually call `Aaper.set
 custom `RequestStrategy`.
 
 ```kotlin  
+package my.app
+
 class MyApp : Application() {  
-  
     override fun onCreate() {  
         super.onCreate()  
         val myRequestStrategyProvider = MyRequestStrategyProvider()  
@@ -456,6 +457,22 @@ class MyApp : Application() {
     }  
 }  
 ```  
+
+**NOTE**: Make sure your application class is set in your `AndroidManifest.xml` file as shown below:
+
+```xml
+<!--Your AndroidManifest.xml-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--yada yada...-->
+
+    <!--You need to add your application class (shown above) to the manifest too (if you don't have it already) as shown below-->
+    <application android:name="my.app.MyApplication">
+        <!--yada yada...-->
+    </application>
+</manifest>
+```
 
 And that's it, Aaper will now use your custom `RequestStrategyProvider` in order to get all of the
 Strategies it needs.
