@@ -11,7 +11,6 @@ dependencies {
 buildConfig {
     packageName("${group}.generated")
     buildConfigField("String", "SDK_DEPENDENCY_URI", "\"$group:aaper:$version\"")
-    buildConfigField("String", "COMPILER_DEPENDENCY_URI", "\"$group:aaper-compiler:$version\"")
 }
 
 gradlePlugin {

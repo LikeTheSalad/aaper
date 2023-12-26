@@ -14,17 +14,12 @@ class AaperPlugin : Plugin<Project> {
 
     companion object {
         private const val ANDROID_APP_PLUGIN_ID = "com.android.application"
-        private const val KOTLIN_PLUGIN_ID = "org.jetbrains.kotlin.android"
-        private const val KOTLIN_KAPT_PLUGIN_ID = "kotlin-kapt"
     }
 
     override fun apply(project: Project) {
         project.plugins.withId(ANDROID_APP_PLUGIN_ID) {
             validateAgpVersion(project)
             setUp(project)
-        }
-        project.plugins.withId(KOTLIN_PLUGIN_ID) {
-            addKotlinCompilerDependency(project)
         }
         checkProjectIsValid(project)
     }
@@ -41,7 +36,6 @@ class AaperPlugin : Plugin<Project> {
     private fun setUp(project: Project) {
         setUpAndroidTransformation(project)
         addSdkDependency(project)
-        addAnnotationProcessor(project)
     }
 
     private fun checkProjectIsValid(project: Project) {
@@ -54,19 +48,6 @@ class AaperPlugin : Plugin<Project> {
 
     private fun addSdkDependency(project: Project) {
         project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
-    }
-
-    private fun addAnnotationProcessor(project: Project) {
-        project.dependencies.add("annotationProcessor", BuildConfig.COMPILER_DEPENDENCY_URI)
-    }
-
-    private fun addKotlinCompilerDependency(project: Project) {
-        addKaptPlugin(project)
-        project.dependencies.add("kapt", BuildConfig.COMPILER_DEPENDENCY_URI)
-    }
-
-    private fun addKaptPlugin(project: Project) {
-        project.plugins.apply(KOTLIN_KAPT_PLUGIN_ID)
     }
 
     private fun setUpAndroidTransformation(project: Project) {
