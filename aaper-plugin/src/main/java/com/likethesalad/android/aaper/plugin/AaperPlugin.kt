@@ -28,8 +28,8 @@ class AaperPlugin : Plugin<Project> {
         val agpVersion =
             project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java).pluginVersion
 
-        if (agpVersion < AndroidPluginVersion(7, 2, 0)) {
-            throw GradleException("Aaper needs Android Gradle Plugin version >= 7.2.0 to work. The version available in this project is: $agpVersion")
+        if (agpVersion < AndroidPluginVersion(7, 4, 0)) {
+            throw GradleException("Aaper needs Android Gradle Plugin version >= 7.4.0 to work. The version available in this project is: $agpVersion")
         }
     }
 

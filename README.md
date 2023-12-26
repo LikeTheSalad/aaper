@@ -90,7 +90,11 @@ to use Aaper into our Activities or Fragments:
 That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
 at `Changing the default behavior`.
 
-> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods inside either an `Activity` or a` Fragment`, more specifically, an `androidx.fragment.app.Fragment` Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a Fragment will be ignored.
+> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods
+> inside either an `Activity` or a` Fragment`, more specifically,
+> an `androidx.fragment.app.Fragment`
+> Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a
+> Fragment will be ignored.
 
 Changing the default behavior
 ---  
@@ -346,13 +350,15 @@ Adding Aaper into your project
 
 ### Prerequisites
 
-#### Android Gradle plugin >= 7.2
+#### Android Gradle plugin >= 7.4
 
 Aaper relies on
 an [API](https://developer.android.com/reference/tools/gradle-api/7.2/com/android/build/api/variant/Instrumentation)
 added in the Android Gradle plugin version 7.2 that allows to modify bytecode at compile time
-using [ASM](https://asm.ow2.io/), this allows Aaper to write all the boilerplate code for you,
-therefore it will be required for your project to use at least version `7.2.0` of the Android Gradle
+using [ASM](https://asm.ow2.io/), it also relies on
+the [Scoped Artifacts API](https://developer.android.com/reference/tools/gradle-api/7.4/com/android/build/api/artifact/Artifacts#forScope(com.android.build.api.variant.ScopedArtifacts.Scope))
+added in 7.4.0. This allows Aaper to write all the boilerplate code for you,
+therefore it will be required for your project to use at least version `7.4.0` of the Android Gradle
 plugin or higher.
 
 ### Aaper Gradle dependency
@@ -441,7 +447,8 @@ initialization in your `AndroidManifest.xml` file like so:
 </application>
 ```
 
-> More info on disabling androidx startup initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
+> More info on disabling androidx startup
+> initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
 
 Once you disabled the automatic initialization, you can manually call `Aaper.setUp` to pass your
 custom `RequestStrategyProvider`.
