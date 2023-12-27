@@ -3,7 +3,8 @@ package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.annotations.TargetAnnotationVisitor
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getGeneratedClassSimpleName
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.wrapMethodName
 import java.lang.Integer.max
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
@@ -132,14 +133,10 @@ class TargetMethodVisitor(
         return if (lastSlash > 0) {
             val prefix = typeInternalName.substring(0, lastSlash)
             val simpleName = typeInternalName.substring(lastSlash + 1)
-            "$prefix/${wrapSimpleName(simpleName)}"
+            "$prefix/${getGeneratedClassSimpleName(simpleName, methodName)}"
         } else {
-            wrapSimpleName(typeInternalName)
+            getGeneratedClassSimpleName(typeInternalName, methodName)
         }
-    }
-
-    private fun wrapSimpleName(simpleName: String): String {
-        return "Aaper_${simpleName}_$methodName"
     }
 
     private fun createWraaper(): MethodVisitor {

@@ -1,8 +1,8 @@
 package com.likethesalad.android.aaper.plugin.appender.visitor
 
 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
-import com.likethesalad.android.aaper.plugin.appender.visitor.utils.ClassName
-import com.likethesalad.android.aaper.plugin.appender.visitor.utils.FieldInfo
+import com.likethesalad.android.aaper.plugin.appender.visitor.data.ClassName
+import com.likethesalad.android.aaper.plugin.appender.visitor.data.FieldInfo
 import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
 import java.lang.Integer.max
 import org.objectweb.asm.ClassVisitor

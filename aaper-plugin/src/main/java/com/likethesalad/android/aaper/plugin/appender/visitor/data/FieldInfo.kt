@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.plugin.appender.visitor.utils
+package com.likethesalad.android.aaper.plugin.appender.visitor.data
 
 import org.objectweb.asm.Type
 
