@@ -5,6 +5,7 @@ import com.likethesalad.android.aaper.plugin.appender.data.MethodInfo
 import com.likethesalad.android.aaper.plugin.appender.visitor.WraaperClassCreator
 import com.likethesalad.android.aaper.plugin.appender.visitor.data.ClassName
 import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getGeneratedClassSimpleName
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getWraapMethodName
 import io.github.classgraph.ClassGraph
 import java.io.BufferedOutputStream
 import java.io.File
@@ -97,7 +98,7 @@ abstract class CodeAppenderTask : DefaultTask() {
         val methodType = Type.getMethodType(methodInfo.descriptor)
         return WraaperClassCreator.create(
             generateClassName,
-            methodInfo.name,
+            getWraapMethodName(methodInfo.name),
             Type.getType("L${containerClassName.internalName};"),
             *methodType.argumentTypes
         )

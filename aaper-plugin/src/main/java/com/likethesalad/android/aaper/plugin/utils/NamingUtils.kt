@@ -6,7 +6,7 @@ object NamingUtils {
         return "Aaper_${methodClassSimpleName}_$methodName"
     }
 
-    fun wrapMethodName(methodName: String): String {
+    fun getWraapMethodName(methodName: String): String {
         return "wraaper_${methodName}"
     }
 }

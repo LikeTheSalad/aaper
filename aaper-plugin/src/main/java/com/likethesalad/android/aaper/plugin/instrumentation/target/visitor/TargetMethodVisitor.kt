@@ -4,7 +4,7 @@ import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.anno
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
 import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getGeneratedClassSimpleName
-import com.likethesalad.android.aaper.plugin.utils.NamingUtils.wrapMethodName
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getWraapMethodName
 import java.lang.Integer.max
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
@@ -39,7 +39,7 @@ class TargetMethodVisitor(
     override fun visitCode() {
         if (isAnnotated) {
             originalMv = mv
-            mv = createWraaper()
+            mv = createWraaperMethod()
         }
         super.visitCode()
     }
@@ -139,10 +139,10 @@ class TargetMethodVisitor(
         }
     }
 
-    private fun createWraaper(): MethodVisitor {
+    private fun createWraaperMethod(): MethodVisitor {
         return cv.visitMethod(
             Opcodes.ACC_SYNTHETIC,
-            wrapMethodName(methodName),
+            getWraapMethodName(methodName),
             methodDescriptor,
             null,
             null
