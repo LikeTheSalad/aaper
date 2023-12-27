@@ -6,7 +6,6 @@ import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.likethesalad.android.aaper.plugin.appender.CodeAppenderTask
-import com.likethesalad.android.aaper.plugin.instrumentation.generated.GeneratedAsmClassVisitorFactory
 import com.likethesalad.android.aaper.plugin.instrumentation.target.TargetAsmClassVisitorFactory
 import com.likethesalad.android.generated.BuildConfig
 import org.gradle.api.GradleException
@@ -70,12 +69,9 @@ class AaperPlugin : Plugin<Project> {
                     CodeAppenderTask::allDirectories,
                     CodeAppenderTask::outputFile
                 )
+
             variant.instrumentation.transformClassesWith(
                 TargetAsmClassVisitorFactory::class.java,
-                InstrumentationScope.PROJECT
-            ) {}
-            variant.instrumentation.transformClassesWith(
-                GeneratedAsmClassVisitorFactory::class.java,
                 InstrumentationScope.PROJECT
             ) {}
         }
