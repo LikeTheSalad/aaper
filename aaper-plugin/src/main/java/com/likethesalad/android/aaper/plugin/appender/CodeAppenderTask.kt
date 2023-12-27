@@ -39,10 +39,10 @@ abstract class CodeAppenderTask : DefaultTask() {
 
         allDirectories.get().forEach { directory ->
             val dirFile = directory.asFile
-            val dirURI = dirFile.toURI()
+            val dirUri = dirFile.toURI()
             dirFile.walk().forEach { file ->
                 if (file.isFile) {
-                    val relativePath = getRelativePath(file, dirURI)
+                    val relativePath = getRelativePath(file, dirUri)
                     addFileToTheOutput(file, curatePath(relativePath), jarOutput)
                 }
             }
@@ -51,8 +51,8 @@ abstract class CodeAppenderTask : DefaultTask() {
         jarOutput.close()
     }
 
-    private fun getRelativePath(file: File, dirURI: URI): String {
-        return dirURI.relativize(file.toURI()).path
+    private fun getRelativePath(file: File, dirUri: URI): String {
+        return dirUri.relativize(file.toURI()).path
     }
 
     private fun curatePath(path: String): String {
