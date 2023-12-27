@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.plugin.instrumentation.utils
+package com.likethesalad.android.aaper.plugin.utils
 
 import org.objectweb.asm.Type
 

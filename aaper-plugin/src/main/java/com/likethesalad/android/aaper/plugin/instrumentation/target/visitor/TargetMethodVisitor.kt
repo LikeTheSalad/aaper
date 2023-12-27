@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.annotations.TargetAnnotationVisitor
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
+import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
 import java.lang.Integer.max
 import org.objectweb.asm.AnnotationVisitor

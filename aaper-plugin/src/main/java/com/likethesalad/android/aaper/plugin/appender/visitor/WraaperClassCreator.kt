@@ -3,7 +3,8 @@ package com.likethesalad.android.aaper.plugin.appender.visitor
 import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
 import com.likethesalad.android.aaper.plugin.appender.visitor.utils.ClassName
 import com.likethesalad.android.aaper.plugin.appender.visitor.utils.FieldInfo
-import kotlin.math.max
+import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
+import java.lang.Integer.max
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
@@ -11,6 +12,9 @@ import org.objectweb.asm.Type
 
 object WraaperClassCreator {
     internal var classVisitorInterceptor: ((ClassVisitor) -> ClassVisitor)? = null
+    private val classVisitorProvider: (ClassVisitor) -> ClassVisitor by lazy {
+        classVisitorInterceptor ?: { it }
+    }
     private const val SUPER_NAME = "java/lang/Object"
 
     fun create(
@@ -20,7 +24,7 @@ object WraaperClassCreator {
         vararg params: Type
     ): ByteArray {
         val cw = ClassWriter(0)
-        val cv = classVisitorInterceptor?.invoke(cw) ?: cw
+        val cv = classVisitorProvider.invoke(cw)
 
         createType(cv, name.internalName)
         val fields = createFields(cv, target, params)
@@ -77,7 +81,8 @@ object WraaperClassCreator {
     }
 
     private fun createConstructor(cv: ClassVisitor, name: ClassName, fields: List<FieldInfo>) {
-        var maxStack = 0
+        var operationsStack = 0
+        var maxLocals = 1
         val types = fields.map { it.type }
         val mv = cv.visitMethod(
             Opcodes.ACC_PUBLIC,
@@ -91,15 +96,18 @@ object WraaperClassCreator {
 
         mv.visitVarInsn(Opcodes.ALOAD, 0)
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, SUPER_NAME, "<init>", "()V", false)
-        maxStack++
+        operationsStack++
 
         // Setting fields from constructor params
-        fields.forEachIndexed { index, field ->
+        var nextPosition = 1
+        fields.forEach { field ->
+            val typeSize = field.type.size
+            maxLocals += typeSize
             mv.visitVarInsn(Opcodes.ALOAD, 0)
-            mv.visitVarInsn(field.type.getOpcode(Opcodes.ILOAD), index + 1)
-            val fieldMaxStack = 1 + field.type.size
-            if (fieldMaxStack > maxStack) {
-                maxStack = fieldMaxStack
+            mv.visitVarInsn(field.type.getOpcode(Opcodes.ILOAD), nextPosition)
+            val fieldMaxStack = 1 + typeSize
+            if (fieldMaxStack > operationsStack) {
+                operationsStack = fieldMaxStack
             }
             mv.visitFieldInsn(
                 Opcodes.PUTFIELD,
@@ -107,11 +115,12 @@ object WraaperClassCreator {
                 field.name,
                 field.type.descriptor
             )
+            nextPosition += typeSize
         }
 
         mv.visitInsn(Opcodes.RETURN)
 
-        mv.visitMaxs(maxStack, types.size + 1)
+        mv.visitMaxs(max(operationsStack, getCombinedSize(types)), maxLocals)
         mv.visitEnd()
     }
 
@@ -135,7 +144,7 @@ object WraaperClassCreator {
                 field.name,
                 field.type.descriptor
             )
-            maxStack++
+            maxStack += field.type.size
         }
         val instance = fields.first()
         val params = fields.minus(instance)

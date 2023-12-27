@@ -19,11 +19,6 @@ class WraaperClassCreatorTest {
         }
     }
 
-    @After
-    fun tearDown() {
-        WraaperClassCreator.classVisitorInterceptor = null
-    }
-
     @Test
     fun `Verify zero param method`() {
         val className = ClassName("com.example", "SomeName")
@@ -57,6 +52,29 @@ class WraaperClassCreatorTest {
         assertThat(target.storedParam).isEqualTo(paramValue)
     }
 
+    @Test
+    fun `Verify multiple param method`() {
+        val className = ClassName("com.example", "SomeName")
+        val target = TwoParamType()
+        val generated =
+            WraaperClassCreator.create(
+                className,
+                "callMe",
+                Type.getType(TwoParamType::class.java),
+                Type.getType(String::class.java),
+                Type.DOUBLE_TYPE
+            )
+
+        val paramValue1 = "The param value"
+        val paramValue2 = 2.0
+        val instance = getGeneratedInstance(className, generated, target, paramValue1, paramValue2)
+
+        instance.run()
+        assertThat(target.callCount).isEqualTo(1)
+        assertThat(target.storedParam1).isEqualTo(paramValue1)
+        assertThat(target.storedParam2).isEqualTo(paramValue2)
+    }
+
     private fun getGeneratedInstance(
         name: ClassName,
         generated: ByteArray,
@@ -66,7 +84,10 @@ class WraaperClassCreatorTest {
             name.fullName,
             generated
         )
-        val classParams = params.map { it.javaClass }.toTypedArray()
+        val classParams = params.map {
+            val javaClass = it.javaClass
+            javaClass.kotlin.javaPrimitiveType ?: javaClass
+        }.toTypedArray()
         return clazz.getDeclaredConstructor(*classParams).newInstance(*params) as AaperRunnable
     }
 
@@ -88,6 +109,20 @@ class WraaperClassCreatorTest {
         fun callMe(param: String) {
             callCount++
             storedParam = param
+        }
+    }
+
+    class TwoParamType {
+        var storedParam1 = ""
+        var storedParam2 = 0.0
+
+        var callCount = 0
+            private set
+
+        fun callMe(param1: String, param2: Double) {
+            callCount++
+            storedParam1 = param1
+            storedParam2 = param2
         }
     }
 }

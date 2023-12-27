@@ -1,6 +1,6 @@
 package com.likethesalad.android.aaper.plugin.instrumentation.generated.visitor
 
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils
+import com.likethesalad.android.aaper.plugin.utils.AsmUtils
 import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
