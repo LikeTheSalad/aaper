@@ -5,7 +5,11 @@ plugins {
 }
 
 dependencies {
+    implementation project(":aaper-api")
+    implementation "org.ow2.asm:asm:9.6"
+    implementation "org.ow2.asm:asm-util:9.6"
     compileOnly "com.android.tools.build:gradle:7.4.0"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
 }
 
 buildConfig {

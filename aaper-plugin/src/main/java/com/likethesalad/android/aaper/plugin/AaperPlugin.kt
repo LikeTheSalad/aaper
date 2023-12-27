@@ -1,8 +1,11 @@
 package com.likethesalad.android.aaper.plugin
 
 import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.ScopedArtifacts
+import com.likethesalad.android.aaper.plugin.appender.CodeAppenderTask
 import com.likethesalad.android.aaper.plugin.instrumentation.generated.GeneratedAsmClassVisitorFactory
 import com.likethesalad.android.aaper.plugin.instrumentation.target.TargetAsmClassVisitorFactory
 import com.likethesalad.android.generated.BuildConfig
@@ -55,6 +58,18 @@ class AaperPlugin : Plugin<Project> {
             project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
 
         componentsExtension.onVariants { variant ->
+            val taskProvider = project.tasks.register(
+                variant.name + "AaperCodeAppender",
+                CodeAppenderTask::class.java
+            )
+            variant.artifacts.forScope(ScopedArtifacts.Scope.PROJECT)
+                .use(taskProvider)
+                .toTransform(
+                    ScopedArtifact.CLASSES,
+                    CodeAppenderTask::allJars,
+                    CodeAppenderTask::allDirectories,
+                    CodeAppenderTask::outputFile
+                )
             variant.instrumentation.transformClassesWith(
                 TargetAsmClassVisitorFactory::class.java,
                 InstrumentationScope.PROJECT
