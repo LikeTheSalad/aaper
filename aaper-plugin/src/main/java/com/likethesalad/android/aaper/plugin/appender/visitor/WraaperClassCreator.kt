@@ -15,14 +15,15 @@ object WraaperClassCreator {
 
     fun create(
         name: ClassName,
+        targetMethodName: String,
         target: Type,
-        targetMethodName: String
+        vararg params: Type
     ): ByteArray {
         val cw = ClassWriter(0)
         val cv = classVisitorInterceptor?.invoke(cw) ?: cw
 
         createType(cv, name.internalName)
-        val fields = createFields(cv, target)
+        val fields = createFields(cv, target, params)
         createConstructor(cv, name, fields)
         createRunMethod(cv, name, targetMethodName, fields)
 
@@ -42,16 +43,37 @@ object WraaperClassCreator {
         )
     }
 
-    private fun createFields(cv: ClassVisitor, target: Type): List<FieldInfo> {
+    private fun createFields(
+        cv: ClassVisitor,
+        target: Type,
+        params: Array<out Type>
+    ): List<FieldInfo> {
+        val fields = mutableListOf<FieldInfo>()
+        val targetParamName = "instance"
+        createField(cv, targetParamName, target)
+        fields.add(FieldInfo(targetParamName, target))
+
+        params.forEachIndexed { index, type ->
+            val paramName = "p$index"
+            createField(cv, paramName, type)
+            fields.add(FieldInfo(paramName, type))
+        }
+
+        return fields
+    }
+
+    private fun createField(
+        cv: ClassVisitor,
+        name: String,
+        type: Type
+    ) {
         cv.visitField(
             Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
-            "instance",
-            target.descriptor,
+            name,
+            type.descriptor,
             null,
             null
         ).visitEnd()
-
-        return listOf(FieldInfo("instance", target))
     }
 
     private fun createConstructor(cv: ClassVisitor, name: ClassName, fields: List<FieldInfo>) {
@@ -67,9 +89,9 @@ object WraaperClassCreator {
 
         mv.visitCode()
 
-        maxStack++
         mv.visitVarInsn(Opcodes.ALOAD, 0)
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, SUPER_NAME, "<init>", "()V", false)
+        maxStack++
 
         // Setting fields from constructor params
         fields.forEachIndexed { index, field ->
@@ -89,7 +111,7 @@ object WraaperClassCreator {
 
         mv.visitInsn(Opcodes.RETURN)
 
-        mv.visitMaxs(maxStack, max(2, types.size))
+        mv.visitMaxs(maxStack, types.size + 1)
         mv.visitEnd()
     }
 

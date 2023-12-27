@@ -29,12 +29,32 @@ class WraaperClassCreatorTest {
         val className = ClassName("com.example", "SomeName")
         val target = ZeroParamType()
         val generated =
-            WraaperClassCreator.create(className, Type.getType(ZeroParamType::class.java), "callMe")
+            WraaperClassCreator.create(className, "callMe", Type.getType(ZeroParamType::class.java))
 
         val instance = getGeneratedInstance(className, generated, target)
 
         instance.run()
         assertThat(target.callCount).isEqualTo(1)
+    }
+
+    @Test
+    fun `Verify one param method`() {
+        val className = ClassName("com.example", "SomeName")
+        val target = OneParamType()
+        val generated =
+            WraaperClassCreator.create(
+                className,
+                "callMe",
+                Type.getType(OneParamType::class.java),
+                Type.getType(String::class.java)
+            )
+
+        val paramValue = "The param value"
+        val instance = getGeneratedInstance(className, generated, target, paramValue)
+
+        instance.run()
+        assertThat(target.callCount).isEqualTo(1)
+        assertThat(target.storedParam).isEqualTo(paramValue)
     }
 
     private fun getGeneratedInstance(
@@ -56,6 +76,18 @@ class WraaperClassCreatorTest {
 
         fun callMe() {
             callCount++
+        }
+    }
+
+    class OneParamType {
+        var storedParam = ""
+
+        var callCount = 0
+            private set
+
+        fun callMe(param: String) {
+            callCount++
+            storedParam = param
         }
     }
 }
