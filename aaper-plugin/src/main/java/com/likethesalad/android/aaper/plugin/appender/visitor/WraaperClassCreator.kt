@@ -39,7 +39,7 @@ object WraaperClassCreator {
     private fun createType(cv: ClassVisitor, name: String) {
         cv.visit(
             Opcodes.V1_8,
-            Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
+            Opcodes.ACC_SYNTHETIC or Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
             name,
             null,
             SUPER_NAME,
