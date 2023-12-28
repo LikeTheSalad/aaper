@@ -1,6 +1,5 @@
 package com.likethesalad.android.aaper.plugin.appender.visitor
 
-import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
 import com.likethesalad.android.aaper.plugin.appender.visitor.data.ClassName
 import com.likethesalad.android.aaper.plugin.appender.visitor.data.FieldInfo
 import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
@@ -43,7 +42,7 @@ object WraaperClassCreator {
             name,
             null,
             SUPER_NAME,
-            arrayOf(Type.getInternalName(AaperRunnable::class.java))
+            arrayOf(Type.getInternalName(Runnable::class.java))
         )
     }
 

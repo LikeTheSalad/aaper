@@ -1,7 +1,6 @@
 package com.likethesalad.android.aaper.plugin.appender.visitor
 
 import com.google.common.truth.Truth.assertThat
-import com.likethesalad.android.aaper.internal.compiler.AaperRunnable
 import com.likethesalad.android.aaper.plugin.appender.visitor.testutils.GeneratedClassLoader
 import com.likethesalad.android.aaper.plugin.appender.visitor.data.ClassName
 import org.junit.Before
@@ -111,7 +110,7 @@ class WraaperClassCreatorTest {
         name: ClassName,
         generated: ByteArray,
         vararg params: Any
-    ): AaperRunnable {
+    ): Runnable {
         val clazz = GeneratedClassLoader(javaClass.classLoader).defineClass(
             name.fullName,
             generated
@@ -120,7 +119,7 @@ class WraaperClassCreatorTest {
             val javaClass = it.javaClass
             javaClass.kotlin.javaPrimitiveType ?: javaClass
         }.toTypedArray()
-        return clazz.getDeclaredConstructor(*classParams).newInstance(*params) as AaperRunnable
+        return clazz.getDeclaredConstructor(*classParams).newInstance(*params) as Runnable
     }
 
     class ZeroParamType {
