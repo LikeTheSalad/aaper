@@ -1,5 +1,6 @@
 package com.likethesalad.android.aaper.plugin
 
+import com.google.common.truth.Truth.assertThat
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.descriptor.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
@@ -23,7 +24,9 @@ class AaperPluginTest {
 
         testProject.addSubproject(descriptor)
 
-        testProject.runGradleAndFail(projectName, "assembleDebug")
+        val buildResult = testProject.runGradleAndFail(projectName, "assembleDebug")
+
+        assertThat(buildResult.output).contains("EnsurePermissions-annotated methods must return VOID, but the method 'someMethod' inside 'com.example.SomeActivity' returns 'int' instead.")
     }
 
     private fun createProjectDescriptor(projectName: String): AndroidAppProjectDescriptor {

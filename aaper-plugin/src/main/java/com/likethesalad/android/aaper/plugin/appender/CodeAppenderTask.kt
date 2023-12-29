@@ -64,6 +64,7 @@ abstract class CodeAppenderTask : DefaultTask() {
                     .forEach { classInfo ->
                         classInfo.declaredMethodInfo.forEach { methodInfo ->
                             if (methodInfo.hasAnnotation(EnsurePermissions::class.java)) {
+                                validateAnnotatedMethod(methodInfo)
                                 annotatedMethods.add(
                                     MethodInfo(
                                         methodInfo.name,
@@ -77,6 +78,13 @@ abstract class CodeAppenderTask : DefaultTask() {
             }
 
         return annotatedMethods
+    }
+
+    private fun validateAnnotatedMethod(methodInfo: io.github.classgraph.MethodInfo) {
+        val returnType = Type.getMethodType(methodInfo.typeDescriptorStr).returnType
+        if (returnType != Type.VOID_TYPE) {
+            throw IllegalStateException("${EnsurePermissions::class.java.simpleName}-annotated methods must return VOID, but the method '${methodInfo.name}' inside '${methodInfo.className}' returns '${returnType.className}' instead.")
+        }
     }
 
     private fun generateAndAddClassToTheOutput(jarOutput: JarOutputStream, methodInfo: MethodInfo) {
