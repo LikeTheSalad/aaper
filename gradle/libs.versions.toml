@@ -7,6 +7,12 @@ testing-utils = "2.0.0"
 [libraries]
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
 asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+androidx-startupRuntime = "androidx.startup:startup-runtime:1.1.1"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
+unitTesting = { module = "com.likethesalad.tools.testing:unit-testing", version.ref = "testing-utils" }
+robolectric = "org.robolectric:robolectric:4.9"
+classGraph = "io.github.classgraph:classgraph:4.8.165"
+android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 
 [bundles]
 asm = ["asm", "asm-util"]

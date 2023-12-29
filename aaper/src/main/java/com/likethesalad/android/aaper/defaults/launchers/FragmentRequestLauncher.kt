@@ -6,6 +6,7 @@ import com.likethesalad.android.aaper.base.launchers.RequestWithCodeLauncher
 /**
  * This class launches a request permission using a Fragment as host.
  */
+@Suppress("DEPRECATION")
 class FragmentRequestLauncher : RequestWithCodeLauncher<Fragment>() {
 
     override fun launchPermissionsRequest(
