@@ -1,0 +1,10 @@
+[versions]
+kotlin = "1.6.20"
+android = "7.4.0"
+
+[libraries]
+fragmentTesting = "androidx.fragment:fragment-testing:1.5.5"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

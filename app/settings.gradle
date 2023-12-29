@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         google()
     }
     versionCatalogs {
-        libs {
+        rootLibs {
             from(files("../gradle/libs.versions.toml"))
         }
     }
