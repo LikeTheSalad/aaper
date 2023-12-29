@@ -17,7 +17,7 @@ artifactPublisher {
 }
 
 ext {
-    testingUtilities_version = '1.0.8'
+    testingUtilities_version = '2.0.0.1'
     autoService_version = '1.0.1'
     fragment_version = '1.5.5'
     robolectric_version = '4.9'

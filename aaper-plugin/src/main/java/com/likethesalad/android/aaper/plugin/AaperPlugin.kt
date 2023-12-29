@@ -49,7 +49,14 @@ class AaperPlugin : Plugin<Project> {
     }
 
     private fun addSdkDependency(project: Project) {
-        project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
+        val localDependencies = System.getProperty("aaper_local_dependencies")
+        if (localDependencies == null) {
+            project.dependencies.add("implementation", BuildConfig.SDK_DEPENDENCY_URI)
+        } else {
+            localDependencies.split(",").forEach {
+                project.dependencies.add("implementation", project.files(it))
+            }
+        }
     }
 
     private fun setUpAndroidTransformation(project: Project) {

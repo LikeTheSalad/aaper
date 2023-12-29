@@ -1,7 +1,20 @@
 plugins {
     id "java-gradle-plugin"
     id 'org.jetbrains.kotlin.jvm'
+    id 'com.likethesalad.testing.android.compilation'
     id 'com.github.gmazzo.buildconfig' version '3.1.0'
+}
+
+configurations {
+    testLocalDependency {
+        canBeResolved(false)
+        canBeConsumed(false)
+    }
+    testLocalClasspath {
+        canBeConsumed(false)
+        canBeResolved(true)
+        extendsFrom(testLocalDependency)
+    }
 }
 
 dependencies {
@@ -10,7 +23,12 @@ dependencies {
     implementation "org.ow2.asm:asm-util:9.6"
     implementation "io.github.classgraph:classgraph:4.8.165"
     compileOnly "com.android.tools.build:gradle:7.4.0"
-    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+    testPluginDependency "com.android.tools.build:gradle:7.4.0"
+    testLocalDependency project(":aaper-api")
+}
+
+tasks.withType(Test) {
+    systemProperty "aaper_local_dependencies", configurations.testLocalClasspath.files.join(",")
 }
 
 buildConfig {
