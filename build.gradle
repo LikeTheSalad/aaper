@@ -1,7 +1,5 @@
 plugins {
-    id 'com.android.library' version '7.4.0' apply false
-    id 'org.jetbrains.kotlin.jvm' version '1.7.20' apply false
-    id 'com.likethesalad.artifact-publisher' version '2.0.0'
+    alias(libs.plugins.artifactPublisher)
 }
 
 description = "Ensure Android runtime permissions using annotations only."
@@ -19,8 +17,4 @@ ext {
     autoService_version = '1.0.1'
     fragment_version = '1.5.5'
     robolectric_version = '4.9'
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

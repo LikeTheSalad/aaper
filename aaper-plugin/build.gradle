@@ -1,8 +1,8 @@
 plugins {
     id "java-gradle-plugin"
-    id 'org.jetbrains.kotlin.jvm'
     id 'com.likethesalad.testing.android.compilation'
-    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.buildConfig)
 }
 
 configurations {

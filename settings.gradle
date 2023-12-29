@@ -23,7 +23,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.likethesalad.tools.testing:android-compilation-testing-plugin:2.0.0.1'
+        classpath 'com.likethesalad.tools.testing:android-compilation-testing-plugin:2.0.0'
     }
 }
 rootProject.name = 'Annotated permissions'
