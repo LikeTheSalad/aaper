@@ -11,10 +11,3 @@ artifactPublisher {
     issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
     tags = ["android", "permissions", "annotation", "runtime"]
 }
-
-ext {
-    testingUtilities_version = '2.0.0'
-    autoService_version = '1.0.1'
-    fragment_version = '1.5.5'
-    robolectric_version = '4.9'
-}
