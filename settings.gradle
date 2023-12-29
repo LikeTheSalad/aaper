@@ -23,7 +23,6 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
         classpath 'com.likethesalad.tools.testing:android-compilation-testing-plugin:2.0.0.1'
     }
 }
