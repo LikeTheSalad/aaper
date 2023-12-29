@@ -4,8 +4,6 @@ plugins {
     id 'com.likethesalad.artifact-publisher' version '2.0.0'
 }
 
-group = 'com.likethesalad.android'
-version = '2.1.0.100'
 description = "Ensure Android runtime permissions using annotations only."
 
 artifactPublisher {

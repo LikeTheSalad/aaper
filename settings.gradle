@@ -27,7 +27,6 @@ buildscript {
     }
 }
 rootProject.name = 'Annotated permission'
-include ':app'
 include ':aaper-api'
 include ':aaper'
 include ':aaper-plugin'
