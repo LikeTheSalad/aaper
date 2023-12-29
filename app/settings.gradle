@@ -16,17 +16,6 @@ dependencyResolutionManagement {
         google()
     }
 }
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'com.likethesalad.tools.testing:android-compilation-testing-plugin:2.0.0.1'
-    }
-}
-rootProject.name = 'Annotated permissions'
-include ':aaper-api'
-include ':aaper'
-include ':aaper-plugin'
+rootProject.name = 'Annotated permissions sample app'
+include ':app'
+includeBuild ".."

@@ -1,11 +1,17 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'com.likethesalad.aaper' version '2.1.0'
+    id 'com.android.application' version '7.4.0'
+    id 'org.jetbrains.kotlin.android' version '1.6.20'
+    id 'com.likethesalad.aaper'
+}
+
+ext {
+    testingUtilities_version = '2.0.0'
+    fragment_version = '1.5.5'
+    robolectric_version = '4.9'
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 31
     defaultConfig {
         applicationId "com.likethesalad.android.aaper.sample"
         minSdkVersion 19
