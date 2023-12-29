@@ -17,7 +17,7 @@ class AaperPluginTest {
     private val projectDirProvider = TestAssetsProvider("projects")
 
     @Test
-    fun `Verify all annotated methods return VOID`() {
+    fun `Verify compilation issue if some methods don't return void`() {
         val projectName = "nonVoidMethod"
         val testProject = AndroidTestProject(temporaryFolder.root)
         val descriptor = createProjectDescriptor(projectName)
@@ -27,6 +27,17 @@ class AaperPluginTest {
         val buildResult = testProject.runGradleAndFail(projectName, "assembleDebug")
 
         assertThat(buildResult.output).contains("EnsurePermissions-annotated methods must return VOID, but the method 'someMethod' inside 'com.example.SomeActivity' returns 'int' instead.")
+    }
+
+    @Test
+    fun `Verify no issues when all annotated methods return void`() {
+        val projectName = "voidMethod"
+        val testProject = AndroidTestProject(temporaryFolder.root)
+        val descriptor = createProjectDescriptor(projectName)
+
+        testProject.addSubproject(descriptor)
+
+        testProject.runGradle(projectName, "assembleDebug")
     }
 
     private fun createProjectDescriptor(projectName: String): AndroidAppProjectDescriptor {
