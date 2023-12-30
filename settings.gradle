@@ -23,6 +23,16 @@ dependencyResolutionManagement {
         google()
     }
 }
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.4.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+    }
+}
 rootProject.name = 'Annotated permissions'
 include ':aaper-api'
 include ':aaper'

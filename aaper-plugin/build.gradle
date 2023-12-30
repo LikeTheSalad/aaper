@@ -21,12 +21,13 @@ libConventions {
     setJavaVersion("11")
 }
 
+def androidPluginApi = "com.android.tools.build:gradle:7.4.0"
 dependencies {
     implementation project(":aaper-api")
     implementation libs.bundles.asm
     implementation libs.classGraph
-    compileOnly libs.android.plugin
-    testPluginDependency libs.android.plugin
+    compileOnly androidPluginApi
+    testPluginDependency androidPluginApi
     testLocalDependency project(":aaper-api")
 }
 

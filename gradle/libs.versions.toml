@@ -1,6 +1,5 @@
 [versions]
 asm = "9.6"
-android = "7.4.0"
 project-utilities = "3.0.0.1"
 
 [libraries]
@@ -11,7 +10,6 @@ androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
 unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
 robolectric = "org.robolectric:robolectric:4.9"
 classGraph = "io.github.classgraph:classgraph:4.8.165"
-android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 
 [bundles]
 asm = ["asm", "asm-util"]
