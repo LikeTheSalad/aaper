@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.java.library)
+    id "com.likethesalad.tools.java-library"
 }
 
 dependencies {

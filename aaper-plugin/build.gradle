@@ -1,7 +1,7 @@
 plugins {
     id "java-gradle-plugin"
-    alias(libs.plugins.java.library)
-    alias(libs.plugins.android.compilation.testing)
+    id "com.likethesalad.tools.java-library"
+    id "com.likethesalad.tools.android-compilation-testing"
     alias(libs.plugins.buildConfig)
 }
 
