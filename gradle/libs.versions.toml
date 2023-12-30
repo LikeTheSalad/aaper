@@ -17,6 +17,8 @@ android-plugin = { module = "com.android.tools.build:gradle", version.ref = "and
 asm = ["asm", "asm-util"]
 
 [plugins]
-pluginUtilities = { id = "com.likethesalad.tools.plugins", version.ref = "project-utilities" }
+android-library = { id = "com.likethesalad.tools.android-library", version.ref = "project-utilities" }
+java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
+android-compilation-testing = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "2.0.1" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "3.1.0" }
