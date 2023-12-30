@@ -17,6 +17,10 @@ configurations {
     }
 }
 
+libConventions {
+    setJavaVersion("11")
+}
+
 dependencies {
     implementation project(":aaper-api")
     implementation libs.bundles.asm
