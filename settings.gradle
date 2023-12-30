@@ -7,6 +7,13 @@ pluginManagement {
         mavenCentral()
         google()
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (it.requested.id.namespace == "com.likethesalad.tools") {
+                useModule("com.likethesalad.tools:plugin-tools:${it.requested.version}")
+            }
+        }
+    }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -14,16 +21,6 @@ dependencyResolutionManagement {
         mavenLocal()
         mavenCentral()
         google()
-    }
-}
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'com.likethesalad.tools.testing:android-compilation-testing-plugin:2.0.0'
     }
 }
 rootProject.name = 'Annotated permissions'
