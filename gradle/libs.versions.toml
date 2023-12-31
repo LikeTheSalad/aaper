@@ -20,4 +20,4 @@ android-library = { id = "com.likethesalad.tools.android-library", version.ref =
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
 android-compilation-testing = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "2.0.1" }
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "3.1.0" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }
