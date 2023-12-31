@@ -1,6 +1,6 @@
 [versions]
 asm = "9.6"
-project-utilities = "3.0.0"
+project-utilities = "3.0.2"
 
 [libraries]
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }

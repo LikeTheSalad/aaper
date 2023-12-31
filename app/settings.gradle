@@ -1,11 +1,23 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
 pluginManagement {
+    Properties rootProperties = new Properties()
+    File propertiesFile = new File(rootDir, '../gradle.properties')
+    propertiesFile.withInputStream {
+        rootProperties.load(it)
+    }
     repositories {
         mavenLocal()
         gradlePluginPortal()
         mavenCentral()
         google()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (it.requested.id.id == "com.likethesalad.aaper") {
+                useModule("com.likethesalad.android:aaper-plugin:${rootProperties["version"]}")
+            }
+        }
     }
 }
 dependencyResolutionManagement {
@@ -23,4 +35,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = 'Annotated permissions sample app'
 include ':app'
-includeBuild ".."
