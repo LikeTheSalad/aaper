@@ -33,6 +33,7 @@ android {
 dependencies {
     api project(":aaper-api")
     api libs.androidx.startupRuntime
+    implementation libs.androidx.core
     implementation libs.androidx.fragment
     testImplementation libs.unitTesting
     testImplementation libs.robolectric
