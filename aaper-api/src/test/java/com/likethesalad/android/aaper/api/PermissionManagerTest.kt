@@ -58,7 +58,9 @@ class PermissionManagerTest : BaseMockable() {
         fun init() {
             sourceMock = mockk(relaxUnitFun = true)
             strategyProvider = mockk(relaxUnitFun = true)
-            every { sourceMock.getRequestStrategyProvider() }.returns(strategyProvider)
+            every { sourceMock.getRequestStrategyProvider() as RequestStrategyProvider }.returns(
+                strategyProvider
+            )
             PermissionManager.setStrategyProviderSource(sourceMock)
         }
     }
