@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.api.base
+package com.likethesalad.android.aaper.api.data
 
 /**
  * It represents any sort of data that might be needed for a permission request. For example,

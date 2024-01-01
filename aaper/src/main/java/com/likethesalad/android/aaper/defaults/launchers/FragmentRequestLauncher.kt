@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.defaults.launchers
 
 import androidx.fragment.app.Fragment
-import com.likethesalad.android.aaper.base.launchers.RequestWithCodeLauncher
+import com.likethesalad.android.aaper.launcher.RequestWithCodeLauncher
 
 /**
  * This class launches a request permission using a Fragment as host.

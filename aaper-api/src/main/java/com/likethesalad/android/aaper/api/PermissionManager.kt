@@ -1,14 +1,14 @@
 package com.likethesalad.android.aaper.api
 
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PendingRequest
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
@@ -47,7 +47,7 @@ object PermissionManager {
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      * @param originalMethod - The method annotated with [EnsurePermissions].
      * @param permissions - The array of permissions that the original method needs.
-     * @param strategyName - The strategy name that will take care of the process for the
+     * @param strategyType - The strategy that will take care of the process for the
      * originalMethod.
      */
     @JvmStatic
@@ -55,12 +55,9 @@ object PermissionManager {
         host: Any,
         originalMethod: Runnable,
         permissions: Array<String>,
-        strategyName: String?
+        strategyType: Class<out RequestStrategy<out Any>>
     ) {
-        val strategy = strategyProvider.getStrategy(
-            host,
-            strategyName ?: RequestStrategyFactory.DEFAULT_STRATEGY
-        )
+        val strategy = strategyProvider.getStrategy(host, strategyType)
         val missingPermissions = getMissingPermissions(
             host,
             strategy.internalGetPermissionStatusProvider(host),

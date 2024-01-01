@@ -1,4 +1,6 @@
-package com.likethesalad.android.aaper.api.base
+package com.likethesalad.android.aaper.api.launcher
+
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 
 /**
  * This class should launch a permission request.

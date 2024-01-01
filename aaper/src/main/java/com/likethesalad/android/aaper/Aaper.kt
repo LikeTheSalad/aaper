@@ -3,9 +3,9 @@ package com.likethesalad.android.aaper
 import android.content.Context
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
-import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
 
 /**
  * Aaper entry point.
@@ -24,12 +24,12 @@ object Aaper : RequestStrategyProviderSource {
      * @param context - The app context
      * @param strategyFactory - Will delegate permission requests to its strategies.
      */
-    fun setUp(context: Context, strategyFactory: RequestStrategyFactory) = synchronized(this) {
+    fun initialize(context: Context) = synchronized(this) {
         if (initialized) {
             throw AaperInitializedAlreadyException()
         }
 
-        this.strategyFactory = strategyFactory
+        this.strategyFactory = DefaultRequestStrategyFactory(context)
         PermissionManager.setStrategyProviderSource(this)
 
         initialized = true
@@ -37,7 +37,7 @@ object Aaper : RequestStrategyProviderSource {
 
     /**
      * Returns the instance of [RequestStrategyFactory] being used, which is the one set on
-     * the [setUp] function. If no custom instance was passed, then this function will return a
+     * the [initialize] function. If no custom instance was passed, then this function will return a
      * [DefaultRequestStrategyFactory] one.
      */
     @Suppress("UNCHECKED_CAST")

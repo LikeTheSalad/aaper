@@ -1,7 +1,8 @@
 package com.likethesalad.android.aaper.api
 
+import com.likethesalad.android.aaper.api.strategy.NoopRequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
+import kotlin.reflect.KClass
 
 /**
  * This annotation is for the methods inside supported hosts (either an Activity or a Fragment)
@@ -10,7 +11,7 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
  * @param permissions - The array of permission that the annotated function
  * needs in order to be run.
  *
- * @param strategyName - (Optional) The name of the [RequestStrategy] that will take care of
+ * @param strategyType - (Optional) The type of the [RequestStrategy] that will take care of
  * handling the permissions request. A default strategy will be used if not provided.
  */
 
@@ -18,5 +19,5 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 @Target(AnnotationTarget.FUNCTION)
 annotation class EnsurePermissions(
     val permissions: Array<String>,
-    val strategyName: String = RequestStrategyFactory.DEFAULT_STRATEGY
+    val strategyType: KClass<out RequestStrategy<out Any>> = NoopRequestStrategy::class
 )

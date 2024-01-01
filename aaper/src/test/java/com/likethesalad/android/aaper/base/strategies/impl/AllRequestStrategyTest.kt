@@ -8,6 +8,7 @@ import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.launchers.FragmentRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
 import com.likethesalad.android.aaper.defaults.statusproviders.FragmentPermissionStatusProvider
+import com.likethesalad.android.aaper.strategy.impl.AllRequestStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.fail
@@ -35,10 +36,6 @@ class AllRequestStrategyTest : BaseMockable() {
                 host: Any,
                 data: PermissionsResult
             ): Boolean {
-                throw UnsupportedOperationException()
-            }
-
-            override fun getName(): String {
                 throw UnsupportedOperationException()
             }
         }

@@ -1,14 +1,14 @@
-package com.likethesalad.android.aaper.base.strategies.impl
+package com.likethesalad.android.aaper.strategy.impl
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.base.strategies.RequestWithCodeMetadataStrategy
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
 import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.launchers.FragmentRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
 import com.likethesalad.android.aaper.defaults.statusproviders.FragmentPermissionStatusProvider
+import com.likethesalad.android.aaper.strategy.RequestWithCodeMetadataStrategy
 
 /**
  * Base class to create a strategy for both Activities and Fragments as supported hosts,

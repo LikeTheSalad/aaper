@@ -1,15 +1,15 @@
 package com.likethesalad.android.aaper.api
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
 import io.mockk.clearMocks

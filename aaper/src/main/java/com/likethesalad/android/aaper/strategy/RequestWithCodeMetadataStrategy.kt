@@ -1,6 +1,6 @@
-package com.likethesalad.android.aaper.base.strategies
+package com.likethesalad.android.aaper.strategy
 
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
 

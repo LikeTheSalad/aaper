@@ -1,11 +1,12 @@
 package com.likethesalad.android.aaper.base.strategies
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.base.RequestLauncher
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsResult
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
+import com.likethesalad.android.aaper.strategy.RequestWithCodeMetadataStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Test
@@ -49,10 +50,6 @@ class RequestWithCodeMetadataStrategyTest : BaseMockable() {
         RequestWithCodeMetadataStrategy<Any>() {
 
         override fun onPermissionsRequestResults(host: Any, data: PermissionsResult): Boolean {
-            throw UnsupportedOperationException()
-        }
-
-        override fun getName(): String {
             throw UnsupportedOperationException()
         }
 

@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.base.launchers
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.launcher.RequestWithCodeLauncher
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before

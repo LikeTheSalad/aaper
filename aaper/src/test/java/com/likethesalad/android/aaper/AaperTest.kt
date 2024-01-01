@@ -4,9 +4,8 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyFactory
-import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
+import com.likethesalad.android.aaper.strategy.DefaultRequestStrategy
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -81,7 +80,7 @@ class AaperTest {
             provider.register(DefaultRequestStrategy())
             provider.setDefaultStrategyName(DefaultRequestStrategy.NAME)
         }
-        Aaper.setUp(mockk(), provider)
+        Aaper.initialize(mockk(), provider)
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")

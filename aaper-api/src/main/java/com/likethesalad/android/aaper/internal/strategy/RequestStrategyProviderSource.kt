@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.internal.base
+package com.likethesalad.android.aaper.internal.strategy
 
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 

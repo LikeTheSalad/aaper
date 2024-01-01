@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.defaults.launchers
 
 import android.app.Activity
 import androidx.core.app.ActivityCompat
-import com.likethesalad.android.aaper.base.launchers.RequestWithCodeLauncher
+import com.likethesalad.android.aaper.launcher.RequestWithCodeLauncher
 
 /**
  * This class launches a request permission using an Activity as host.

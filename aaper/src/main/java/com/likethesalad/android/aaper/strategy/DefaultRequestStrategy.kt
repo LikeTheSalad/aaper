@@ -1,7 +1,7 @@
-package com.likethesalad.android.aaper.defaults.strategies
+package com.likethesalad.android.aaper.strategy
 
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.base.strategies.impl.AllRequestStrategy
+import com.likethesalad.android.aaper.strategy.impl.AllRequestStrategy
 
 /**
  * This is the default strategy to handle both Activity and Fragment's permissions requests.
@@ -12,15 +12,9 @@ import com.likethesalad.android.aaper.base.strategies.impl.AllRequestStrategy
  */
 class DefaultRequestStrategy : AllRequestStrategy() {
 
-    companion object {
-        internal val NAME = DefaultRequestStrategy::class.java.name
-    }
-
     override fun onPermissionsRequestResults(host: Any, data: PermissionsResult): Boolean {
         // If no permissions were denied, return true so that the annotated method
         // gets called.
         return data.denied.isEmpty()
     }
-
-    override fun getName(): String = NAME
 }

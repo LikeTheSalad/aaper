@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.api.base
+package com.likethesalad.android.aaper.api.statusprovider
 
 /**
  * This class should tell whether a given permission is granted not.

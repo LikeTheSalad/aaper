@@ -5,6 +5,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
+import com.likethesalad.android.aaper.strategy.impl.ActivityRequestStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
@@ -28,10 +29,6 @@ class ActivityRequestStrategyTest : BaseMockable() {
                 host: Activity,
                 data: PermissionsResult
             ): Boolean {
-                throw UnsupportedOperationException()
-            }
-
-            override fun getName(): String {
                 throw UnsupportedOperationException()
             }
         }

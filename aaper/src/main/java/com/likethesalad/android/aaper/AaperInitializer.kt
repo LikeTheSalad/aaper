@@ -2,17 +2,11 @@ package com.likethesalad.android.aaper
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyFactory
-import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 
 class AaperInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        val strategyFactory = DefaultRequestStrategyFactory()
-        strategyFactory.register(DefaultRequestStrategy())
-        strategyFactory.setDefaultStrategyName(DefaultRequestStrategy.NAME)
-
-        Aaper.setUp(context, strategyFactory)
+        Aaper.initialize(context)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

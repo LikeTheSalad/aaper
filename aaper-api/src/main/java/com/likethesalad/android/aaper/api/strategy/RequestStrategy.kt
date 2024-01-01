@@ -1,17 +1,16 @@
 package com.likethesalad.android.aaper.api.strategy
 
-import com.likethesalad.android.aaper.api.EnsurePermissions
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.base.RequestLauncher
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
  * This is the base class for a request strategy.
  */
-abstract class RequestStrategy<T> {
+abstract class RequestStrategy<HOST> {
 
     @Suppress("UNCHECKED_CAST")
     internal fun internalOnBeforeLaunchingRequest(
@@ -19,7 +18,7 @@ abstract class RequestStrategy<T> {
         data: PermissionsRequest,
         request: RequestRunner
     ): Boolean {
-        return onBeforeLaunchingRequest(host as T, data, request)
+        return onBeforeLaunchingRequest(host as HOST, data, request)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -27,22 +26,22 @@ abstract class RequestStrategy<T> {
         host: Any,
         data: PermissionsResult
     ): Boolean {
-        return onPermissionsRequestResults(host as T, data)
+        return onPermissionsRequestResults(host as HOST, data)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun internalGetPermissionStatusProvider(host: Any): PermissionStatusProvider<T> {
-        return getPermissionStatusProvider(host as T)
+    fun internalGetPermissionStatusProvider(host: Any): PermissionStatusProvider<HOST> {
+        return getPermissionStatusProvider(host as HOST)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun internalGetRequestLauncher(host: Any): RequestLauncher<T> {
-        return getRequestLauncher(host as T)
+    fun internalGetRequestLauncher(host: Any): RequestLauncher<HOST> {
+        return getRequestLauncher(host as HOST)
     }
 
     @Suppress("UNCHECKED_CAST")
     fun internalGetLaunchMetadata(host: Any): LaunchMetadata? {
-        return getLaunchMetadata(host as T)
+        return getLaunchMetadata(host as HOST)
     }
 
     /**
@@ -58,7 +57,7 @@ abstract class RequestStrategy<T> {
      * TRUE if the request will be manually launched later by triggering the request runner.
      */
     open fun onBeforeLaunchingRequest(
-        host: T,
+        host: HOST,
         data: PermissionsRequest,
         request: RequestRunner
     ): Boolean {
@@ -79,16 +78,9 @@ abstract class RequestStrategy<T> {
      * will not be called.
      */
     abstract fun onPermissionsRequestResults(
-        host: T,
+        host: HOST,
         data: PermissionsResult
     ): Boolean
-
-    /**
-     * This getter must provide the name of this [RequestStrategy], it's the same name
-     * that users can later (optionally) provide in a parameter of the [EnsurePermissions]
-     * annotation.
-     */
-    abstract fun getName(): String
 
     /**
      * This getter must provide a [RequestLauncher] instance which will be used to
@@ -96,7 +88,7 @@ abstract class RequestStrategy<T> {
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      */
-    abstract fun getRequestLauncher(host: T): RequestLauncher<T>
+    abstract fun getRequestLauncher(host: HOST): RequestLauncher<HOST>
 
     /**
      * This getter must provide a [PermissionStatusProvider] instance which will
@@ -104,7 +96,7 @@ abstract class RequestStrategy<T> {
      *
      * @param host - The class that contains the original method, e.g. Activity or Fragment.
      */
-    abstract fun getPermissionStatusProvider(host: T): PermissionStatusProvider<T>
+    abstract fun getPermissionStatusProvider(host: HOST): PermissionStatusProvider<HOST>
 
     /**
      * This getter is called before launching the request and it must provide
@@ -112,5 +104,5 @@ abstract class RequestStrategy<T> {
      *
      * @return - The metadata needed, if any, to launch the request.
      */
-    abstract fun getLaunchMetadata(host: T): LaunchMetadata?
+    abstract fun getLaunchMetadata(host: HOST): LaunchMetadata?
 }

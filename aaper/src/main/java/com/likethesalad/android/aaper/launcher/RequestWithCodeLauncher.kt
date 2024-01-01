@@ -1,7 +1,7 @@
-package com.likethesalad.android.aaper.base.launchers
+package com.likethesalad.android.aaper.launcher
 
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
-import com.likethesalad.android.aaper.api.base.RequestLauncher
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
 
 /**

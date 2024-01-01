@@ -1,11 +1,11 @@
-package com.likethesalad.android.aaper.base.strategies.impl
+package com.likethesalad.android.aaper.strategy.impl
 
 import android.app.Activity
-import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.base.strategies.RequestWithCodeMetadataStrategy
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
 import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
 import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
+import com.likethesalad.android.aaper.strategy.RequestWithCodeMetadataStrategy
 
 /**
  * Base class to create a strategy for Activities-only as host, meaning that only the annotated
