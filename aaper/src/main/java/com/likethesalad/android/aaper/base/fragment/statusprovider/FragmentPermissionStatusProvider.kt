@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.defaults.statusproviders
+package com.likethesalad.android.aaper.base.fragment.statusprovider
 
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat

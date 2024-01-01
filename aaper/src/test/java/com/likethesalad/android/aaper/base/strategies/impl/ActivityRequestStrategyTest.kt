@@ -3,9 +3,9 @@ package com.likethesalad.android.aaper.base.strategies.impl
 import android.app.Activity
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
-import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
-import com.likethesalad.android.aaper.strategy.impl.ActivityRequestStrategy
+import com.likethesalad.android.aaper.base.activity.launcher.ActivityRequestLauncher
+import com.likethesalad.android.aaper.base.activity.statusprovider.ActivityPermissionStatusProvider
+import com.likethesalad.android.aaper.base.activity.strategy.ActivityRequestStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before

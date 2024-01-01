@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.strategy
 
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.strategy.impl.AllRequestStrategy
+import com.likethesalad.android.aaper.base.common.strategy.AllRequestStrategy
 
 /**
  * This is the default strategy to handle both Activity and Fragment's permissions requests.

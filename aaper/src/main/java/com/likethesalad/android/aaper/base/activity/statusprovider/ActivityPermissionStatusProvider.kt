@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.defaults.statusproviders
+package com.likethesalad.android.aaper.base.activity.statusprovider
 
 import android.app.Activity
 import android.content.pm.PackageManager

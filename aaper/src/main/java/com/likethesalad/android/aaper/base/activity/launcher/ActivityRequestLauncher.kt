@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.defaults.launchers
+package com.likethesalad.android.aaper.base.activity.launcher
 
 import android.app.Activity
 import androidx.core.app.ActivityCompat

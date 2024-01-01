@@ -1,10 +1,10 @@
-package com.likethesalad.android.aaper.strategy.impl
+package com.likethesalad.android.aaper.base.fragment.strategy
 
 import androidx.fragment.app.Fragment
 import com.likethesalad.android.aaper.api.launcher.RequestLauncher
 import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
-import com.likethesalad.android.aaper.defaults.launchers.FragmentRequestLauncher
-import com.likethesalad.android.aaper.defaults.statusproviders.FragmentPermissionStatusProvider
+import com.likethesalad.android.aaper.base.fragment.launcher.FragmentRequestLauncher
+import com.likethesalad.android.aaper.base.fragment.statusprovider.FragmentPermissionStatusProvider
 import com.likethesalad.android.aaper.strategy.RequestWithCodeMetadataStrategy
 
 /**

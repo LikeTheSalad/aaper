@@ -1,10 +1,11 @@
-package com.likethesalad.android.aaper.strategy.impl
+package com.likethesalad.android.aaper.base.activity.strategy
 
 import android.app.Activity
 import com.likethesalad.android.aaper.api.launcher.RequestLauncher
 import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
-import com.likethesalad.android.aaper.defaults.launchers.ActivityRequestLauncher
-import com.likethesalad.android.aaper.defaults.statusproviders.ActivityPermissionStatusProvider
+import com.likethesalad.android.aaper.base.activity.launcher.ActivityRequestLauncher
+import com.likethesalad.android.aaper.base.activity.statusprovider.ActivityPermissionStatusProvider
+import com.likethesalad.android.aaper.base.common.strategy.AllRequestStrategy
 import com.likethesalad.android.aaper.strategy.RequestWithCodeMetadataStrategy
 
 /**

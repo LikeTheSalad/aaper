@@ -1,6 +1,7 @@
 package com.likethesalad.android.aaper.defaults.statusproviders
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.base.activity.statusprovider.ActivityPermissionStatusProvider
 import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
 import com.likethesalad.android.aaper.testutils.RobolectricActivity
 import org.junit.Before
