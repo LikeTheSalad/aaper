@@ -217,7 +217,7 @@ fun methodThatNeedsThePermissions() {
 #### Or, Set it as the default strategy
 
 We can set our custom RequestStrategy as default for all the annotated methods by doing the
-following after registering our custom Strategy:
+following:
 
 ```kotlin  
 // Application.onCreate  
