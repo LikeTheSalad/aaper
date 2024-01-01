@@ -8,7 +8,7 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.data.PendingRequest
-import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
@@ -17,9 +17,9 @@ import com.likethesalad.android.aaper.internal.utils.RequestRunner
  */
 object PermissionManager {
 
-    private var strategyProviderSource: RequestStrategyProviderSource? = null
-    private val strategyProvider by lazy {
-        strategyProviderSource!!.getRequestStrategyFactory<RequestStrategyFactory>()
+    private var strategyFactoryProvider: RequestStrategyFactoryProvider? = null
+    private val strategyFactory by lazy {
+        strategyFactoryProvider!!.getRequestStrategyFactory<RequestStrategyFactory>()
     }
     private var currentRequest: CurrentRequest? = null
 
@@ -27,14 +27,14 @@ object PermissionManager {
      * This setter is to define the source for a [RequestStrategyFactory] instance.
      * It can only be called once.
      *
-     * @param source - The source for the [RequestStrategyFactory] instance.
+     * @param provider - The provider of the [RequestStrategyFactory] instance.
      */
     @JvmStatic
-    fun setStrategyProviderSource(source: RequestStrategyProviderSource) {
-        if (strategyProviderSource != null) {
+    fun setStrategyFactoryProvider(provider: RequestStrategyFactoryProvider) {
+        if (strategyFactoryProvider != null) {
             throw IllegalStateException("There's a source already set")
         }
-        strategyProviderSource = source
+        strategyFactoryProvider = provider
     }
 
     /**
@@ -57,7 +57,7 @@ object PermissionManager {
         permissions: Array<String>,
         strategyType: Class<out RequestStrategy<out Any>>
     ) {
-        val strategy = strategyProvider.getStrategy(host, strategyType)
+        val strategy = strategyFactory.getStrategy(host, strategyType)
         val missingPermissions = getMissingPermissions(
             host,
             strategy.internalGetPermissionStatusProvider(host),
@@ -210,6 +210,6 @@ object PermissionManager {
     }
 
     fun resetForTest() {
-        strategyProviderSource = null
+        strategyFactoryProvider = null
     }
 }

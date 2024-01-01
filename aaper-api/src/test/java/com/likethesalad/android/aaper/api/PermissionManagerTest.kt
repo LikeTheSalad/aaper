@@ -9,7 +9,7 @@ import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvide
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
-import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
 import io.mockk.clearMocks
@@ -50,18 +50,18 @@ class PermissionManagerTest : BaseMockable() {
 
     companion object {
 
-        private lateinit var sourceMock: RequestStrategyProviderSource
+        private lateinit var providerMock: RequestStrategyFactoryProvider
         private lateinit var strategyFactory: RequestStrategyFactory
 
         @JvmStatic
         @BeforeClass
         fun init() {
-            sourceMock = mockk(relaxUnitFun = true)
+            providerMock = mockk(relaxUnitFun = true)
             strategyFactory = mockk(relaxUnitFun = true)
-            every { sourceMock.getRequestStrategyFactory() as RequestStrategyFactory }.returns(
+            every { providerMock.getRequestStrategyFactory() as RequestStrategyFactory }.returns(
                 strategyFactory
             )
-            PermissionManager.setStrategyProviderSource(sourceMock)
+            PermissionManager.setStrategyFactoryProvider(providerMock)
         }
     }
 

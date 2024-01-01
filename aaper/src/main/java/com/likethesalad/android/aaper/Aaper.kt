@@ -4,13 +4,13 @@ import android.content.Context
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
-import com.likethesalad.android.aaper.internal.strategy.RequestStrategyProviderSource
+import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
 
 /**
  * Aaper entry point.
  */
-object Aaper : RequestStrategyProviderSource {
+object Aaper : RequestStrategyFactoryProvider {
 
     private lateinit var strategyFactory: RequestStrategyFactory
     private var initialized = false
@@ -30,7 +30,7 @@ object Aaper : RequestStrategyProviderSource {
         }
 
         this.strategyFactory = DefaultRequestStrategyFactory(context)
-        PermissionManager.setStrategyProviderSource(this)
+        PermissionManager.setStrategyFactoryProvider(this)
 
         initialized = true
     }
