@@ -19,7 +19,7 @@ object Aaper : RequestStrategyFactoryProvider {
     private var initialized = false
     private var strategyFactory: RequestStrategyFactory? = null
     private var applicationContext: Context? = null
-    private var defaultStrategyType: Class<out RequestStrategy<out Any>> =
+    private var defaultStrategy: Class<out RequestStrategy<out Any>> =
         DefaultRequestStrategy::class.java
 
     /**
@@ -43,17 +43,17 @@ object Aaper : RequestStrategyFactoryProvider {
     }
 
     /**
-     * Sets the default strategy. Used when an [EnsurePermissions] `strategyType` param is not provided.
+     * Sets the default strategy. Used when an [EnsurePermissions] `strategy` param is not provided.
      */
-    fun setDefaultStrategyType(type: Class<out RequestStrategy<out Any>>) {
-        this.defaultStrategyType = type
+    fun setDefaultStrategy(type: Class<out RequestStrategy<out Any>>) {
+        this.defaultStrategy = type
     }
 
     /**
-     * Provides the default strategy to be used when an [EnsurePermissions] `strategyType` param is not provided.
+     * Provides the default strategy to be used when an [EnsurePermissions] `strategy` param is not provided.
      */
-    fun getDefaultStrategyType(): Class<out RequestStrategy<out Any>> {
-        return defaultStrategyType
+    fun getDefaultStrategy(): Class<out RequestStrategy<out Any>> {
+        return defaultStrategy
     }
 
     /**
@@ -93,6 +93,6 @@ object Aaper : RequestStrategyFactoryProvider {
         initialized = false
         applicationContext = null
         strategyFactory = null
-        defaultStrategyType = DefaultRequestStrategy::class.java
+        defaultStrategy = DefaultRequestStrategy::class.java
     }
 }

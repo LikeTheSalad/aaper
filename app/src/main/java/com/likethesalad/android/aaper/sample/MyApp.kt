@@ -10,6 +10,6 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-//        Aaper.setDefaultStrategyType(FinishActivityOnDeniedStrategy::class.java)
+//        Aaper.setDefaultStrategy(FinishActivityOnDeniedStrategy::class.java)
     }
 }

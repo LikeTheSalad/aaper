@@ -17,7 +17,7 @@ object PermissionRequestHandler {
             host,
             originalMethod,
             permissions,
-            strategyType ?: Aaper.getDefaultStrategyType()
+            strategyType ?: Aaper.getDefaultStrategy()
         )
     }
 }

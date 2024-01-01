@@ -9,6 +9,6 @@ class TestApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Aaper.initialize(this)
-        Aaper.setDefaultStrategyType(AlwaysSuccessfulStrategy::class.java)
+        Aaper.setDefaultStrategy(AlwaysSuccessfulStrategy::class.java)
     }
 }

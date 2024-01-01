@@ -77,7 +77,7 @@ class AaperTest : BaseMockable() {
     fun `Verify default strategy`() {
         init()
 
-        Truth.assertThat(Aaper.getDefaultStrategyType() == DefaultRequestStrategy::class.java)
+        Truth.assertThat(Aaper.getDefaultStrategy() == DefaultRequestStrategy::class.java)
             .isTrue()
     }
 
@@ -85,9 +85,9 @@ class AaperTest : BaseMockable() {
     fun `Setting a default strategy`() {
         init()
 
-        Aaper.setDefaultStrategyType(TestStrategy::class.java)
+        Aaper.setDefaultStrategy(TestStrategy::class.java)
 
-        Truth.assertThat(Aaper.getDefaultStrategyType() == TestStrategy::class.java)
+        Truth.assertThat(Aaper.getDefaultStrategy() == TestStrategy::class.java)
             .isTrue()
     }
 
