@@ -10,7 +10,7 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
  *
  * This factory doesn't work for strategies that need other types of constructor params, for those you should create and set your own factory.
  */
-class DefaultRequestStrategyFactory(private val applicationContext: Context) :
+open class DefaultRequestStrategyFactory(private val applicationContext: Context) :
     RequestStrategyFactory {
     override fun <T : RequestStrategy<out Any>> getStrategy(host: Any, type: Class<T>): T {
         return try {

@@ -17,7 +17,7 @@ Table of Contents
     * [Aaper Gradle dependency](#aaper-gradle-dependency)
 * [Troubleshooting](#troubleshooting)
 * [Advanced configuration](#advanced-configuration)
-    * [Creating a custom RequestStrategyProvider](#creating-a-custom-requeststrategyprovider)
+    * [Creating a custom RequestStrategyFactory](#creating-a-custom-requeststrategyfactory)
     * [Overriding permission's status query and request launch](#overriding-permissions-status-query-and-request-launch)
 * [License](#license)
 
@@ -44,18 +44,18 @@ runtime permission requests.
 ```kotlin  
 // Aaper usage  
 
-class MyActivity/MyFragment {  
-  
-    override fun onCreate/onViewCreated(...) {  
-        takePhotoButton.setOnClickListener {  
-            takePhoto()  
-        }  
-    }  
-  
-    @EnsurePermissions(permissions = [Manifest.permission.CAMERA])  
-    fun takePhoto() {  
-        Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()  
-    }  
+class MyActivity/MyFragment {
+
+    override fun onCreate/onViewCreated(...) {
+    takePhotoButton.setOnClickListener {
+        takePhoto()
+    }
+}
+
+    @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
+    fun takePhoto() {
+        Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+    }
 }  
 ```  
 
@@ -84,7 +84,7 @@ to use Aaper into our Activities or Fragments:
 - **Step two:** Annotate an Activity or Fragment method with the `@EnsurePermissions` annotation
   where you provide a list of permissions (that are also defined in your `AndroidManifest.xml`) that
   such method needs in order to work properly. Alternatively, you can also pass an optional
-  parameter named `strategyName`, where you can specify the behavior of handling such permissions'
+  parameter named `strategy`, where you can specify the behavior of handling such permissions'
   request. More info below under `Changing the default behavior`.
 
 That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
@@ -103,7 +103,7 @@ after a permission request is executed, and even how the request is executed, by
 own `RequestStrategy` class. The way Aaper works is by delegating the request actions to
 a `RequestStrategy` instance, you can tell Aaper which strategy to use by:
 
-- Specifying the strategy name on the @EnsurePermissions annotation.
+- Specifying the strategy on the @EnsurePermissions annotation.
 - Defining your own `RequestStrategy` as default.
 
 ### Custom Strategy example
@@ -114,18 +114,14 @@ the permissions requested by Aaper is denied.
 We'll start by creating our class that extends from `ActivityRequestStrategy`:
 
 ```kotlin  
-class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {  
-  
-    override fun onPermissionsRequestResults(  
-        host: Activity,  
-        data: PermissionsResult  
-    ): Boolean {  
-        TODO("Not yet implemented")  
-    }  
-  
-    override fun getName(): String {  
-        TODO("Not yet implemented")  
-    }  
+class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
+
+    override fun onPermissionsRequestResults(
+        host: Activity,
+        data: PermissionsResult
+    ): Boolean {
+        TODO("Not yet implemented")
+    }
 }  
 ```  
 
@@ -148,8 +144,8 @@ custom `RequestStrategy`, those are:
 In this example, we will annotate a method inside an Activity and nowhere else,
 therefore `ActivityRequestStrategy` seems to suit better for this case.
 
-We must provide for every custom `RequestStrategy` two things, a name (which will serve as an ID for
-our Strategy) and a boolean as response for `onPermissionsRequestResults` method, depending on what
+We must provide for every custom `RequestStrategy` a boolean as response
+for `onPermissionsRequestResults` method, depending on what
 we return there, this is what will happen after a permission request is executed:
 
 - If `onPermissionsRequestResults` returns TRUE, it means that the request was successful in our
@@ -160,26 +156,21 @@ we return there, this is what will happen after a permission request is executed
 For our example, this is what it will end up looking like:
 
 ```kotlin  
-class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {  
-  
-    override fun onPermissionsRequestResults(  
-        host: Activity,  
-        data: PermissionsResult  
-    ): Boolean {  
-        if (data.denied.isNotEmpty()) {  
+class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
+
+    override fun onPermissionsRequestResults(
+        host: Activity,
+        data: PermissionsResult
+    ): Boolean {
+        if (data.denied.isNotEmpty()) {
             // At least one permission was denied.  
-            host.finish()  
+            host.finish()
             return false // So that the annotated method doesn't get called.  
-        }  
-  
+        }
+
         // No permissions were denied, therefore proceed to call the annotated method.  
-        return true  
-    }  
-  
-    override fun getName(): String {  
-        // We can return anything here, as long as there is no other RequestStrategy with the same name.  
-        return "FinishActivityOnDenied"  
-    }  
+        return true
+    }
 }  
 ```  
 
@@ -208,54 +199,19 @@ under `Advanced configuration`.
 
 ### Using our custom Strategy
 
-#### Registering it
-
-In order to use our new `FinishActivityOnDeniedStrategy` request strategy, we must first register it
-once, therefore a good place to do so would be in your app's `Application.onCreate` method:
-
-```kotlin  
-package my.app
-
-class MyApp : Application() {  
-  
-    override fun onCreate() {  
-        super.onCreate()  
-        val strategyProvider = Aaper.getRequestStrategyProvider<DefaultRequestStrategyProvider>()
-        strategyProvider.register(FinishActivityOnDeniedStrategy())  
-    }  
-}  
-```  
-
-**NOTE**: Make sure your application class is set in your `AndroidManifest.xml` file as shown below:
-
-```xml
-<!--Your AndroidManifest.xml-->
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--yada yada...-->
-
-    <!--You need to add your application class (shown above) to the manifest too (if you don't have it already) as shown below-->
-    <application android:name="my.app.MyApplication">
-        <!--yada yada...-->
-    </application>
-</manifest>
-```
-
-We can register as many Strategies as we like, as long as they all have unique names. After
-registering our new `RequestStrategy`, we can either:
-
 #### Use it per annotation param only
 
-This can be achieved by passing our strategy's name into the `EnsurePermissions` annotation of a
+This can be achieved by passing our strategy type into the `EnsurePermissions` annotation of a
 method, like so:
 
 ```kotlin  
-@EnsurePermissions(  
-    permissions = [(PERMISSION NAMES)],  
-    strategyName = "FinishActivityOnDenied" // The name that we return in our custom strategy's `getName()` method.  
-)  
-fun methodThatNeedsThePermissions() {...}  
+@EnsurePermissions(
+    permissions = [(PERMISSION NAMES)],
+    strategy = FinishActivityOnDenied::class
+)
+fun methodThatNeedsThePermissions() {
+    //...
+}  
 ```  
 
 #### Or, Set it as the default strategy
@@ -266,11 +222,10 @@ following after registering our custom Strategy:
 ```kotlin  
 // Application.onCreate  
 // ...  
-strategyProvider.register(FinishActivityOnDeniedStrategy())  
-strategyProvider.setDefaultStrategyName("FinishActivityOnDenied") // The name that we return in our custom strategy's `getName()` method.  
+Aaper.setDefaultStrategy(FinishActivityOnDeniedStrategy::class.java) 
 ```  
 
-After doing so, you won't have to explicitly pass "FinishActivityOnDenied" to
+After doing so, you won't have to explicitly pass `FinishActivityOnDenied::class` to
 the `EnsurePermissions` annotation in order to use this custom strategy, as it will be the default
 one.
 
@@ -286,17 +241,17 @@ request dialog. Following our previous example, if we override such method, our 
 look like the following:
 
 ```kotlin  
-class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {  
-  
+class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
+
     // Other methods...  
-  
-    override fun onBeforeLaunchingRequest(  
-        host: Activity,  
-        data: PermissionsRequest,  
-        request: RequestRunner  
-    ): Boolean {  
-        return super.onBeforeLaunchingRequest(host, data, request)  
-    }  
+
+    override fun onBeforeLaunchingRequest(
+        host: Activity,
+        data: PermissionsRequest,
+        request: RequestRunner
+    ): Boolean {
+        return super.onBeforeLaunchingRequest(host, data, request)
+    }
 }  
 ```  
 
@@ -325,24 +280,24 @@ we launch the permissions request, otherwise we don't.
 
 ```kotlin  
 // My custom RequestStrategy  
-  
+
 // ...  
-override fun onBeforeLaunchingRequest(  
-        host: Activity,  
-        data: PermissionsRequest,  
-        request: RequestRunner  
-    ): Boolean {  
-        val infoDialog = AlertDialog.Builder(host).setPositiveButton("CONTINUE") { _, _ ->  
-            // When the user has read the information and wants to continue.  
-            request.run() // Execute the runnable to launch the System's permission dialog.  
-        }.setTitle("We need these permissions")  
-            .setMessage("Pretty please approve the permissions :(")  
-            .create()  
-  
-        infoDialog.show()  
-  
-        return true // This is so that Aaper doesn't launch the permissions request as we're going to launch it manually.  
-    }  
+override fun onBeforeLaunchingRequest(
+    host: Activity,
+    data: PermissionsRequest,
+    request: RequestRunner
+): Boolean {
+    val infoDialog = AlertDialog.Builder(host).setPositiveButton("CONTINUE") { _, _ ->
+        // When the user has read the information and wants to continue.  
+        request.run() // Execute the runnable to launch the System's permission dialog.  
+    }.setTitle("We need these permissions")
+        .setMessage("Pretty please approve the permissions :(")
+        .create()
+
+    infoDialog.show()
+
+    return true // This is so that Aaper doesn't launch the permissions request as we're going to launch it manually.  
+}  
 ```  
 
 Adding Aaper into your project
@@ -392,76 +347,46 @@ not listed within your app's manifest.
 Advanced configuration
 ---  
 
-### Creating a custom RequestStrategyProvider
+### Creating a custom RequestStrategyFactory
 
 Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them,
-is through an instance of `RequestStrategyProvider`. By default, the `RequestStrategyProvider` that
-Aaper will use is `DefaultRequestStrategyProvider`, if you need to change it, take a look
-at `Using your custom RequestStrategyProvider`.
+is through an instance of `RequestStrategyFactory`. By default, the `RequestStrategyFactory` that
+Aaper will use is `DefaultRequestStrategyFactory`, if you need to change it, take a look
+at `Using your custom RequestStrategyFactory`.
 
-The `DefaultRequestStrategyProvider` implementation contains a map of `RequestStrategy` instances to
-which Aaper can access later on by providing the name of the Strategy it needs, such default
-provider can let you register your own Strategies and also override the default's Strategy name, as
-we saw above under `Using our custom Strategy`, so in essence, the `DefaultRequestStrategyProvider`
-should suffice for most cases.
+The `DefaultRequestStrategyFactory` implementation instantiates strategies that have either a
+constructor with an `android.content.Context`, or an empty constructor. If the strategy has
+a `Context` param, the Application context will be passed.
 
-Sometimes, providing instances of custom `RequestStrategy` classes as part of Aaper's initialization
-might not be possible, or just not good for your App's performance (in the case that there's a lot
-of custom Strategies). For these cases, you can create your own implementation
-of `RequestStrategyProvider`, where you'd be able to provide your own `RequestStrategy` instances
-the way you'd like the most, either by creating them on-demand or just by storing them in memory, or
-both. Implementing from `RequestStrategyProvider` is pretty straightforward as it only requires you
-to override two methods:
+Sometimes it might be needed to pass some parameters to instantiate your strategies that are not
+covered by the default strategy factory implementation. For these cases, you can create your own
+implementation of `RequestStrategyFactory`, where you'd be able to provide your
+own `RequestStrategy` instances the way you'd like the most, either by creating them on-demand or
+just by storing them in memory, or both. Implementing from `RequestStrategyFactory` is pretty
+straightforward as it only requires you to override one method:
 
 ```kotlin  
-class MyRequestStrategyProvider : RequestStrategyProvider() {  
-  
-    override fun getStrategyForName(host: Any, name: String): RequestStrategy<out Any> {  
-        TODO("Not yet implemented")  
-  }  
-  
-    override fun getDefaultStrategy(host: Any): RequestStrategy<out Any> {  
-        TODO("Not yet implemented")  
-  }  
+class MyRequestStrategyFactory : RequestStrategyFactory {
+
+    override fun <T : RequestStrategy<out Any>> getStrategy(host: Any, type: Class<T>): T {
+        // Return an instance of the strategy of type `type`.
+    }
 }  
 ```  
 
-As you can see, both methods are related to providing a `RequestStrategy` instance, one for the
-default one, and the other for every other case. You can take a look at the javadoc for more details
-on the class and its methods: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
+#### Using your custom RequestStrategyFactory
 
-#### Using your custom RequestStrategyProvider
-
-After you've created your own `RequestStrategyProvider`, you need to disable Aaper's automatic
-initialization in your `AndroidManifest.xml` file like so:
-
-```xml
-
-<application>
-    <provider android:name="androidx.startup.InitializationProvider"
-        android:authorities="${applicationId}.androidx-startup" android:exported="false"
-        tools:node="merge">
-        <meta-data android:name="com.likethesalad.android.aaper.AaperInitializer"
-            tools:node="remove" />
-    </provider>
-</application>
-```
-
-> More info on disabling androidx startup
-> initializers [here](https://developer.android.com/topic/libraries/app-startup#disable-individual).
-
-Once you disabled the automatic initialization, you can manually call `Aaper.setUp` to pass your
-custom `RequestStrategyProvider`.
+After you've created your own `RequestStrategyFactory`, you'll need to pass it to `Aaper` like so:
 
 ```kotlin  
 package my.app
 
-class MyApp : Application() {  
-    override fun onCreate() {  
-        super.onCreate()  
-        val myRequestStrategyProvider = MyRequestStrategyProvider()  
-        Aaper.setUp(this, myRequestStrategyProvider)
-    }  
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        val myRequestStrategyFactory = MyRequestStrategyFactory()
+        Aaper.setRequestStrategyFactory(myRequestStrategyFactory) // You can only call this method once.
+    }
 }  
 ```  
 
@@ -481,7 +406,7 @@ class MyApp : Application() {
 </manifest>
 ```
 
-And that's it, Aaper will now use your custom `RequestStrategyProvider` in order to get all of the
+And that's it, Aaper will now use your custom `RequestStrategyFactory` in order to get all of the
 Strategies it needs.
 
 ### Overriding permission's status query and request launch
