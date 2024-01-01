@@ -1,6 +1,19 @@
 Change Log
 ==========
 
+Version 3.0.0 *(??-??-2024)*
+---
+
+* Removed annotation processor module.
+* Creating wraapers using the AGP forScope transformation API.
+* BREAKING - Simplified Aaper's API by:
+    * Allowing to pass strategies to the EnsurePermissions annotations as class types rather than
+      with a name, hence removing the need to name every new strategy.
+    * Avoiding having to register new strategies before using them (they will be automatically
+      instantiated on demand).
+    * Providing new `RequestStrategyFactory` interface to allow for custom instantiation of
+      strategies if needed.
+
 Version 2.1.0 *(05-02-2023)*
 ---
 
