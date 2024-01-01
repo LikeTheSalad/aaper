@@ -1,7 +1,6 @@
-package com.likethesalad.android.aaper.defaults.launchers
+package com.likethesalad.android.aaper.base.activity.launcher
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.base.activity.launcher.ActivityRequestLauncher
 import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
 import com.likethesalad.android.aaper.testutils.RobolectricActivity
 import org.junit.Before

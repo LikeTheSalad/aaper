@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.base.strategies.impl
+package com.likethesalad.android.aaper.base.common.strategy
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.base.activity.launcher.ActivityRequestLauncher
 import com.likethesalad.android.aaper.base.activity.statusprovider.ActivityPermissionStatusProvider
-import com.likethesalad.android.aaper.base.common.strategy.AllRequestStrategy
 import com.likethesalad.android.aaper.base.fragment.launcher.FragmentRequestLauncher
 import com.likethesalad.android.aaper.base.fragment.statusprovider.FragmentPermissionStatusProvider
 import com.likethesalad.tools.testing.BaseMockable

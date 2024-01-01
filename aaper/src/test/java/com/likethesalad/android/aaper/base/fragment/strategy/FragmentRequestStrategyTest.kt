@@ -1,11 +1,10 @@
-package com.likethesalad.android.aaper.base.strategies.impl
+package com.likethesalad.android.aaper.base.fragment.strategy
 
 import androidx.fragment.app.Fragment
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.base.fragment.launcher.FragmentRequestLauncher
 import com.likethesalad.android.aaper.base.fragment.statusprovider.FragmentPermissionStatusProvider
-import com.likethesalad.android.aaper.base.fragment.strategy.FragmentRequestStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before

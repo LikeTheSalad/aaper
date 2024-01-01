@@ -1,8 +1,7 @@
-package com.likethesalad.android.aaper.defaults.strategies
+package com.likethesalad.android.aaper.strategy
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.strategy.DefaultRequestStrategy
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -27,12 +26,6 @@ class DefaultRequestStrategyTest : BaseMockable() {
     @Before
     fun setUp() {
         defaultRequestStrategy = DefaultRequestStrategy()
-    }
-
-    @Test
-    fun `Verify name`() {
-        Truth.assertThat(defaultRequestStrategy.getName())
-            .isEqualTo("com.likethesalad.android.aaper.strategy.DefaultRequestStrategy")
     }
 
     @Test

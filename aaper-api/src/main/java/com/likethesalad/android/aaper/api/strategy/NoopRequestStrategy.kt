@@ -9,7 +9,7 @@ import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvide
 /**
  * Placeholder strategy for when no type param is provided in an [EnsurePermissions] annotation.
  */
-class NoopRequestStrategy : RequestStrategy<Any>() {
+open class NoopRequestStrategy : RequestStrategy<Any>() {
     override fun onPermissionsRequestResults(host: Any, data: PermissionsResult): Boolean {
         throw UnsupportedOperationException()
     }

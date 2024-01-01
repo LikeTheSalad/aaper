@@ -1,11 +1,14 @@
 package com.likethesalad.android.aaper
 
 import android.content.Context
+import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.api.PermissionManager
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.errors.AaperNotInitializedException
 import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
+import com.likethesalad.android.aaper.strategy.DefaultRequestStrategy
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
 
 /**
@@ -16,6 +19,8 @@ object Aaper : RequestStrategyFactoryProvider {
     private var initialized = false
     private var strategyFactory: RequestStrategyFactory? = null
     private var applicationContext: Context? = null
+    private var defaultStrategyType: Class<out RequestStrategy<out Any>> =
+        DefaultRequestStrategy::class.java
 
     /**
      * Initializes Aaper
@@ -32,10 +37,23 @@ object Aaper : RequestStrategyFactoryProvider {
         }
 
         this.applicationContext = context.applicationContext
-        this.strategyFactory = DefaultRequestStrategyFactory(context)
         PermissionManager.setStrategyFactoryProvider(this)
 
         initialized = true
+    }
+
+    /**
+     * Sets the default strategy. Used when an [EnsurePermissions] `strategyType` param is not provided.
+     */
+    fun setDefaultStrategyType(type: Class<out RequestStrategy<out Any>>) {
+        this.defaultStrategyType = type
+    }
+
+    /**
+     * Provides the default strategy to be used when an [EnsurePermissions] `strategyType` param is not provided.
+     */
+    fun getDefaultStrategyType(): Class<out RequestStrategy<out Any>> {
+        return defaultStrategyType
     }
 
     /**
@@ -75,5 +93,6 @@ object Aaper : RequestStrategyFactoryProvider {
         initialized = false
         applicationContext = null
         strategyFactory = null
+        defaultStrategyType = DefaultRequestStrategy::class.java
     }
 }

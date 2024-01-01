@@ -1,14 +1,18 @@
 package com.likethesalad.android.aaper
 
+import android.content.Context
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.PermissionManager
+import com.likethesalad.android.aaper.api.strategy.NoopRequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategy
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
+import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import org.junit.After
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
@@ -17,14 +21,18 @@ import org.junit.Test
  * Created by César Muñoz on 14/08/20.
  */
 
-class AaperTest {
+class AaperTest : BaseMockable() {
 
-    private lateinit var permissionManagerMock: PermissionManager
+    @MockK
+    lateinit var applicationContext: Context
 
     @Before
     fun setUp() {
-        permissionManagerMock = mockk(relaxUnitFun = true)
-        PermissionManager.resetForTest()
+        every { applicationContext.applicationContext }.returns(applicationContext)
+    }
+
+    @After
+    fun tearDown() {
         cleanUp()
     }
 
@@ -48,45 +56,55 @@ class AaperTest {
     }
 
     @Test
-    fun `Set up default strategy factory with default strategy`() {
-        val defaultRequestStrategyProvider =
-            mockk<DefaultRequestStrategyFactory>(relaxUnitFun = true)
-        val strategyCaptor = slot<RequestStrategy<Any>>()
+    fun `Setting a strategy factory only once`() {
+        init()
 
-        init(defaultRequestStrategyProvider)
+        val factory = TestStrategyFactory()
+        Aaper.setRequestStrategyFactory(factory)
 
-        verify {
-            defaultRequestStrategyProvider.register(capture(strategyCaptor))
+        Truth.assertThat(Aaper.getRequestStrategyFactory<TestStrategyFactory>())
+            .isInstanceOf(TestStrategyFactory::class.java)
+
+        try {
+            Aaper.setRequestStrategyFactory(factory)
+        } catch (e: IllegalStateException) {
+            Truth.assertThat(e.message)
+                .isEqualTo("The RequestStrategyFactory instance can only be set once.")
         }
-        verify {
-            defaultRequestStrategyProvider.setDefaultStrategyName(DefaultRequestStrategy::class.java.name)
-        }
-        val strategy = strategyCaptor.captured
-        Truth.assertThat(strategy).isInstanceOf(DefaultRequestStrategy::class.java)
     }
 
     @Test
-    fun `Return strategy factory set in the initialization`() {
-        val provider = mockk<RequestStrategyFactory>()
+    fun `Verify default strategy`() {
+        init()
 
-        init(provider)
-
-        Truth.assertThat(Aaper.getRequestStrategyFactory<RequestStrategyFactory>())
-            .isEqualTo(provider)
+        Truth.assertThat(Aaper.getDefaultStrategyType() == DefaultRequestStrategy::class.java)
+            .isTrue()
     }
 
-    private fun init(provider: RequestStrategyFactory = DefaultRequestStrategyFactory()) {
-        if (provider is DefaultRequestStrategyFactory) {
-            provider.register(DefaultRequestStrategy())
-            provider.setDefaultStrategyName(DefaultRequestStrategy.NAME)
-        }
-        Aaper.initialize(mockk(), provider)
+    @Test
+    fun `Setting a default strategy`() {
+        init()
+
+        Aaper.setDefaultStrategyType(TestStrategy::class.java)
+
+        Truth.assertThat(Aaper.getDefaultStrategyType() == TestStrategy::class.java)
+            .isTrue()
     }
 
-    @Suppress("CAST_NEVER_SUCCEEDS")
+    private fun init() {
+        Aaper.initialize(applicationContext)
+    }
+
     private fun cleanUp() {
-        val initializedField = Aaper::class.java.getDeclaredField("initialized")
-        initializedField.isAccessible = true
-        initializedField.set(null, false)
+        PermissionManager.resetForTest()
+        Aaper.resetForTest()
+    }
+
+    class TestStrategy : NoopRequestStrategy()
+
+    class TestStrategyFactory : RequestStrategyFactory {
+        override fun <T : RequestStrategy<out Any>> getStrategy(host: Any, type: Class<T>): T {
+            throw UnsupportedOperationException()
+        }
     }
 }
