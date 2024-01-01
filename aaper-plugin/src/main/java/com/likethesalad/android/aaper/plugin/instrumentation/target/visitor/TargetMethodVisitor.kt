@@ -53,7 +53,7 @@ class TargetMethodVisitor(
     }
 
     private fun replaceOriginalCode(originalMv: MethodVisitor) {
-        val strategyName = targetAnnotationVisitor.strategyName
+        val strategyType = targetAnnotationVisitor.strategyType
         val permissions = targetAnnotationVisitor.getPermissions()
         val generatedInternalName = getGeneratedInternalName()
         val argTypes = mutableListOf<Type>(Type.getObjectType(typeInternalName))
@@ -67,17 +67,17 @@ class TargetMethodVisitor(
             argTypes
         ) // Max 2+(argTypes.size), leaves 1
         createStringArrayAndLeaveItInStack(originalMv, permissions) // Max 4, leaves 1
-        if (strategyName != null) {
-            originalMv.visitLdcInsn(strategyName)// 1
+        if (strategyType != null) {
+            originalMv.visitLdcInsn(strategyType)// 1
         } else {
             originalMv.visitInsn(Opcodes.ACONST_NULL) // 1
         }
 
         originalMv.visitMethodInsn(
             Opcodes.INVOKESTATIC,
-            "com/likethesalad/android/aaper/api/PermissionManager",
+            "com/likethesalad/android/aaper/internal/PermissionRequestHandler",
             "processPermissionRequest",
-            "(Ljava/lang/Object;Ljava/lang/Runnable;[Ljava/lang/String;Ljava/lang/String;)V",
+            "(Ljava/lang/Object;Ljava/lang/Runnable;[Ljava/lang/String;Ljava/lang/Class;)V",
             false
         )
 
