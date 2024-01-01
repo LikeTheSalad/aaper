@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.api
 
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 
 /**
  * This annotation is for the methods inside supported hosts (either an Activity or a Fragment)
@@ -18,5 +18,5 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 @Target(AnnotationTarget.FUNCTION)
 annotation class EnsurePermissions(
     val permissions: Array<String>,
-    val strategyName: String = RequestStrategyProvider.DEFAULT_STRATEGY
+    val strategyName: String = RequestStrategyFactory.DEFAULT_STRATEGY
 )

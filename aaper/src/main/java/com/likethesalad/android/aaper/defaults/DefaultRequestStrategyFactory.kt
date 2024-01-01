@@ -2,12 +2,12 @@ package com.likethesalad.android.aaper.defaults
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
 
 /**
- * Default strategy provider, it contains only the [DefaultRequestStrategy] by default
+ * Default strategy factory, it contains only the [DefaultRequestStrategy] by default
  * but it also allows for registration of custom Strategies, as long as the name of the Strategy
  * being registered is not the same as an already registered Strategy.
  *
@@ -15,7 +15,7 @@ import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
  * Strategy can be overridden by another (already registered) one by calling the [setDefaultStrategyName]
  * method and providing the name of the Strategy that will be used as default.
  */
-class DefaultRequestStrategyProvider : RequestStrategyProvider() {
+class DefaultRequestStrategyFactory : RequestStrategyFactory() {
 
     private val strategies = mutableMapOf<String, RequestStrategy<out Any>>()
     private var defaultStrategyName: String = ""

@@ -3,8 +3,8 @@ package com.likethesalad.android.aaper
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
+import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyFactory
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import io.mockk.mockk
@@ -41,17 +41,17 @@ class AaperTest {
     }
 
     @Test
-    fun `Check default initialization strategy provider`() {
+    fun `Check default initialization strategy factory`() {
         init()
 
-        Truth.assertThat(Aaper.getRequestStrategyProvider<DefaultRequestStrategyProvider>())
-            .isInstanceOf(DefaultRequestStrategyProvider::class.java)
+        Truth.assertThat(Aaper.getRequestStrategyFactory<DefaultRequestStrategyFactory>())
+            .isInstanceOf(DefaultRequestStrategyFactory::class.java)
     }
 
     @Test
-    fun `Set up default strategy provider with default strategy`() {
+    fun `Set up default strategy factory with default strategy`() {
         val defaultRequestStrategyProvider =
-            mockk<DefaultRequestStrategyProvider>(relaxUnitFun = true)
+            mockk<DefaultRequestStrategyFactory>(relaxUnitFun = true)
         val strategyCaptor = slot<RequestStrategy<Any>>()
 
         init(defaultRequestStrategyProvider)
@@ -67,17 +67,17 @@ class AaperTest {
     }
 
     @Test
-    fun `Return strategy provider set in the initialization`() {
-        val provider = mockk<RequestStrategyProvider>()
+    fun `Return strategy factory set in the initialization`() {
+        val provider = mockk<RequestStrategyFactory>()
 
         init(provider)
 
-        Truth.assertThat(Aaper.getRequestStrategyProvider<RequestStrategyProvider>())
+        Truth.assertThat(Aaper.getRequestStrategyFactory<RequestStrategyFactory>())
             .isEqualTo(provider)
     }
 
-    private fun init(provider: RequestStrategyProvider = DefaultRequestStrategyProvider()) {
-        if (provider is DefaultRequestStrategyProvider) {
+    private fun init(provider: RequestStrategyFactory = DefaultRequestStrategyFactory()) {
+        if (provider is DefaultRequestStrategyFactory) {
             provider.register(DefaultRequestStrategy())
             provider.setDefaultStrategyName(DefaultRequestStrategy.NAME)
         }

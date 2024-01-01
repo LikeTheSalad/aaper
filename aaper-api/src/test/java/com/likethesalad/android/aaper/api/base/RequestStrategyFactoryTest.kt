@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.api.base
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * Created by César Muñoz on 10/08/20.
  */
-class RequestStrategyProviderTest : BaseMockable() {
+class RequestStrategyFactoryTest : BaseMockable() {
 
     @MockK
     lateinit var strategy: RequestStrategy<Any>
@@ -19,11 +19,11 @@ class RequestStrategyProviderTest : BaseMockable() {
     @MockK
     lateinit var host: Any
 
-    private lateinit var requestStrategyProvider: TestRequestStrategyProvider
+    private lateinit var requestStrategyProvider: TestRequestStrategyFactory
 
     @Before
     fun setUp() {
-        requestStrategyProvider = TestRequestStrategyProvider(strategy)
+        requestStrategyProvider = TestRequestStrategyFactory(strategy)
     }
 
     @Test
@@ -50,8 +50,8 @@ class RequestStrategyProviderTest : BaseMockable() {
         Truth.assertThat(requestStrategyProvider.defaultHost).isEqualTo(host)
     }
 
-    class TestRequestStrategyProvider(private val strategy: RequestStrategy<Any>) :
-        RequestStrategyProvider() {
+    class TestRequestStrategyFactory(private val strategy: RequestStrategy<Any>) :
+        RequestStrategyFactory() {
 
         var forNameHost: Any? = null
         var forNameName: String? = null

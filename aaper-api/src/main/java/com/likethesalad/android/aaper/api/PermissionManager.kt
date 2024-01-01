@@ -3,7 +3,7 @@ package com.likethesalad.android.aaper.api
 import com.likethesalad.android.aaper.api.base.LaunchMetadata
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
@@ -19,15 +19,15 @@ object PermissionManager {
 
     private var strategyProviderSource: RequestStrategyProviderSource? = null
     private val strategyProvider by lazy {
-        strategyProviderSource!!.getRequestStrategyProvider<RequestStrategyProvider>()
+        strategyProviderSource!!.getRequestStrategyFactory<RequestStrategyFactory>()
     }
     private var currentRequest: CurrentRequest? = null
 
     /**
-     * This setter is to define the source for a [RequestStrategyProvider] instance.
+     * This setter is to define the source for a [RequestStrategyFactory] instance.
      * It can only be called once.
      *
-     * @param source - The source for the [RequestStrategyProvider] instance.
+     * @param source - The source for the [RequestStrategyFactory] instance.
      */
     @JvmStatic
     fun setStrategyProviderSource(source: RequestStrategyProviderSource) {
@@ -59,7 +59,7 @@ object PermissionManager {
     ) {
         val strategy = strategyProvider.getStrategy(
             host,
-            strategyName ?: RequestStrategyProvider.DEFAULT_STRATEGY
+            strategyName ?: RequestStrategyFactory.DEFAULT_STRATEGY
         )
         val missingPermissions = getMissingPermissions(
             host,

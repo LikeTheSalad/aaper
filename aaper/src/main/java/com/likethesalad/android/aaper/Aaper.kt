@@ -2,8 +2,8 @@ package com.likethesalad.android.aaper
 
 import android.content.Context
 import com.likethesalad.android.aaper.api.PermissionManager
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
-import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
+import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
 
@@ -12,7 +12,7 @@ import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSourc
  */
 object Aaper : RequestStrategyProviderSource {
 
-    private lateinit var strategyProvider: RequestStrategyProvider
+    private lateinit var strategyFactory: RequestStrategyFactory
     private var initialized = false
 
     /**
@@ -22,27 +22,27 @@ object Aaper : RequestStrategyProviderSource {
      * disable its automatic initialization first. More info on the README.
      *
      * @param context - The app context
-     * @param strategyProvider - Will delegate permission requests to its strategies.
+     * @param strategyFactory - Will delegate permission requests to its strategies.
      */
-    fun setUp(context: Context, strategyProvider: RequestStrategyProvider) = synchronized(this) {
+    fun setUp(context: Context, strategyFactory: RequestStrategyFactory) = synchronized(this) {
         if (initialized) {
             throw AaperInitializedAlreadyException()
         }
 
-        this.strategyProvider = strategyProvider
+        this.strategyFactory = strategyFactory
         PermissionManager.setStrategyProviderSource(this)
 
         initialized = true
     }
 
     /**
-     * Returns the instance of [RequestStrategyProvider] being used, which is the one set on
+     * Returns the instance of [RequestStrategyFactory] being used, which is the one set on
      * the [setUp] function. If no custom instance was passed, then this function will return a
-     * [DefaultRequestStrategyProvider] one.
+     * [DefaultRequestStrategyFactory] one.
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T : RequestStrategyProvider> getRequestStrategyProvider(): T {
-        return strategyProvider as T
+    override fun <T : RequestStrategyFactory> getRequestStrategyFactory(): T {
+        return strategyFactory as T
     }
 
     fun resetForTest() {

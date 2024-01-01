@@ -1,8 +1,8 @@
 package com.likethesalad.android.aaper.internal.base
 
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 
 interface RequestStrategyProviderSource {
 
-    fun <T : RequestStrategyProvider> getRequestStrategyProvider(): T
+    fun <T : RequestStrategyFactory> getRequestStrategyFactory(): T
 }

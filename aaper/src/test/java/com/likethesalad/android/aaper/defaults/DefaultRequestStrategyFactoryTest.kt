@@ -14,16 +14,16 @@ import org.junit.Test
  * Created by César Muñoz on 14/08/20.
  */
 
-class DefaultRequestStrategyProviderTest : BaseMockable() {
+class DefaultRequestStrategyFactoryTest : BaseMockable() {
 
     @MockK
     lateinit var host: Any
 
-    private lateinit var defaultRequestStrategyProvider: DefaultRequestStrategyProvider
+    private lateinit var defaultRequestStrategyFactory: DefaultRequestStrategyFactory
 
     @Before
     fun setUp() {
-        defaultRequestStrategyProvider = DefaultRequestStrategyProvider()
+        defaultRequestStrategyFactory = DefaultRequestStrategyFactory()
     }
 
     @Test
@@ -31,7 +31,7 @@ class DefaultRequestStrategyProviderTest : BaseMockable() {
         val strategyName = "someStrategy"
         val strategy = createStrategyMock(strategyName)
 
-        defaultRequestStrategyProvider.register(strategy)
+        defaultRequestStrategyFactory.register(strategy)
 
         Truth.assertThat(getStrategyForName(strategyName)).isEqualTo(strategy)
     }
@@ -41,10 +41,10 @@ class DefaultRequestStrategyProviderTest : BaseMockable() {
         val strategyName = "someStrategy"
         val strategy = createStrategyMock(strategyName)
         val anotherStrategy = createStrategyMock(strategyName)
-        defaultRequestStrategyProvider.register(strategy)
+        defaultRequestStrategyFactory.register(strategy)
 
         try {
-            defaultRequestStrategyProvider.register(anotherStrategy)
+            defaultRequestStrategyFactory.register(anotherStrategy)
             fail("Should've gone into the catch block")
         } catch (e: StrategyNameAlreadyExistsException) {
             Truth.assertThat(e.strategyName).isEqualTo(strategyName)
@@ -57,8 +57,8 @@ class DefaultRequestStrategyProviderTest : BaseMockable() {
         val strategyName2 = "someName2"
         val strategy = createStrategyMock(strategyName)
         val strategy2 = createStrategyMock(strategyName2)
-        defaultRequestStrategyProvider.register(strategy, strategy2)
-        defaultRequestStrategyProvider.setDefaultStrategyName(strategyName2)
+        defaultRequestStrategyFactory.register(strategy, strategy2)
+        defaultRequestStrategyFactory.setDefaultStrategyName(strategyName2)
 
         val result = getDefaultStrategy()
 
@@ -68,21 +68,21 @@ class DefaultRequestStrategyProviderTest : BaseMockable() {
 
     @Suppress("UNCHECKED_CAST")
     private fun getStrategyForName(name: String): RequestStrategy<out Any> {
-        val method = defaultRequestStrategyProvider.javaClass.getDeclaredMethod(
+        val method = defaultRequestStrategyFactory.javaClass.getDeclaredMethod(
             "getStrategyForName",
             Any::class.java,
             String::class.java
         )
-        return method.invoke(defaultRequestStrategyProvider, host, name) as RequestStrategy<out Any>
+        return method.invoke(defaultRequestStrategyFactory, host, name) as RequestStrategy<out Any>
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun getDefaultStrategy(): RequestStrategy<out Any> {
-        val method = defaultRequestStrategyProvider.javaClass.getDeclaredMethod(
+        val method = defaultRequestStrategyFactory.javaClass.getDeclaredMethod(
             "getDefaultStrategy",
             Any::class.java
         )
-        return method.invoke(defaultRequestStrategyProvider, host) as RequestStrategy<out Any>
+        return method.invoke(defaultRequestStrategyFactory, host) as RequestStrategy<out Any>
     }
 
     private fun createStrategyMock(name: String): RequestStrategy<Any> {

@@ -5,7 +5,7 @@ import com.likethesalad.android.aaper.api.base.LaunchMetadata
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
-import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource
@@ -51,15 +51,15 @@ class PermissionManagerTest : BaseMockable() {
     companion object {
 
         private lateinit var sourceMock: RequestStrategyProviderSource
-        private lateinit var strategyProvider: RequestStrategyProvider
+        private lateinit var strategyFactory: RequestStrategyFactory
 
         @JvmStatic
         @BeforeClass
         fun init() {
             sourceMock = mockk(relaxUnitFun = true)
-            strategyProvider = mockk(relaxUnitFun = true)
-            every { sourceMock.getRequestStrategyProvider() as RequestStrategyProvider }.returns(
-                strategyProvider
+            strategyFactory = mockk(relaxUnitFun = true)
+            every { sourceMock.getRequestStrategyFactory() as RequestStrategyFactory }.returns(
+                strategyFactory
             )
             PermissionManager.setStrategyProviderSource(sourceMock)
         }
@@ -68,7 +68,7 @@ class PermissionManagerTest : BaseMockable() {
     @Before
     fun setUp() {
         cleanUp()
-        every { strategyProvider.getStrategy(host, strategyName) }.returns(strategy)
+        every { strategyFactory.getStrategy(host, strategyName) }.returns(strategy)
         every {
             strategy.internalGetPermissionStatusProvider(host)
         }.returns(permissionStatusProvider)
@@ -392,7 +392,7 @@ class PermissionManagerTest : BaseMockable() {
     }
 
     private fun cleanUp() {
-        clearMocks(strategyProvider)
+        clearMocks(strategyFactory)
         val method = PermissionManager::class.java.getDeclaredMethod("cleanUp")
         method.isAccessible = true
         method.invoke(PermissionManager)

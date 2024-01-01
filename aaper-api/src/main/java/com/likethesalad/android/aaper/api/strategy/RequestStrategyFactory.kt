@@ -5,7 +5,7 @@ import com.likethesalad.android.aaper.api.EnsurePermissions
 /**
  * This class should provide instances of [RequestStrategy].
  */
-abstract class RequestStrategyProvider {
+abstract class RequestStrategyFactory {
 
     companion object {
         const val DEFAULT_STRATEGY = "[default.strategy]"
