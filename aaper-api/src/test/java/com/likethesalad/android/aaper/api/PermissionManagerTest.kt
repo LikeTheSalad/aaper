@@ -6,15 +6,17 @@ import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.launcher.RequestLauncher
 import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
-import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
-import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
+import com.likethesalad.android.aaper.testutils.StrategyTest
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -38,15 +40,13 @@ class PermissionManagerTest : BaseMockable() {
     lateinit var requestLauncher: RequestLauncher<Any>
 
     @MockK
-    lateinit var strategy: RequestStrategy<Any>
+    lateinit var strategy: StrategyTest
 
     @MockK
     lateinit var host: Any
 
     @MockK
     lateinit var launchMetadata: LaunchMetadata
-
-    private val strategyName = "someStrategyName"
 
     companion object {
 
@@ -68,7 +68,9 @@ class PermissionManagerTest : BaseMockable() {
     @Before
     fun setUp() {
         cleanUp()
-        every { strategyFactory.getStrategy(host, strategyName) }.returns(strategy)
+        every { requestLauncher.internalLaunchPermissionsRequest(any(), any(), any()) } just Runs
+        every { originalMethod.run() } just Runs
+        every { strategyFactory.getStrategy(host, StrategyTest::class.java) }.returns(strategy)
         every {
             strategy.internalGetPermissionStatusProvider(host)
         }.returns(permissionStatusProvider)
@@ -87,7 +89,12 @@ class PermissionManagerTest : BaseMockable() {
             strategy.internalOnBeforeLaunchingRequest(host, any(), any())
         }.returns(false)
 
-        PermissionManager.processPermissionRequest(host, originalMethod, permissions, strategyName)
+        PermissionManager.processPermissionRequest(
+            host,
+            originalMethod,
+            permissions,
+            StrategyTest::class.java
+        )
 
         verify {
             requestLauncher.internalLaunchPermissionsRequest(
@@ -111,7 +118,12 @@ class PermissionManagerTest : BaseMockable() {
             )
         }.returns(true)
 
-        PermissionManager.processPermissionRequest(host, originalMethod, permissions, strategyName)
+        PermissionManager.processPermissionRequest(
+            host,
+            originalMethod,
+            permissions,
+            StrategyTest::class.java
+        )
 
         val capturedData = dataCaptor.captured
         Truth.assertThat(capturedData.missingPermissions).isEqualTo(missingPermissions.toList())
@@ -140,7 +152,12 @@ class PermissionManagerTest : BaseMockable() {
         val permissions = arrayOf("one", "two")
         setUpPermissions(permissions, emptyArray())
 
-        PermissionManager.processPermissionRequest(host, originalMethod, permissions, strategyName)
+        PermissionManager.processPermissionRequest(
+            host,
+            originalMethod,
+            permissions,
+            StrategyTest::class.java
+        )
 
         verify {
             originalMethod.run()
@@ -162,7 +179,12 @@ class PermissionManagerTest : BaseMockable() {
             )
         }.returns(false)
 
-        PermissionManager.processPermissionRequest(host, originalMethod, permissions, strategyName)
+        PermissionManager.processPermissionRequest(
+            host,
+            originalMethod,
+            permissions,
+            StrategyTest::class.java
+        )
 
         verify {
             strategy.internalOnBeforeLaunchingRequest(host, any(), any())
@@ -183,7 +205,7 @@ class PermissionManagerTest : BaseMockable() {
             host,
             secondMethod,
             secondPermissions,
-            strategyName
+            StrategyTest::class.java
         )
 
         verify(exactly = 0) {
@@ -204,7 +226,12 @@ class PermissionManagerTest : BaseMockable() {
             )
         }.returns(false)
 
-        PermissionManager.processPermissionRequest(host, originalMethod, permissions, strategyName)
+        PermissionManager.processPermissionRequest(
+            host,
+            originalMethod,
+            permissions,
+            StrategyTest::class.java
+        )
 
         verify {
             strategy.internalOnBeforeLaunchingRequest(host, any(), any())
@@ -224,7 +251,7 @@ class PermissionManagerTest : BaseMockable() {
             host,
             secondMethod,
             secondPermissions,
-            strategyName
+            StrategyTest::class.java
         )
 
         verify {
