@@ -7,13 +7,13 @@ import org.objectweb.asm.Type
 class TargetAnnotationVisitor(annotationVisitor: AnnotationVisitor) :
     AnnotationVisitor(Opcodes.ASM9, annotationVisitor) {
     private var permissionsAnnotationVisitor: PermissionsAnnotationVisitor? = null
-    var strategyType: Type? = null
+    var strategy: Type? = null
         private set
 
     override fun visit(name: String, value: Any?) {
         super.visit(name, value)
-        if (name == "strategyType") {
-            strategyType = value as Type
+        if (name == "strategy") {
+            strategy = value as Type
         }
     }
 

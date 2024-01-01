@@ -53,7 +53,7 @@ class TargetMethodVisitor(
     }
 
     private fun replaceOriginalCode(originalMv: MethodVisitor) {
-        val strategyType = targetAnnotationVisitor.strategyType
+        val strategyType = targetAnnotationVisitor.strategy
         val permissions = targetAnnotationVisitor.getPermissions()
         val generatedInternalName = getGeneratedInternalName()
         val argTypes = mutableListOf<Type>(Type.getObjectType(typeInternalName))
