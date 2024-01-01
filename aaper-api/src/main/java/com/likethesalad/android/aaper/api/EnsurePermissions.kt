@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.api
 
-import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 
 /**
  * This annotation is for the methods inside supported hosts (either an Activity or a Fragment)

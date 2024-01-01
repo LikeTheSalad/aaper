@@ -1,6 +1,9 @@
-package com.likethesalad.android.aaper.api.base
+package com.likethesalad.android.aaper.api.strategy
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
+import com.likethesalad.android.aaper.api.base.LaunchMetadata
+import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
+import com.likethesalad.android.aaper.api.base.RequestLauncher
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.utils.RequestRunner

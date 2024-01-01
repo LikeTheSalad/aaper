@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper
 
 import android.content.Context
 import com.likethesalad.android.aaper.api.PermissionManager
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource

@@ -1,8 +1,8 @@
 package com.likethesalad.android.aaper.defaults
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
-import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
 

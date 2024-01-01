@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.defaults
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.api.base.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.errors.StrategyNameAlreadyExistsException
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every

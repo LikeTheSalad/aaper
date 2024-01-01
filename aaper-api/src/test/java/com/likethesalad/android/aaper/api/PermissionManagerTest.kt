@@ -4,8 +4,8 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.base.LaunchMetadata
 import com.likethesalad.android.aaper.api.base.PermissionStatusProvider
 import com.likethesalad.android.aaper.api.base.RequestLauncher
-import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.internal.base.RequestStrategyProviderSource

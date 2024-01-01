@@ -1,6 +1,8 @@
 package com.likethesalad.android.aaper.api.base
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
 import io.mockk.impl.annotations.MockK
 import org.junit.Before

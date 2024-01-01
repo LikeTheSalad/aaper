@@ -1,4 +1,4 @@
-package com.likethesalad.android.aaper.api.base
+package com.likethesalad.android.aaper.api.strategy
 
 import com.likethesalad.android.aaper.api.EnsurePermissions
 

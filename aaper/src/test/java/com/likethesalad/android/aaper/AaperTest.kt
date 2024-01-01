@@ -2,8 +2,8 @@ package com.likethesalad.android.aaper
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.PermissionManager
-import com.likethesalad.android.aaper.api.base.RequestStrategy
-import com.likethesalad.android.aaper.api.base.RequestStrategyProvider
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
+import com.likethesalad.android.aaper.api.strategy.RequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.DefaultRequestStrategyProvider
 import com.likethesalad.android.aaper.defaults.strategies.DefaultRequestStrategy
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
