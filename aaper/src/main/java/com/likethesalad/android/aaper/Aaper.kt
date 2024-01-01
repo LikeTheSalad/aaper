@@ -4,6 +4,7 @@ import android.content.Context
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
+import com.likethesalad.android.aaper.errors.AaperNotInitializedException
 import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
 
@@ -12,8 +13,9 @@ import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
  */
 object Aaper : RequestStrategyFactoryProvider {
 
-    private lateinit var strategyFactory: RequestStrategyFactory
     private var initialized = false
+    private var strategyFactory: RequestStrategyFactory? = null
+    private var applicationContext: Context? = null
 
     /**
      * Initializes Aaper
@@ -22,13 +24,14 @@ object Aaper : RequestStrategyFactoryProvider {
      * disable its automatic initialization first. More info on the README.
      *
      * @param context - The app context
-     * @param strategyFactory - Will delegate permission requests to its strategies.
      */
+    @JvmStatic
     fun initialize(context: Context) = synchronized(this) {
         if (initialized) {
             throw AaperInitializedAlreadyException()
         }
 
+        this.applicationContext = context.applicationContext
         this.strategyFactory = DefaultRequestStrategyFactory(context)
         PermissionManager.setStrategyFactoryProvider(this)
 
@@ -36,16 +39,41 @@ object Aaper : RequestStrategyFactoryProvider {
     }
 
     /**
-     * Returns the instance of [RequestStrategyFactory] being used, which is the one set on
-     * the [initialize] function. If no custom instance was passed, then this function will return a
+     * Sets a [RequestStrategyFactory] instance. This can only be done once.
+     * If no custom instance was passed, then a [DefaultRequestStrategyFactory] instance will be set lazily.
+     */
+    @JvmStatic
+    fun setRequestStrategyFactory(strategyFactory: RequestStrategyFactory) = synchronized(this) {
+        verifyInitialization()
+        if (this.strategyFactory != null) {
+            throw IllegalStateException("The RequestStrategyFactory instance can only be set once.")
+        }
+        this.strategyFactory = strategyFactory
+    }
+
+    /**
+     * Returns the provided [RequestStrategyFactory] instance.
+     * If no custom instance was passed, then this function will return a
      * [DefaultRequestStrategyFactory] one.
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T : RequestStrategyFactory> getRequestStrategyFactory(): T {
+    override fun <T : RequestStrategyFactory> getRequestStrategyFactory(): T = synchronized(this) {
+        verifyInitialization()
+        if (strategyFactory == null) {
+            setRequestStrategyFactory(DefaultRequestStrategyFactory(applicationContext!!))
+        }
         return strategyFactory as T
+    }
+
+    private fun verifyInitialization() {
+        if (!initialized) {
+            throw AaperNotInitializedException()
+        }
     }
 
     fun resetForTest() {
         initialized = false
+        applicationContext = null
+        strategyFactory = null
     }
 }
