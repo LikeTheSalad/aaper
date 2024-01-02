@@ -25,8 +25,9 @@ What it is
 ---  
 **A**nnotated **A**ndroid **Per**missions takes care of ensuring Android runtime permissions for
 an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do
-so without having to write any code nor override any Activity and/or Fragment method related to
-runtime permission requests.
+so without having to override any Activity and/or Fragment method related to
+runtime permission requests and also without having to duplicate code related to how to handle the
+overall requests thanks to Aaper's reusable [strategies](#changing-the-default-behavior).
 
 ### Default behavior example
 
@@ -90,7 +91,7 @@ to use Aaper into our Activities or Fragments:
 That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
 at `Changing the default behavior`.
 
-> It is very important to bear in mind that, the @EnsurePermissions annotation only works on methods
+> It is very important to bear in mind that the @EnsurePermissions annotation only works on methods
 > inside either an `Activity` or a` Fragment`, more specifically,
 > an `androidx.fragment.app.Fragment`
 > Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a
@@ -103,8 +104,8 @@ after a permission request is executed, and even how the request is executed, by
 own `RequestStrategy` class. The way Aaper works is by delegating the request actions to
 a `RequestStrategy` instance, you can tell Aaper which strategy to use by:
 
-- Specifying the strategy on the @EnsurePermissions annotation.
-- Defining your own `RequestStrategy` as default.
+- Specifying the strategy in the @EnsurePermissions annotation.
+- Setting your own `RequestStrategy` as default.
 
 ### Custom Strategy example
 
@@ -136,7 +137,7 @@ custom `RequestStrategy`, those are:
   All three have the same structure and same base methods, the main difference from an
   implementation point of view, would be the type of `host` provided in their base functions, for
   example in the method `onPermissionsRequestResults` we see that our host is of type `Activity`,
-  because we extend from `ActivityRequestStrategy`, whereas if we extend
+  because we extend from `ActivityRequestStrategy`, whereas if we extended
   from `FragmentRequestStrategy`, the host will be a `Fragment`. For `AllRequestStrategy`, the host
   is `Any` or `Object` and you'd have to check its type manually in order to verify whether the
   current request is for an Activity or a Fragment.
@@ -145,7 +146,7 @@ In this example, we will annotate a method inside an Activity and nowhere else,
 therefore `ActivityRequestStrategy` seems to suit better for this case.
 
 We must provide for every custom `RequestStrategy` a boolean as response
-for `onPermissionsRequestResults` method, depending on what
+for the `onPermissionsRequestResults` method, depending on what
 we return there, this is what will happen after a permission request is executed:
 
 - If `onPermissionsRequestResults` returns TRUE, it means that the request was successful in our
@@ -175,7 +176,7 @@ class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
 ```  
 
 As we can see in `onPermissionsRequestResults`, we check the `denied` permissions list we get
-from `data`, and we verify if it is not empty, which would mean that there are some denied
+from `data`, and verify whether it's not empty, which would mean that there are some denied
 permissions, therefore our Strategy will treat the request process as failed and will return `false`
 so that the annotated method won't get called, and before that, we call `host.finish()`, in order to
 close our Activity too.
@@ -201,13 +202,12 @@ under `Advanced configuration`.
 
 #### Use it per annotation param only
 
-This can be achieved by passing our strategy type into the `EnsurePermissions` annotation of a
-method, like so:
+This can be achieved by passing our strategy type into the `EnsurePermissions` annotation, like so:
 
 ```kotlin  
 @EnsurePermissions(
     permissions = [(PERMISSION NAMES)],
-    strategy = FinishActivityOnDenied::class
+    strategy = FinishActivityOnDeniedStrategy::class
 )
 fun methodThatNeedsThePermissions() {
     //...
@@ -265,9 +265,9 @@ The `onBeforeLaunchingRequest` method returns a `boolean` which by default is `F
   to `onBeforeLaunchingRequest`.
 
 The `onBeforeLaunchingRequest` method provides us with three parameters, host, data (contains the
-permissions requested for the annotated method) and, the most important one, the `RequestRunner`.
+permissions requested for the annotated method) and the `RequestRunner`.
 
-The `RequestRunner` is a runnable object that, when is run, it launches the System's permission
+`RequestRunner` is a runnable object that, when is run, it launches the System's permission
 request dialog. This method should only be called if the `onBeforeLaunchingRequest` method
 returns `TRUE`, which means that the Strategy will do some operation prior to the permission
 request. When the pre-request process is done and the `RequestStrategy` wants to proceed launching
@@ -275,7 +275,7 @@ the System's permission dialog, it then must call `RequestRunner.run()`.
 
 #### Example
 
-In this pretty simple example, we use a dialog with a single button, if the user clicks on it, then
+In this example, we use a dialog with a single button, if the user clicks on it, then
 we launch the permissions request, otherwise we don't.
 
 ```kotlin  
@@ -305,14 +305,14 @@ Adding Aaper into your project
 
 ### Prerequisites
 
-#### Android Gradle plugin >= 7.4
+#### Android Gradle plugin >= 7.4.0
 
 Aaper relies on
-an [API](https://developer.android.com/reference/tools/gradle-api/7.2/com/android/build/api/variant/Instrumentation)
-added in the Android Gradle plugin version 7.2 that allows to modify bytecode at compile time
-using [ASM](https://asm.ow2.io/), it also relies on
+the [transformation API](https://developer.android.com/reference/tools/gradle-api/7.2/com/android/build/api/variant/Instrumentation)
+added in the Android Gradle plugin version 7.2.0 and
 the [Scoped Artifacts API](https://developer.android.com/reference/tools/gradle-api/7.4/com/android/build/api/artifact/Artifacts#forScope(com.android.build.api.variant.ScopedArtifacts.Scope))
-added in 7.4.0. This allows Aaper to write all the boilerplate code for you,
+added in 7.4.0. Combined they allow to add and modify bytecode at compile time
+using [ASM](https://asm.ow2.io/). This allows Aaper to write all the boilerplate code for you,
 therefore it will be required for your project to use at least version `7.4.0` of the Android Gradle
 plugin or higher.
 
@@ -349,9 +349,11 @@ Advanced configuration
 
 ### Creating a custom RequestStrategyFactory
 
-Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them,
+Aaper's behavior is all about its `RequestStrategy` objects, and the way Aaper can access to them
 is through an instance of `RequestStrategyFactory`. By default, the `RequestStrategyFactory` that
-Aaper will use is `DefaultRequestStrategyFactory`, if you need to change it, take a look
+Aaper will use is
+the [DefaultRequestStrategyFactory](https://github.com/LikeTheSalad/aaper/blob/main/aaper/src/main/java/com/likethesalad/android/aaper/strategy/DefaultRequestStrategyFactory.kt),
+if you need to change it, take a look
 at `Using your custom RequestStrategyFactory`.
 
 The `DefaultRequestStrategyFactory` implementation instantiates strategies that have either a
@@ -411,14 +413,14 @@ Strategies it needs.
 
 ### Overriding permission's status query and request launch
 
-There are two methods in every `RequestStrategy` that provide the tools to both query if a
-permission is granted and also to launch a set of permissions' request, those methods
+There are two methods in every `RequestStrategy` that provide the tools to both, querying if a
+permission is granted, and also to launch a set of permissions' request. Those methods
 are `getPermissionStatusProvider`, which provides an instance of `PermissionStatusProvider`,
 and `getRequestLauncher`, which provides an instance of `RequestLauncher`. More info on these
 classes in the javadoc: https://javadoc.io/doc/com.likethesalad.android/aaper-api.
 
-For the `PermissionStatusProvider` class, the defaults for both `Activity` and `Fragment` is to
-use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one,
+For the `PermissionStatusProvider` class, the default behavior for both `Activity` and `Fragment` is
+to use `androidx.core.content.ContextCompat.checkSelfPermission`, and for the `RequestLauncher` one,
 the Activity's implementation makes use of `ActivityCompat.requestPermissions`, whereas for
 Fragment's implementation, the `requestPermissions` method is called straight from the host Fragment
 itself.
