@@ -26,8 +26,8 @@ What it is
 **A**nnotated **A**ndroid **Per**missions takes care of ensuring Android runtime permissions for
 an `EnsurePermissions`-annotated method inside either an Activity or a Fragment. The idea is to do
 so without having to override any Activity and/or Fragment method related to
-runtime permission requests and also without having to duplicate code related to how to handle the
-overall requests thanks to Aaper's reusable [strategies](#changing-the-default-behavior).
+runtime permission requests and also without having to duplicate the code that handles the
+overall requests' processes thanks to Aaper's reusable [strategies](#changing-the-default-behavior).
 
 ### Default behavior example
 
