@@ -7,6 +7,13 @@ pluginManagement {
         mavenCentral()
         google()
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (it.requested.id.namespace == "com.likethesalad.tools") {
+                useModule("com.likethesalad.tools:plugin-tools:${it.requested.version}")
+            }
+        }
+    }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -18,17 +25,15 @@ dependencyResolutionManagement {
 }
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
-        gradlePluginPortal()
+        google()
     }
     dependencies {
-        classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
+        classpath "com.android.tools.build:gradle:7.4.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
     }
 }
-rootProject.name = 'Annotated permission'
-include ':app'
+rootProject.name = 'Annotated permissions'
 include ':aaper-api'
 include ':aaper'
-include ':aaper-compiler'
 include ':aaper-plugin'

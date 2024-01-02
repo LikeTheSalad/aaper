@@ -1,7 +1,7 @@
 package com.likethesalad.android.aaper.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.tools.testing.BaseMockable
 import org.junit.Before
 import org.junit.Test

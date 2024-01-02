@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     @EnsurePermissions(
         permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE],
-        strategyName = AlertDialogStrategy.NAME
+        strategy = AlertDialogStrategy::class
     )
     private fun showToast() {
         Toast.makeText(this, "All permissions are granted", Toast.LENGTH_SHORT).show()

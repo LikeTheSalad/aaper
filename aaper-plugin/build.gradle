@@ -1,17 +1,43 @@
 plugins {
     id "java-gradle-plugin"
-    id 'org.jetbrains.kotlin.jvm'
-    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+    alias(libs.plugins.java.library)
+    alias(libs.plugins.android.compilation.testing)
+    alias(libs.plugins.buildConfig)
 }
 
+configurations {
+    testLocalDependency {
+        canBeResolved(false)
+        canBeConsumed(false)
+    }
+    testLocalClasspath {
+        canBeConsumed(false)
+        canBeResolved(true)
+        extendsFrom(testLocalDependency)
+    }
+}
+
+libConventions {
+    setJavaVersion("11")
+}
+
+def androidPluginApi = "com.android.tools.build:gradle:7.4.0"
 dependencies {
-    compileOnly "com.android.tools.build:gradle:7.2.0"
+    implementation project(":aaper-api")
+    implementation libs.bundles.asm
+    implementation libs.classGraph
+    compileOnly androidPluginApi
+    testPluginDependency androidPluginApi
+    testLocalDependency project(":aaper-api")
+}
+
+tasks.withType(Test) {
+    systemProperty "aaper_local_dependencies", configurations.testLocalClasspath.files.join(",")
 }
 
 buildConfig {
     packageName("${group}.generated")
     buildConfigField("String", "SDK_DEPENDENCY_URI", "\"$group:aaper:$version\"")
-    buildConfigField("String", "COMPILER_DEPENDENCY_URI", "\"$group:aaper-compiler:$version\"")
 }
 
 gradlePlugin {

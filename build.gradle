@@ -1,11 +1,7 @@
 plugins {
-    id 'com.android.library' version '7.2.2' apply false
-    id 'org.jetbrains.kotlin.jvm' version '1.7.20' apply false
-    id 'artifact-publisher'
+    alias(libs.plugins.artifactPublisher)
 }
 
-group = 'com.likethesalad.android'
-version = '2.1.0'
 description = "Ensure Android runtime permissions using annotations only."
 
 artifactPublisher {
@@ -14,15 +10,4 @@ artifactPublisher {
     vcsUrl = "https://github.com/LikeTheSalad/aaper.git"
     issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
     tags = ["android", "permissions", "annotation", "runtime"]
-}
-
-ext {
-    testingUtilities_version = '1.0.8'
-    autoService_version = '1.0.1'
-    fragment_version = '1.5.5'
-    robolectric_version = '4.9'
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

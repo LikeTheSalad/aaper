@@ -1,0 +1,67 @@
+package com.likethesalad.android.aaper.strategy
+
+import com.google.common.truth.Truth
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
+import com.likethesalad.android.aaper.api.data.PermissionsResult
+import com.likethesalad.android.aaper.api.launcher.RequestLauncher
+import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
+import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
+import com.likethesalad.tools.testing.BaseMockable
+import io.mockk.impl.annotations.MockK
+import org.junit.Test
+
+/**
+ * Created by César Muñoz on 13/08/20.
+ */
+
+class RequestWithCodeMetadataStrategyTest : BaseMockable() {
+
+    @MockK
+    lateinit var host: Any
+
+    private lateinit var requestWithCodeMetadataStrategy: TestRequestWithCodeMetadataStrategy
+
+    @Test
+    fun `Get default metadata`() {
+        requestWithCodeMetadataStrategy = TestRequestWithCodeMetadataStrategy()
+
+        val result = requestWithCodeMetadataStrategy.getLaunchMetadata(host)
+
+        verifyRequestCodeLaunchMetadata(result!!, 21293)
+    }
+
+    @Test
+    fun `Get overridden metadata code`() {
+        val customCode = 12345
+        requestWithCodeMetadataStrategy = TestRequestWithCodeMetadataStrategy(customCode)
+
+        val result = requestWithCodeMetadataStrategy.getLaunchMetadata(host)
+
+        verifyRequestCodeLaunchMetadata(result!!, customCode)
+    }
+
+    private fun verifyRequestCodeLaunchMetadata(result: LaunchMetadata, expectedCode: Int) {
+        Truth.assertThat(result).isInstanceOf(RequestCodeLaunchMetadata::class.java)
+        Truth.assertThat((result as RequestCodeLaunchMetadata).code).isEqualTo(expectedCode)
+    }
+
+    class TestRequestWithCodeMetadataStrategy(val customCode: Int? = null) :
+        RequestWithCodeMetadataStrategy<Any>() {
+
+        override fun onPermissionsRequestResults(host: Any, data: PermissionsResult): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun getRequestLauncher(host: Any): RequestLauncher<Any> {
+            throw UnsupportedOperationException()
+        }
+
+        override fun getPermissionStatusProvider(host: Any): PermissionStatusProvider<Any> {
+            throw UnsupportedOperationException()
+        }
+
+        override fun getRequestCode(): Int {
+            return customCode ?: super.getRequestCode()
+        }
+    }
+}

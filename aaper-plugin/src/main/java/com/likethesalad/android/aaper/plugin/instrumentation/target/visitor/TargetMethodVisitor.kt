@@ -2,8 +2,9 @@ package com.likethesalad.android.aaper.plugin.instrumentation.target.visitor
 
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.annotations.TargetAnnotationVisitor
 import com.likethesalad.android.aaper.plugin.instrumentation.target.visitor.utils.AnnotatedMethodNotifier
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.AsmUtils.getCombinedSize
-import com.likethesalad.android.aaper.plugin.instrumentation.utils.NamingUtils.wrapMethodName
+import com.likethesalad.android.aaper.plugin.utils.AsmUtils.getCombinedSize
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getGeneratedClassSimpleName
+import com.likethesalad.android.aaper.plugin.utils.NamingUtils.getWraapMethodName
 import java.lang.Integer.max
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
@@ -38,7 +39,7 @@ class TargetMethodVisitor(
     override fun visitCode() {
         if (isAnnotated) {
             originalMv = mv
-            mv = createWraaper()
+            mv = createWraaperMethod()
         }
         super.visitCode()
     }
@@ -52,7 +53,7 @@ class TargetMethodVisitor(
     }
 
     private fun replaceOriginalCode(originalMv: MethodVisitor) {
-        val strategyName = targetAnnotationVisitor.strategyName
+        val strategyType = targetAnnotationVisitor.strategy
         val permissions = targetAnnotationVisitor.getPermissions()
         val generatedInternalName = getGeneratedInternalName()
         val argTypes = mutableListOf<Type>(Type.getObjectType(typeInternalName))
@@ -66,17 +67,17 @@ class TargetMethodVisitor(
             argTypes
         ) // Max 2+(argTypes.size), leaves 1
         createStringArrayAndLeaveItInStack(originalMv, permissions) // Max 4, leaves 1
-        if (strategyName != null) {
-            originalMv.visitLdcInsn(strategyName)// 1
+        if (strategyType != null) {
+            originalMv.visitLdcInsn(strategyType)// 1
         } else {
             originalMv.visitInsn(Opcodes.ACONST_NULL) // 1
         }
 
         originalMv.visitMethodInsn(
             Opcodes.INVOKESTATIC,
-            "com/likethesalad/android/aaper/api/PermissionManager",
+            "com/likethesalad/android/aaper/internal/PermissionRequestHandler",
             "processPermissionRequest",
-            "(Ljava/lang/Object;Ljava/lang/Runnable;[Ljava/lang/String;Ljava/lang/String;)V",
+            "(Ljava/lang/Object;Ljava/lang/Runnable;[Ljava/lang/String;Ljava/lang/Class;)V",
             false
         )
 
@@ -132,20 +133,16 @@ class TargetMethodVisitor(
         return if (lastSlash > 0) {
             val prefix = typeInternalName.substring(0, lastSlash)
             val simpleName = typeInternalName.substring(lastSlash + 1)
-            "$prefix/${wrapSimpleName(simpleName)}"
+            "$prefix/${getGeneratedClassSimpleName(simpleName, methodName)}"
         } else {
-            wrapSimpleName(typeInternalName)
+            getGeneratedClassSimpleName(typeInternalName, methodName)
         }
     }
 
-    private fun wrapSimpleName(simpleName: String): String {
-        return "Aaper_${simpleName}_$methodName"
-    }
-
-    private fun createWraaper(): MethodVisitor {
+    private fun createWraaperMethod(): MethodVisitor {
         return cv.visitMethod(
             Opcodes.ACC_SYNTHETIC,
-            wrapMethodName(methodName),
+            getWraapMethodName(methodName),
             methodDescriptor,
             null,
             null

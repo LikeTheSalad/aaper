@@ -1,0 +1,23 @@
+[versions]
+asm = "9.6"
+project-utilities = "3.0.2"
+
+[libraries]
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+androidx-startupRuntime = "androidx.startup:startup-runtime:1.1.1"
+androidx-core = "androidx.core:core:1.8.0"
+androidx-fragment = "androidx.fragment:fragment:1.5.5"
+unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
+robolectric = "org.robolectric:robolectric:4.11.1"
+classGraph = "io.github.classgraph:classgraph:4.8.165"
+
+[bundles]
+asm = ["asm", "asm-util"]
+
+[plugins]
+android-library = { id = "com.likethesalad.tools.android-library", version.ref = "project-utilities" }
+java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
+android-compilation-testing = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
+artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "2.0.2" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }

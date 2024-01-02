@@ -9,7 +9,7 @@ import android.text.style.StyleSpan
 import androidx.appcompat.app.AlertDialog
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.base.strategies.impl.AllRequestStrategy
+import com.likethesalad.android.aaper.base.common.strategy.AllRequestStrategy
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 
 /**
@@ -17,10 +17,6 @@ import com.likethesalad.android.aaper.internal.utils.RequestRunner
  * to user before requesting permissions.
  */
 class AlertDialogStrategy : AllRequestStrategy() {
-
-    companion object {
-        const val NAME = "AlertUserStrategy"
-    }
 
     override fun onBeforeLaunchingRequest(
         host: Any,
@@ -58,6 +54,4 @@ class AlertDialogStrategy : AllRequestStrategy() {
         // Same way as the DefaultRequestStrategy handles it
         return data.denied.isEmpty()
     }
-
-    override fun getName(): String = NAME
 }

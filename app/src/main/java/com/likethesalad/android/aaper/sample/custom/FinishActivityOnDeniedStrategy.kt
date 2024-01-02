@@ -2,7 +2,7 @@ package com.likethesalad.android.aaper.sample.custom
 
 import android.app.Activity
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.android.aaper.base.strategies.impl.ActivityRequestStrategy
+import com.likethesalad.android.aaper.base.activity.strategy.ActivityRequestStrategy
 
 /**
  * Example of a RequestStrategy that closes the host Activity if at least one permission
@@ -22,11 +22,5 @@ class FinishActivityOnDeniedStrategy : ActivityRequestStrategy() {
 
         // No permissions were denied, therefore proceed to call the annotated method.
         return true
-    }
-
-    override fun getName(): String {
-        // We can return anything here, as long as there is no other Strategy with the same
-        // name.
-        return "FinishActivityOnDenied"
     }
 }

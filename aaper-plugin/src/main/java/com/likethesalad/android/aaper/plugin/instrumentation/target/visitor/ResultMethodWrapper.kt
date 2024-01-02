@@ -22,7 +22,7 @@ class ResultMethodWrapper(methodVisitor: MethodVisitor) :
             Opcodes.INVOKESTATIC,
             "com/likethesalad/android/aaper/api/PermissionManager",
             "processPermissionResponse",
-            "(Ljava/lang/Object;[Ljava/lang/String;Lcom/likethesalad/android/aaper/api/base/LaunchMetadata;)V",
+            "(Ljava/lang/Object;[Ljava/lang/String;Lcom/likethesalad/android/aaper/api/data/LaunchMetadata;)V",
             false
         )
     }

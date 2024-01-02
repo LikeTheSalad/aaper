@@ -1,0 +1,37 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    Properties rootProperties = new Properties()
+    File propertiesFile = new File(rootDir, '../gradle.properties')
+    propertiesFile.withInputStream {
+        rootProperties.load(it)
+    }
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (it.requested.id.id == "com.likethesalad.aaper") {
+                useModule("com.likethesalad.android:aaper-plugin:${rootProperties["version"]}")
+            }
+        }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+    versionCatalogs {
+        rootLibs {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
+}
+rootProject.name = 'Annotated permissions sample app'
+include ':app'

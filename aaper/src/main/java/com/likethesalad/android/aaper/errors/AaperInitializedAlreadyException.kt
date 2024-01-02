@@ -4,7 +4,7 @@ import com.likethesalad.android.aaper.Aaper
 import com.likethesalad.android.aaper.api.errors.AaperException
 
 /**
- * This exception is thrown whenever [Aaper.setUp] is called more than once.
+ * This exception is thrown whenever [Aaper.initialize] is called more than once.
  */
 class AaperInitializedAlreadyException
     : AaperException(

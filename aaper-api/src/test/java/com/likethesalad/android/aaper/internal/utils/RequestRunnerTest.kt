@@ -1,11 +1,11 @@
 package com.likethesalad.android.aaper.internal.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.aaper.api.base.RequestStrategy
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.errors.RequestExecutedAlreadyException
+import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.internal.data.PendingRequest
-import com.likethesalad.android.aaper.internal.utils.testutils.BaseMockable
+import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

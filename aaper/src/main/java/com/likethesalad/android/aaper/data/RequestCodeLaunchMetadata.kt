@@ -1,6 +1,6 @@
 package com.likethesalad.android.aaper.data
 
-import com.likethesalad.android.aaper.api.base.LaunchMetadata
+import com.likethesalad.android.aaper.api.data.LaunchMetadata
 
 /**
  * This is the [LaunchMetadata] used for common android permissions requests in which a code
