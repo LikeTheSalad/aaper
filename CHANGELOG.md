@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 3.0.0 *(??-??-2024)*
+Version 3.0.0 *(02-01-2024)*
 ---
 
 * Removed annotation processor module.
@@ -11,7 +11,7 @@ Version 3.0.0 *(??-??-2024)*
       with a name, hence removing the need to name every new strategy.
     * Avoiding having to register new strategies before using them (they will be automatically
       instantiated on demand).
-    * Providing new `RequestStrategyFactory` interface to allow for custom instantiation of
+    * Providing the `RequestStrategyFactory` interface to allow for custom instantiation of
       strategies if needed.
 
 Version 2.1.0 *(05-02-2023)*
