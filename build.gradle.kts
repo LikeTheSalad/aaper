@@ -9,5 +9,5 @@ artifactPublisher {
     url = "https://github.com/LikeTheSalad/aaper"
     vcsUrl = "https://github.com/LikeTheSalad/aaper.git"
     issueTrackerUrl = "https://github.com/LikeTheSalad/aaper/issues"
-    tags = ["android", "permissions", "annotation", "runtime"]
+    tags.addAll("android", "permissions", "annotation", "runtime")
 }

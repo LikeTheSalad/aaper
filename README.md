@@ -328,7 +328,7 @@ id 'com.likethesalad.aaper' version '3.0.0'
 **Full app's build.gradle example:**
 
 ```groovy  
-// Your app's build.gradle file  
+// Your app's build.gradle.kts file  
 plugins {
     id 'com.android.application'
     id 'com.likethesalad.aaper' version '3.0.0'
