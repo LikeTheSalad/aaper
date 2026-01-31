@@ -18,7 +18,7 @@ asm = ["asm", "asm-util"]
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "android" }
-kotlin-jvm = "org.jetbrains.kotlin.jvm:2.3.0"
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.3.0" }
 android-compilation-testing = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.5.0" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }
