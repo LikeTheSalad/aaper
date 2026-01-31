@@ -25,6 +25,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Annotated permissions"
+includeBuild("build-tools")
 include(":aaper-api")
 include(":aaper")
 include(":aaper-plugin")
