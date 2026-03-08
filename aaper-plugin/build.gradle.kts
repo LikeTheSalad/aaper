@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.buildConfig)
+    id("javalib-conventions")
     id("java-gradle-plugin")
+    alias(libs.plugins.buildConfig)
 }
 
 val testLocalDependency by configurations.creating {
