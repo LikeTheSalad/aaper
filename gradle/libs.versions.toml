@@ -3,7 +3,7 @@ asm = "9.6"
 android = "9.0.0"
 junit = "5.14.2"
 assertj = "3.27.6"
-mockk = "1.14.7"
+mockk = "1.14.9"
 
 [libraries]
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
