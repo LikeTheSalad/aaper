@@ -10,9 +10,6 @@ pluginManagement {
             if (requested.id.id == "com.likethesalad.artifact-publisher") {
                 useModule("com.likethesalad.tools:artifact-publisher:${requested.version}")
             }
-            if (requested.id.namespace == "com.likethesalad.tools") {
-                useModule("com.likethesalad.tools:plugin-tools:${requested.version}")
-            }
         }
     }
 }

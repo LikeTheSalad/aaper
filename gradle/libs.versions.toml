@@ -1,6 +1,5 @@
 [versions]
 asm = "9.6"
-project-utilities = "3.0.2"
 android = "9.0.0"
 junit = "5.14.2"
 assertj = "3.27.6"
@@ -29,6 +28,5 @@ asm = ["asm", "asm-util"]
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "android" }
-android-compilation-testing = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.5.0" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }
