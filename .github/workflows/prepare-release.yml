@@ -53,6 +53,11 @@ jobs:
           git push --set-upstream origin $RELEASE_BRANCH
       - name: Updating the CHANGELOG.md file
         run: ./gradlew changelogUpdate
+      - name: Updating README.md version references
+        env:
+          VERSION: ${{ steps.variables.outputs.version }}
+        run: |
+          sed -i 's/id("com.likethesalad.aaper") version "[0-9]\+\.[0-9]\+\.[0-9]\+"/id("com.likethesalad.aaper") version "'"$VERSION"'"/g' README.md
       - name: Creating release branch PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
