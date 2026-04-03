@@ -1,27 +1,29 @@
 package com.likethesalad.android.aaper.base.fragment.strategy
 
 import androidx.fragment.app.Fragment
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.base.fragment.launcher.FragmentRequestLauncher
 import com.likethesalad.android.aaper.base.fragment.statusprovider.FragmentPermissionStatusProvider
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-class FragmentRequestStrategyTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class FragmentRequestStrategyTest {
 
     @MockK
     lateinit var host: Fragment
 
     private lateinit var fragmentRequestStrategy: FragmentRequestStrategy
 
-    @Before
+    @BeforeEach
     fun setUp() {
         fragmentRequestStrategy = object : FragmentRequestStrategy() {
             override fun onPermissionsRequestResults(
@@ -37,13 +39,13 @@ class FragmentRequestStrategyTest : BaseMockable() {
     fun `Verify request launcher type`() {
         val result = fragmentRequestStrategy.getRequestLauncher(host)
 
-        Truth.assertThat(result).isInstanceOf(FragmentRequestLauncher::class.java)
+        assertThat(result).isInstanceOf(FragmentRequestLauncher::class.java)
     }
 
     @Test
     fun `Verify permission status provider type`() {
         val result = fragmentRequestStrategy.getPermissionStatusProvider(host)
 
-        Truth.assertThat(result).isInstanceOf(FragmentPermissionStatusProvider::class.java)
+        assertThat(result).isInstanceOf(FragmentPermissionStatusProvider::class.java)
     }
 }

@@ -15,6 +15,19 @@ val testLocalClasspath by configurations.creating {
     isCanBeConsumed = false
     extendsFrom(testLocalDependency)
 }
+val testPluginDependency by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+val testPluginClasspath by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+    extendsFrom(testPluginDependency)
+}
+
+tasks.withType<PluginUnderTestMetadata> {
+    pluginClasspath.from(testPluginClasspath)
+}
 
 kotlin {
     jvmToolchain(17)
@@ -25,12 +38,17 @@ kotlin {
 }
 
 val androidPluginApi = "com.android.tools.build:gradle:7.4.0"
+val testAndroidPluginApi = "com.android.tools.build:gradle:${libs.versions.android.get()}"
 dependencies {
     implementation(project(":aaper-api"))
     implementation(libs.bundles.asm)
     implementation(libs.classGraph)
     compileOnly(androidPluginApi)
-    testLocalDependency(project(":aaper-api"))
+    testImplementation(gradleTestKit())
+    testLocalDependency(project(":aaper-api")) {
+        isTransitive = false
+    }
+    testPluginDependency(testAndroidPluginApi)
 }
 
 tasks.withType<Test> {

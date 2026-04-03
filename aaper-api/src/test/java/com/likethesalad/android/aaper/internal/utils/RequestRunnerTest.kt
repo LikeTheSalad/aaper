@@ -1,25 +1,27 @@
 package com.likethesalad.android.aaper.internal.utils
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.errors.RequestExecutedAlreadyException
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
 import com.likethesalad.android.aaper.internal.data.PendingRequest
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.verify
-import org.junit.Assert.fail
-import org.junit.Before
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 10/08/20.
  */
 
-class RequestRunnerTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class RequestRunnerTest {
 
     @MockK
     lateinit var functionMock: (PendingRequest) -> Unit
@@ -39,7 +41,7 @@ class RequestRunnerTest : BaseMockable() {
     private lateinit var pendingRequest: PendingRequest
     private lateinit var requestRunner: RequestRunner
 
-    @Before
+    @BeforeEach
     fun setUp() {
         every { functionMock.invoke(any()) } just Runs
         pendingRequest = createPendingRequest()
@@ -63,7 +65,7 @@ class RequestRunnerTest : BaseMockable() {
             requestRunner.run()
             fail("Should have gone into the catch block")
         } catch (e: RequestExecutedAlreadyException) {
-            Truth.assertThat(e.permissions).isEqualTo(permissions)
+            assertThat(e.permissions).isEqualTo(permissions)
         }
     }
 

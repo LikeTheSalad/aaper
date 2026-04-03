@@ -1,8 +1,8 @@
 package com.likethesalad.android.aaper.base.activity.launcher
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
 import com.likethesalad.android.aaper.testutils.RobolectricActivity
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.Robolectric
@@ -36,9 +36,9 @@ class ActivityRequestLauncherTest : BaseRobolectricTest() {
             val shadowActivity = Shadows.shadowOf(controller.get())
 
             val lastRequestedPermission = shadowActivity.lastRequestedPermission
-            Truth.assertThat(lastRequestedPermission.requestedPermissions.asList())
-                .containsExactlyElementsIn(permissions)
-            Truth.assertThat(lastRequestedPermission.requestCode).isEqualTo(requestCode)
+            assertThat(lastRequestedPermission.requestedPermissions.asList())
+                .containsExactlyElementsOf(permissions)
+            assertThat(lastRequestedPermission.requestCode).isEqualTo(requestCode)
         }
     }
 }

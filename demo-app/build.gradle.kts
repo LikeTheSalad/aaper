@@ -1,10 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     id("com.likethesalad.aaper")
 }
 
 android {
+    namespace = "com.likethesalad.android.aaper.sample"
     compileSdk = 36
     defaultConfig {
         applicationId = "com.likethesalad.android.aaper.sample"
@@ -30,7 +30,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.appCompat)
-    testImplementation(rootLibs.unitTesting)
+    testImplementation(rootLibs.junit4)
+    testImplementation(rootLibs.mockk)
     testImplementation(rootLibs.robolectric)
     debugImplementation(libs.fragmentTesting)
 }

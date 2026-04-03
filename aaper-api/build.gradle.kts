@@ -12,6 +12,3 @@ kotlin {
     }
 }
 
-dependencies {
-    testImplementation(libs.unitTesting)
-}

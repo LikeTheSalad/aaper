@@ -9,6 +9,9 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            all {
+                it.useJUnitPlatform()
+            }
         }
     }
 }
@@ -18,6 +21,12 @@ dependencies {
     api(libs.androidx.startupRuntime)
     implementation(libs.androidx.core)
     implementation(libs.androidx.fragment)
-    testImplementation(libs.unitTesting)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit4)
+    testRuntimeOnly(libs.junit.launcher)
+    testRuntimeOnly(libs.junit.vintage)
+    testImplementation(libs.assertj)
+    testImplementation(libs.mockk)
     testImplementation(libs.robolectric)
 }

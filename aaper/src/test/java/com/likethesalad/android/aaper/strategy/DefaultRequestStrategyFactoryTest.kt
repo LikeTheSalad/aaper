@@ -1,18 +1,20 @@
 package com.likethesalad.android.aaper.strategy
 
 import android.content.Context
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.strategy.NoopRequestStrategy
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 14/08/20.
  */
 
-class DefaultRequestStrategyFactoryTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class DefaultRequestStrategyFactoryTest {
 
     @MockK
     lateinit var host: Any
@@ -22,7 +24,7 @@ class DefaultRequestStrategyFactoryTest : BaseMockable() {
 
     private lateinit var defaultRequestStrategyFactory: DefaultRequestStrategyFactory
 
-    @Before
+    @BeforeEach
     fun setUp() {
         defaultRequestStrategyFactory = DefaultRequestStrategyFactory(applicationContext)
     }
@@ -32,7 +34,7 @@ class DefaultRequestStrategyFactoryTest : BaseMockable() {
         val strategy =
             defaultRequestStrategyFactory.getStrategy(host, DefaultRequestStrategy::class.java)
 
-        Truth.assertThat(strategy).isInstanceOf(DefaultRequestStrategy::class.java)
+        assertThat(strategy).isInstanceOf(DefaultRequestStrategy::class.java)
     }
 
     @Test
@@ -40,8 +42,8 @@ class DefaultRequestStrategyFactoryTest : BaseMockable() {
         val strategy =
             defaultRequestStrategyFactory.getStrategy(host, TestStrategyWithContext::class.java)
 
-        Truth.assertThat(strategy).isInstanceOf(TestStrategyWithContext::class.java)
-        Truth.assertThat(strategy.appContext).isEqualTo(applicationContext)
+        assertThat(strategy).isInstanceOf(TestStrategyWithContext::class.java)
+        assertThat(strategy.appContext).isEqualTo(applicationContext)
     }
 
     class TestStrategyWithContext(val appContext: Context) : NoopRequestStrategy()

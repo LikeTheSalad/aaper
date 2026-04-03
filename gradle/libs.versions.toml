@@ -2,6 +2,9 @@
 asm = "9.6"
 project-utilities = "3.0.2"
 android = "9.0.0"
+junit = "5.14.2"
+assertj = "3.27.6"
+mockk = "1.14.7"
 
 [libraries]
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
@@ -9,10 +12,16 @@ asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
 androidx-startupRuntime = "androidx.startup:startup-runtime:1.1.1"
 androidx-core = "androidx.core:core:1.8.0"
 androidx-fragment = "androidx.fragment:fragment:1.5.5"
-unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
-robolectric = "org.robolectric:robolectric:4.11.1"
+robolectric = "org.robolectric:robolectric:4.16"
 classGraph = "io.github.classgraph:classgraph:4.8.165"
 kotlin-plugin = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.3.0"
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-vintage = { module = "org.junit.vintage:junit-vintage-engine" }
+junit4 = { module = "junit:junit", version = "4.13.2" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [bundles]
 asm = ["asm", "asm-util"]

@@ -1,25 +1,25 @@
 package com.likethesalad.android.aaper.plugin
 
-import com.google.common.truth.Truth.assertThat
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.descriptor.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import java.io.File
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 
 class AaperPluginTest {
 
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
+    @TempDir
+    lateinit var temporaryFolder: File
 
     private val projectDirProvider = TestAssetsProvider("projects")
 
     @Test
     fun `Verify compilation issue if some methods don't return void`() {
         val projectName = "nonVoidMethod"
-        val testProject = AndroidTestProject(temporaryFolder.root)
+        val testProject = AndroidTestProject(temporaryFolder)
         val descriptor = createProjectDescriptor(projectName)
 
         testProject.addSubproject(descriptor)
@@ -32,7 +32,7 @@ class AaperPluginTest {
     @Test
     fun `Verify no issues when all annotated methods return void`() {
         val projectName = "voidMethod"
-        val testProject = AndroidTestProject(temporaryFolder.root)
+        val testProject = AndroidTestProject(temporaryFolder)
         val descriptor = createProjectDescriptor(projectName)
 
         testProject.addSubproject(descriptor)

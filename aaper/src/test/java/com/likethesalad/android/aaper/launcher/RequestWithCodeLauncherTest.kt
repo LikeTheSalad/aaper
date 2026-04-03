@@ -1,23 +1,25 @@
 package com.likethesalad.android.aaper.launcher
 
-import com.google.common.truth.Truth
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-class RequestWithCodeLauncherTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class RequestWithCodeLauncherTest {
 
     @MockK
     lateinit var host: Any
 
     private lateinit var launcher: TestRequestWithCodeLauncher
 
-    @Before
+    @BeforeEach
     fun setUp() {
         launcher = TestRequestWithCodeLauncher()
     }
@@ -29,7 +31,7 @@ class RequestWithCodeLauncherTest : BaseMockable() {
 
         launcher.launchPermissionsRequest(host, permissions, requestCode)
 
-        Truth.assertThat(launcher.requestCodePassed).isEqualTo(requestCode)
+        assertThat(launcher.requestCodePassed).isEqualTo(requestCode)
     }
 
     class TestRequestWithCodeLauncher : RequestWithCodeLauncher<Any>() {

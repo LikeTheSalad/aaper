@@ -2,23 +2,26 @@ package com.likethesalad.android.aaper.base.common.strategy
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.base.activity.launcher.ActivityRequestLauncher
 import com.likethesalad.android.aaper.base.activity.statusprovider.ActivityPermissionStatusProvider
 import com.likethesalad.android.aaper.base.fragment.launcher.FragmentRequestLauncher
 import com.likethesalad.android.aaper.base.fragment.statusprovider.FragmentPermissionStatusProvider
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Assert.fail
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-class AllRequestStrategyTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class AllRequestStrategyTest {
 
     @MockK
     lateinit var fragmentHost: Fragment
@@ -28,7 +31,7 @@ class AllRequestStrategyTest : BaseMockable() {
 
     private lateinit var allRequestStrategy: AllRequestStrategy
 
-    @Before
+    @BeforeEach
     fun setUp() {
         allRequestStrategy = object : AllRequestStrategy() {
             override fun onPermissionsRequestResults(
@@ -44,45 +47,41 @@ class AllRequestStrategyTest : BaseMockable() {
     fun `Verify request launcher type for fragment host`() {
         val result = allRequestStrategy.getRequestLauncher(fragmentHost)
 
-        Truth.assertThat(result).isInstanceOf(FragmentRequestLauncher::class.java)
+        assertThat(result).isInstanceOf(FragmentRequestLauncher::class.java)
     }
 
     @Test
     fun `Verify permission status provider type for fragment host`() {
         val result = allRequestStrategy.getPermissionStatusProvider(fragmentHost)
 
-        Truth.assertThat(result).isInstanceOf(FragmentPermissionStatusProvider::class.java)
+        assertThat(result).isInstanceOf(FragmentPermissionStatusProvider::class.java)
     }
 
     @Test
     fun `Verify request launcher type for activity host`() {
         val result = allRequestStrategy.getRequestLauncher(activityHost)
 
-        Truth.assertThat(result).isInstanceOf(ActivityRequestLauncher::class.java)
+        assertThat(result).isInstanceOf(ActivityRequestLauncher::class.java)
     }
 
     @Test
     fun `Verify permission status provider type for activity host`() {
         val result = allRequestStrategy.getPermissionStatusProvider(activityHost)
 
-        Truth.assertThat(result).isInstanceOf(ActivityPermissionStatusProvider::class.java)
+        assertThat(result).isInstanceOf(ActivityPermissionStatusProvider::class.java)
     }
 
     @Test
     fun `Verify request launcher exception for unknown host`() {
-        try {
+        assertThrows(UnsupportedOperationException::class.java) {
             allRequestStrategy.getRequestLauncher(mockk())
-            fail("Should've gone into the catch block")
-        } catch (e: UnsupportedOperationException) {
         }
     }
 
     @Test
     fun `Verify permission status provider exception for unknown host`() {
-        try {
+        assertThrows(UnsupportedOperationException::class.java) {
             allRequestStrategy.getPermissionStatusProvider(mockk())
-            fail("Should've gone into the catch block")
-        } catch (e: UnsupportedOperationException) {
         }
     }
 }

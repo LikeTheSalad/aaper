@@ -32,4 +32,3 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Annotated permissions sample app"
-include(":app")

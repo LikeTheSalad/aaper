@@ -1,7 +1,6 @@
 package com.likethesalad.android.aaper
 
 import android.content.Context
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.PermissionManager
 import com.likethesalad.android.aaper.api.strategy.NoopRequestStrategy
 import com.likethesalad.android.aaper.api.strategy.RequestStrategy
@@ -9,29 +8,32 @@ import com.likethesalad.android.aaper.api.strategy.RequestStrategyFactory
 import com.likethesalad.android.aaper.errors.AaperInitializedAlreadyException
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategy
 import com.likethesalad.android.aaper.strategy.DefaultRequestStrategyFactory
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.junit.After
-import org.junit.Assert.fail
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 14/08/20.
  */
 
-class AaperTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class AaperTest {
 
     @MockK
     lateinit var applicationContext: Context
 
-    @Before
+    @BeforeEach
     fun setUp() {
         every { applicationContext.applicationContext }.returns(applicationContext)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         cleanUp()
     }
@@ -51,7 +53,7 @@ class AaperTest : BaseMockable() {
     fun `Check default initialization strategy factory`() {
         init()
 
-        Truth.assertThat(Aaper.getRequestStrategyFactory<DefaultRequestStrategyFactory>())
+        assertThat(Aaper.getRequestStrategyFactory<DefaultRequestStrategyFactory>())
             .isInstanceOf(DefaultRequestStrategyFactory::class.java)
     }
 
@@ -62,13 +64,13 @@ class AaperTest : BaseMockable() {
         val factory = TestStrategyFactory()
         Aaper.setRequestStrategyFactory(factory)
 
-        Truth.assertThat(Aaper.getRequestStrategyFactory<TestStrategyFactory>())
+        assertThat(Aaper.getRequestStrategyFactory<TestStrategyFactory>())
             .isInstanceOf(TestStrategyFactory::class.java)
 
         try {
             Aaper.setRequestStrategyFactory(factory)
         } catch (e: IllegalStateException) {
-            Truth.assertThat(e.message)
+            assertThat(e.message)
                 .isEqualTo("The RequestStrategyFactory instance can only be set once.")
         }
     }
@@ -77,7 +79,7 @@ class AaperTest : BaseMockable() {
     fun `Verify default strategy`() {
         init()
 
-        Truth.assertThat(Aaper.getDefaultStrategy() == DefaultRequestStrategy::class.java)
+        assertThat(Aaper.getDefaultStrategy() == DefaultRequestStrategy::class.java)
             .isTrue()
     }
 
@@ -87,7 +89,7 @@ class AaperTest : BaseMockable() {
 
         Aaper.setDefaultStrategy(TestStrategy::class.java)
 
-        Truth.assertThat(Aaper.getDefaultStrategy() == TestStrategy::class.java)
+        assertThat(Aaper.getDefaultStrategy() == TestStrategy::class.java)
             .isTrue()
     }
 
