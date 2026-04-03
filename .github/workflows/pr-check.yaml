@@ -18,7 +18,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build and check with Gradle Wrapper
-        run: ./tests.sh
+        run: ./checks.sh
       - name: Store build report
         if: failure()
         uses: actions/upload-artifact@v6
