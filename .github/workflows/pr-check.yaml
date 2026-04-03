@@ -7,10 +7,7 @@ on:
 jobs:
   build:
     name: Gradle check
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
@@ -26,7 +23,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ matrix.os }}-reports
+          name: reports
           path: |
             **/build/reports/
             **/build/test-results/
