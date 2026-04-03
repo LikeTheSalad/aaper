@@ -327,25 +327,6 @@ plugins {
 }
 ```
 
-If you use Groovy DSL instead:
-
-```groovy  
-plugins {
-    id 'com.android.application'
-    id 'com.likethesalad.aaper' version '3.0.0'
-}
-```  
-
-**Full app module example with Kotlin DSL:**
-
-```kotlin
-// Your app/build.gradle.kts file
-plugins {
-    id("com.android.application")
-    id("com.likethesalad.aaper") version "3.0.0"
-}
-```
-
 Troubleshooting
 ---  
 
