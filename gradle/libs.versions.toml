@@ -15,6 +15,7 @@ androidx-fragment = "androidx.fragment:fragment:1.5.5"
 robolectric = "org.robolectric:robolectric:4.16"
 classGraph = "io.github.classgraph:classgraph:4.8.165"
 kotlin-plugin = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.3.0"
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }

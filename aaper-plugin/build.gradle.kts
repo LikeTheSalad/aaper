@@ -37,18 +37,16 @@ kotlin {
     }
 }
 
-val androidPluginApi = "com.android.tools.build:gradle:7.4.0"
-val testAndroidPluginApi = "com.android.tools.build:gradle:${libs.versions.android.get()}"
 dependencies {
     implementation(project(":aaper-api"))
     implementation(libs.bundles.asm)
     implementation(libs.classGraph)
-    compileOnly(androidPluginApi)
+    compileOnly(libs.android.gradle.plugin)
     testImplementation(gradleTestKit())
     testLocalDependency(project(":aaper-api")) {
         isTransitive = false
     }
-    testPluginDependency(testAndroidPluginApi)
+    testPluginDependency(libs.android.gradle.plugin)
 }
 
 tasks.withType<Test> {
