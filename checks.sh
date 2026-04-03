@@ -1,4 +1,3 @@
 set -e
-./gradlew publishToMavenLocal
-./gradlew test
+./gradlew check
 ./gradlew -p "demo-app" testDebugUnitTest
