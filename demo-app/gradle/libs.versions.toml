@@ -1,5 +1,5 @@
 [versions]
-android = "9.0.0"
+android = "9.1.0"
 androidx-test-ext-junit = "1.1.3"
 androidx-test-runner = "1.4.0"
 androidx-test-rules = "1.4.0"
