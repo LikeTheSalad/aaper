@@ -30,6 +30,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.appCompat)
+    testImplementation(rootLibs.assertj)
     testImplementation(rootLibs.junit4)
     testImplementation(rootLibs.mockk)
     testImplementation(rootLibs.robolectric)
