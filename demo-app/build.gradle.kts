@@ -39,4 +39,5 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
     debugImplementation(libs.fragmentTesting)
+    debugImplementation(libs.androidx.test.monitor)
 }
