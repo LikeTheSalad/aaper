@@ -1,8 +1,13 @@
 Change Log
 ==========
 
-Version 3.0.0 *(02-01-2024)*
----
+## Unreleased
+
+* Bumping up dependencies
+* Setting up GH Workflows
+* Adding tests
+
+## Version 3.0.0 *(02-01-2024)*
 
 * Removed annotation processor module.
 * Creating wraapers using the AGP forScope transformation API.
@@ -14,13 +19,11 @@ Version 3.0.0 *(02-01-2024)*
     * Providing the `RequestStrategyFactory` interface to allow for custom instantiation of
       strategies if needed.
 
-Version 2.1.0 *(05-02-2023)*
----
+## Version 2.1.0 *(05-02-2023)*
 
 * Using androidx.startup to automatically initialize Aaper with its default config (thanks
   @msasikanth)
 
-Version 2.0.0 *(04-02-2023)*
----
+## Version 2.0.0 *(04-02-2023)*
 
 * Using a combination of annotation processor + the new AGP Instrumentation API
