@@ -2,7 +2,7 @@
 asm = "9.6"
 android = "9.0.0"
 junit = "5.14.2"
-assertj = "3.27.6"
+assertj = "3.27.7"
 mockk = "1.14.9"
 
 [libraries]
