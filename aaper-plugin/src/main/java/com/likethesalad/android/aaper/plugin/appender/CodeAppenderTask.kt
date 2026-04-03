@@ -20,16 +20,21 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.objectweb.asm.Type
 
+@CacheableTask
 abstract class CodeAppenderTask : DefaultTask() {
 
+    @get:Classpath
     @get:InputFiles
     abstract val allDirectories: ListProperty<Directory>
 
+    @get:Classpath
     @get:InputFiles
     abstract val allJars: ListProperty<RegularFile>
 
