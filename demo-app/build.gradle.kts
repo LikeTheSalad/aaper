@@ -34,5 +34,9 @@ dependencies {
     testImplementation(rootLibs.junit4)
     testImplementation(rootLibs.mockk)
     testImplementation(rootLibs.robolectric)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.monitor)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
     debugImplementation(libs.fragmentTesting)
 }
