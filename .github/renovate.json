@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":disableDependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "description": "Instrumentation test libraries in demo-app tend to require coordinated upgrades.",
+      "groupName": "androidx test stack",
+      "matchPackageNames": [
+        "androidx.test**"
+      ]
+    }
+  ]
+}

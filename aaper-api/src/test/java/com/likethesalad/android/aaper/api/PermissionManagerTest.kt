@@ -1,6 +1,5 @@
 package com.likethesalad.android.aaper.api
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsRequest
 import com.likethesalad.android.aaper.api.data.PermissionsResult
@@ -11,24 +10,27 @@ import com.likethesalad.android.aaper.internal.data.CurrentRequest
 import com.likethesalad.android.aaper.internal.strategy.RequestStrategyFactoryProvider
 import com.likethesalad.android.aaper.internal.utils.RequestRunner
 import com.likethesalad.android.aaper.testutils.StrategyTest
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.lang.reflect.Field
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 10/08/20.
  */
-class PermissionManagerTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class PermissionManagerTest {
 
     @MockK
     lateinit var originalMethod: Runnable
@@ -54,7 +56,7 @@ class PermissionManagerTest : BaseMockable() {
         private lateinit var strategyFactory: RequestStrategyFactory
 
         @JvmStatic
-        @BeforeClass
+        @BeforeAll
         fun init() {
             providerMock = mockk(relaxUnitFun = true)
             strategyFactory = mockk(relaxUnitFun = true)
@@ -65,9 +67,12 @@ class PermissionManagerTest : BaseMockable() {
         }
     }
 
-    @Before
+    @BeforeEach
     fun setUp() {
         cleanUp()
+        every { providerMock.getRequestStrategyFactory() as RequestStrategyFactory }.returns(
+            strategyFactory
+        )
         every { requestLauncher.internalLaunchPermissionsRequest(any(), any(), any()) } just Runs
         every { originalMethod.run() } just Runs
         every { strategyFactory.getStrategy(host, StrategyTest::class.java) }.returns(strategy)
@@ -126,8 +131,8 @@ class PermissionManagerTest : BaseMockable() {
         )
 
         val capturedData = dataCaptor.captured
-        Truth.assertThat(capturedData.missingPermissions).isEqualTo(missingPermissions.toList())
-        Truth.assertThat(capturedData.permissions).isEqualTo(permissions.toList())
+        assertThat(capturedData.missingPermissions).isEqualTo(missingPermissions.toList())
+        assertThat(capturedData.permissions).isEqualTo(permissions.toList())
         verify(exactly = 0) {
             requestLauncher.internalLaunchPermissionsRequest(
                 host,
@@ -242,6 +247,7 @@ class PermissionManagerTest : BaseMockable() {
         // Second request
         val secondPermissions = arrayOf("three", "four")
         val secondMethod = mockk<Runnable>()
+        every { secondMethod.run() } just Runs
         setUpPermissions(secondPermissions, emptyArray())
         every {
             strategy.internalGetPermissionStatusProvider(host)
@@ -281,7 +287,7 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(notRequestingHost, arrayOf(), launchMetadata)
 
-        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
             strategy.internalOnPermissionsRequestResults(any(), any())
         }
@@ -298,7 +304,7 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(host, arrayOf(), responseMetadata)
 
-        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
             strategy.internalOnPermissionsRequestResults(any(), any())
         }
@@ -315,7 +321,7 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(host, arrayOf(), responseMetadata)
 
-        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
             strategy.internalOnPermissionsRequestResults(any(), any())
         }
@@ -330,7 +336,7 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(host, arrayOf(), null)
 
-        Truth.assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
+        assertThat(getCurrentRequestValue()).isEqualTo(currentRequest)
         verify(exactly = 0) {
             strategy.internalOnPermissionsRequestResults(any(), any())
         }
@@ -370,7 +376,7 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(host, permissionsRequested, launchMetadata)
 
-        Truth.assertThat(getCurrentRequestValue()).isNull()
+        assertThat(getCurrentRequestValue()).isNull()
         verify {
             strategy.internalOnPermissionsRequestResults(host, capture(resultDataCaptor))
         }
@@ -378,9 +384,9 @@ class PermissionManagerTest : BaseMockable() {
             originalMethod.run()
         }
         val capturedResponse = resultDataCaptor.captured
-        Truth.assertThat(capturedResponse.granted).containsExactly("two", "four")
-        Truth.assertThat(capturedResponse.denied).containsExactly("one", "three")
-        Truth.assertThat(capturedResponse.request).isEqualTo(requestData)
+        assertThat(capturedResponse.granted).containsExactly("two", "four")
+        assertThat(capturedResponse.denied).containsExactly("one", "three")
+        assertThat(capturedResponse.request).isEqualTo(requestData)
     }
 
     @Test
@@ -399,15 +405,15 @@ class PermissionManagerTest : BaseMockable() {
 
         PermissionManager.processPermissionResponse(host, permissionsRequested, launchMetadata)
 
-        Truth.assertThat(getCurrentRequestValue()).isNull()
+        assertThat(getCurrentRequestValue()).isNull()
         verify {
             strategy.internalOnPermissionsRequestResults(host, capture(resultDataCaptor))
             originalMethod.run()
         }
         val capturedResponse = resultDataCaptor.captured
-        Truth.assertThat(capturedResponse.granted).containsExactlyElementsIn(permissionsRequested)
-        Truth.assertThat(capturedResponse.denied).isEmpty()
-        Truth.assertThat(capturedResponse.request).isEqualTo(requestData)
+        assertThat(capturedResponse.granted).containsExactlyElementsOf(permissionsRequested.toList())
+        assertThat(capturedResponse.denied).isEmpty()
+        assertThat(capturedResponse.request).isEqualTo(requestData)
     }
 
     private fun setUpPermissions(permissions: Array<String>, missingPermissions: Array<String>) {

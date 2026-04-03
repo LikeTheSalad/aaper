@@ -1,19 +1,21 @@
 package com.likethesalad.android.aaper.strategy
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.PermissionsResult
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import org.junit.Before
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-class DefaultRequestStrategyTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class DefaultRequestStrategyTest {
 
     @MockK
     lateinit var host: Any
@@ -23,7 +25,7 @@ class DefaultRequestStrategyTest : BaseMockable() {
 
     private lateinit var defaultRequestStrategy: DefaultRequestStrategy
 
-    @Before
+    @BeforeEach
     fun setUp() {
         defaultRequestStrategy = DefaultRequestStrategy()
     }
@@ -34,7 +36,7 @@ class DefaultRequestStrategyTest : BaseMockable() {
             data.denied
         }.returns(emptyList())
 
-        Truth.assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data))
+        assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data))
             .isTrue()
         verify {
             data.denied
@@ -47,7 +49,7 @@ class DefaultRequestStrategyTest : BaseMockable() {
             data.denied
         }.returns(listOf("one"))
 
-        Truth.assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data)).isFalse()
+        assertThat(defaultRequestStrategy.onPermissionsRequestResults(host, data)).isFalse()
         verify {
             data.denied
         }

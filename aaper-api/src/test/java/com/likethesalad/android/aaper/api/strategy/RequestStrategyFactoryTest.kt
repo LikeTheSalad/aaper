@@ -1,16 +1,18 @@
 package com.likethesalad.android.aaper.api.strategy
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.testutils.StrategyTest
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Before
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 10/08/20.
  */
-class RequestStrategyFactoryTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class RequestStrategyFactoryTest {
 
     @MockK
     lateinit var strategy: StrategyTest
@@ -20,7 +22,7 @@ class RequestStrategyFactoryTest : BaseMockable() {
 
     private lateinit var requestStrategyProvider: TestRequestStrategyFactory
 
-    @Before
+    @BeforeEach
     fun setUp() {
         requestStrategyProvider = TestRequestStrategyFactory(strategy)
     }
@@ -29,9 +31,9 @@ class RequestStrategyFactoryTest : BaseMockable() {
     fun `Get strategy by type`() {
         val result = requestStrategyProvider.getStrategy(host, StrategyTest::class.java)
 
-        Truth.assertThat(result).isEqualTo(strategy)
-        Truth.assertThat(requestStrategyProvider.forHost).isEqualTo(host)
-        Truth.assertThat(requestStrategyProvider.forType).isEqualTo(StrategyTest::class.java)
+        assertThat(result).isEqualTo(strategy)
+        assertThat(requestStrategyProvider.forHost).isEqualTo(host)
+        assertThat(requestStrategyProvider.forType).isEqualTo(StrategyTest::class.java)
     }
 
     class TestRequestStrategyFactory(private val strategy: RequestStrategy<Any>) :

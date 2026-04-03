@@ -1,8 +1,8 @@
 package com.likethesalad.android.aaper.base.activity.statusprovider
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.testutils.BaseRobolectricTest
 import com.likethesalad.android.aaper.testutils.RobolectricActivity
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.Robolectric
@@ -33,7 +33,7 @@ class ActivityPermissionStatusProviderTest : BaseRobolectricTest() {
             val result =
                 activityPermissionStatusProvider.isPermissionGranted(activity, permissionName)
 
-            Truth.assertThat(result).isTrue()
+            assertThat(result).isTrue()
         }
     }
 }

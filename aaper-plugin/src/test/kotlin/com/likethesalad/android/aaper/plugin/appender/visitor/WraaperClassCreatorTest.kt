@@ -1,16 +1,16 @@
 package com.likethesalad.android.aaper.plugin.appender.visitor
 
-import com.google.common.truth.Truth.assertThat
-import com.likethesalad.android.aaper.plugin.appender.visitor.testutils.GeneratedClassLoader
 import com.likethesalad.android.aaper.plugin.appender.visitor.data.ClassName
-import org.junit.Before
-import org.junit.Test
+import com.likethesalad.android.aaper.plugin.appender.visitor.testutils.GeneratedClassLoader
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.objectweb.asm.Type
 import org.objectweb.asm.util.CheckClassAdapter
 
 class WraaperClassCreatorTest {
 
-    @Before
+    @BeforeEach
     fun setUp() {
         WraaperClassCreator.classVisitorInterceptor = {
             CheckClassAdapter(it)

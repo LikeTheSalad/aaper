@@ -1,20 +1,22 @@
 package com.likethesalad.android.aaper.strategy
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.aaper.api.data.LaunchMetadata
 import com.likethesalad.android.aaper.api.data.PermissionsResult
 import com.likethesalad.android.aaper.api.launcher.RequestLauncher
 import com.likethesalad.android.aaper.api.statusprovider.PermissionStatusProvider
 import com.likethesalad.android.aaper.data.RequestCodeLaunchMetadata
-import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.impl.annotations.MockK
-import org.junit.Test
+import io.mockk.junit5.MockKExtension
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Created by César Muñoz on 13/08/20.
  */
 
-class RequestWithCodeMetadataStrategyTest : BaseMockable() {
+@ExtendWith(MockKExtension::class)
+class RequestWithCodeMetadataStrategyTest {
 
     @MockK
     lateinit var host: Any
@@ -41,8 +43,8 @@ class RequestWithCodeMetadataStrategyTest : BaseMockable() {
     }
 
     private fun verifyRequestCodeLaunchMetadata(result: LaunchMetadata, expectedCode: Int) {
-        Truth.assertThat(result).isInstanceOf(RequestCodeLaunchMetadata::class.java)
-        Truth.assertThat((result as RequestCodeLaunchMetadata).code).isEqualTo(expectedCode)
+        assertThat(result).isInstanceOf(RequestCodeLaunchMetadata::class.java)
+        assertThat((result as RequestCodeLaunchMetadata).code).isEqualTo(expectedCode)
     }
 
     class TestRequestWithCodeMetadataStrategy(val customCode: Int? = null) :

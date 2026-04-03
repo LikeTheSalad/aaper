@@ -1,7 +1,0 @@
-plugins {
-    alias(libs.plugins.java.library)
-}
-
-dependencies {
-    testImplementation libs.unitTesting
-}

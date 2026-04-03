@@ -45,13 +45,15 @@ overall requests' processes thanks to Aaper's reusable [strategies](#changing-th
 ```kotlin  
 // Aaper usage  
 
-class MyActivity/MyFragment {
+class MyActivity : AppCompatActivity() {
 
-    override fun onCreate/onViewCreated(...) {
-    takePhotoButton.setOnClickListener {
-        takePhoto()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        takePhotoButton.setOnClickListener {
+            takePhoto()
+        }
     }
-}
 
     @EnsurePermissions(permissions = [Manifest.permission.CAMERA])
     fun takePhoto() {
@@ -91,11 +93,9 @@ to use Aaper into our Activities or Fragments:
 That's it, if you want to know how to modify Aaper's behavior to suit your needs, take a look
 at `Changing the default behavior`.
 
-> It is very important to bear in mind that the @EnsurePermissions annotation only works on methods
-> inside either an `Activity` or a` Fragment`, more specifically,
-> an `androidx.fragment.app.Fragment`
-> Fragment. Any @EnsurePermissions annotated method that isn't inside of either an Activity or a
-> Fragment will be ignored.
+> It is very important to bear in mind that the `@EnsurePermissions` annotation only works on methods
+> inside either an `Activity` or an `androidx.fragment.app.Fragment`. Any `@EnsurePermissions`
+> annotated method that isn't inside one of those hosts will be ignored.
 
 Changing the default behavior
 ---  
@@ -313,27 +313,19 @@ added in the Android Gradle plugin version 7.2.0 and
 the [Scoped Artifacts API](https://developer.android.com/reference/tools/gradle-api/7.4/com/android/build/api/artifact/Artifacts#forScope(com.android.build.api.variant.ScopedArtifacts.Scope))
 added in 7.4.0. Combined they allow to add and modify bytecode at compile time
 using [ASM](https://asm.ow2.io/). This allows Aaper to write all the boilerplate code for you,
-therefore it will be required for your project to use at least version `7.4.0` of the Android Gradle
-plugin or higher.
+therefore your project must use at least version `7.4.0` of the Android Gradle plugin.
 
 ### Aaper Gradle dependency
 
 In order to add the [Aaper plugin](https://plugins.gradle.org/plugin/com.likethesalad.aaper) into
-your project, you just have to add the following line into your app's build.gradle `plugins` block:
+your project, add it to your app module's `plugins` block.
 
-```groovy  
-id 'com.likethesalad.aaper' version '3.0.0'
-```
-
-**Full app's build.gradle example:**
-
-```groovy  
-// Your app's build.gradle file  
+```kotlin
 plugins {
-    id 'com.android.application'
-    id 'com.likethesalad.aaper' version '3.0.0'
+    id("com.android.application")
+    id("com.likethesalad.aaper") version "3.0.0"
 }
-```  
+```
 
 Troubleshooting
 ---  
@@ -356,15 +348,15 @@ the [DefaultRequestStrategyFactory](https://github.com/LikeTheSalad/aaper/blob/m
 if you need to change it, take a look
 at `Using your custom RequestStrategyFactory`.
 
-The `DefaultRequestStrategyFactory` implementation instantiates strategies that have either a
-constructor with an `android.content.Context`, or an empty constructor. If the strategy has
-a `Context` param, the Application context will be passed.
+The `DefaultRequestStrategyFactory` implementation instantiates strategies that have either an
+empty constructor or a constructor with an `android.content.Context`. If the strategy has
+a `Context` parameter, the application context will be passed.
 
 Sometimes it might be needed to pass some parameters to instantiate your strategies that are not
 covered by the default strategy factory implementation. For these cases, you can create your own
 implementation of `RequestStrategyFactory`, where you'd be able to provide your
 own `RequestStrategy` instances the way you'd like the most, either by creating them on-demand or
-just by storing them in memory, or both. Implementing from `RequestStrategyFactory` is pretty
+just by storing them in memory, or both. Implementing `RequestStrategyFactory` is pretty
 straightforward as it only requires you to override one method:
 
 ```kotlin  
@@ -402,7 +394,7 @@ class MyApp : Application() {
     <!--yada yada...-->
 
     <!--You need to add your application class (shown above) to the manifest too (if you don't have it already) as shown below-->
-    <application android:name="my.app.MyApplication">
+    <application android:name="my.app.MyApp">
         <!--yada yada...-->
     </application>
 </manifest>
