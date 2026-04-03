@@ -1,5 +1,5 @@
 package com.likethesalad.android.aaper.sample.test.utils
 
-interface CallMe {
+fun interface CallMe {
     fun call()
 }
