@@ -86,7 +86,9 @@ jobs:
         run: sed -i "s/^version=.*/version=${{ steps.vars.outputs.version }}/" gradle.properties
 
       - name: Update CHANGELOG.md
-        run: ./gradlew changelogUpdate
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+        run: bash .github/scripts/update-changelog.sh
 
       - name: Update README.md version references
         run: |

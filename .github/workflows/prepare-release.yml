@@ -23,7 +23,6 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-java
       - name: Setting variables
         id: variables
         run: |
@@ -40,7 +39,9 @@ jobs:
           git checkout -b $RELEASE_BRANCH
           git push --set-upstream origin $RELEASE_BRANCH
       - name: Updating the CHANGELOG.md file
-        run: ./gradlew changelogUpdate
+        env:
+          VERSION: ${{ steps.variables.outputs.version }}
+        run: bash .github/scripts/update-changelog.sh
       - name: Updating README.md version references
         env:
           VERSION: ${{ steps.variables.outputs.version }}

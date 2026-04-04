@@ -15,6 +15,9 @@ For manual setup instructions (secrets, branch protection, etc.) see [SETUP.md](
 ├── ARCHITECTURE.md          # This file
 ├── SETUP.md                 # Manual setup instructions for a new remote repo
 ├── renovate.json            # Renovate dependency-update bot configuration
+├── scripts/
+│   ├── bump-version.sh      # Shell helper: bumps gradle.properties to the next minor version
+│   └── update-changelog.sh  # Shell helper: turns "Unreleased" into a versioned heading
 ├── actions/
 │   ├── setup-java/          # Composite action: installs the project JDK
 │   ├── setup-bot-git-user/  # Composite action: creates GitHub App token + configures git
@@ -66,6 +69,8 @@ prepares a release branch and PR for review; step 2 publishes the artifacts and 
 **Files involved:**
 - `workflows/prepare-release.yml` (step 1)
 - `workflows/release.yml` (step 2)
+- `scripts/update-changelog.sh`
+- `scripts/bump-version.sh`
 - `actions/setup-bot-git-user/action.yml`
 - `actions/setup-java/action.yml`
 - `actions/publish-maven-central/action.yml`
@@ -79,7 +84,8 @@ prepares a release branch and PR for review; step 2 publishes the artifacts and 
   branches.
 - Reads `version` from `gradle.properties` (e.g. `3.1.0`).
 - Creates and pushes a `release/3.1.0` branch.
-- Runs `./gradlew changelogUpdate` and updates version references in `README.md` via `sed`.
+- Runs `bash .github/scripts/update-changelog.sh` and updates version references in `README.md`
+  via `sed`.
 - Creates a `pre-release/3.1.0` branch, commits those changes, and opens a PR:
   `pre-release/3.1.0` → `release/3.1.0`.
 - A human reviews and merges that PR, then manually triggers step 2 on `release/3.1.0`.
@@ -91,9 +97,9 @@ prepares a release branch and PR for review; step 2 publishes the artifacts and 
 - Two sequential jobs:
   - `release`: publishes to Maven Central and the Gradle Plugin Portal.
   - `post_release` (runs after `release` succeeds): reads the version from `gradle.properties`,
-    creates a git tag (`v3.1.0`), pushes it, creates a GitHub Release, runs `./gradlew versionBump`
-    to advance `gradle.properties` to the next version, commits and pushes, then opens a PR from
-    the release branch back to `main`.
+    creates a git tag (`v3.1.0`), pushes it, creates a GitHub Release, runs
+    `bash .github/scripts/bump-version.sh` to advance `gradle.properties` to the next version,
+    commits and pushes, then opens a PR from the release branch back to `main`.
 
 ---
 
@@ -105,6 +111,7 @@ tagging, changelog, and merging back to `main` — is unattended.
 
 **Files involved:**
 - `workflows/auto-patch-release.yml`
+- `scripts/update-changelog.sh`
 - `actions/setup-bot-git-user/action.yml`
 - `actions/setup-java/action.yml`
 - `actions/publish-maven-central/action.yml`
@@ -125,10 +132,10 @@ Two jobs:
    pushes work under the bot identity).
 2. Creates and pushes an `auto-patch/{version}` branch.
 3. **Temporarily** patches `gradle.properties` with the new patch version using `sed`. This is
-   intentionally **not committed** — it only affects the local runner so that Gradle tasks
-   (`changelogUpdate`, `publishAndReleaseToMavenCentral`, `publishPlugins`) and the plugin's
+   intentionally **not committed** — it only affects the local runner so that the changelog script,
+   the publish tasks (`publishAndReleaseToMavenCentral`, `publishPlugins`), and the plugin's
    embedded `BuildConfig.SDK_DEPENDENCY_URI` use the correct version.
-4. Runs `./gradlew changelogUpdate` and updates README version references.
+4. Runs `bash .github/scripts/update-changelog.sh` and updates README version references.
 5. Publishes to Maven Central, then to the Gradle Plugin Portal.
 6. Restores `gradle.properties` (`git checkout -- gradle.properties`), stages only `CHANGELOG.md`
    and `README.md`, commits, and pushes. This keeps `gradle.properties` on `main` pointing at the
@@ -183,8 +190,7 @@ Each one eliminates a repeated block of steps across multiple workflows.
 Installs the JDK used by all workflows. The version is defined here only — change it in one place
 to apply the update everywhere.
 
-**Used by:** `pr-check.yaml`, `prepare-release.yml`, `release.yml` (both jobs),
-`auto-patch-release.yml`.
+**Used by:** `pr-check.yaml`, `release.yml` (job `release`), `auto-patch-release.yml`.
 
 ### `setup-bot-git-user`
 
@@ -249,10 +255,10 @@ point to, breaking `git describe` and any tooling that walks tag ancestry.
 ### `gradle.properties` as the minor/major version source of truth
 
 `gradle.properties` always contains the next planned minor or major version (e.g. `3.1.0`). The
-`versionBump` Gradle task advances it after each release. Patch releases deliberately do **not**
-modify this file — they derive the patch version from the latest git tag, inject it temporarily
-into `gradle.properties` for the Gradle build only, then restore the file before committing. This
-keeps the two versioning tracks independent.
+`bump-version.sh` advances it after each release. Patch releases deliberately do **not** modify
+this file — they derive the patch version from the latest git tag, inject it temporarily into
+`gradle.properties` for the Gradle build only, then restore the file before committing. This keeps
+the two versioning tracks independent.
 
 ### Renovate schedule coordinates with patch release day
 
@@ -284,8 +290,8 @@ These patterns can be copied without changes:
 | `./checks.sh` | `pr-check.yaml` | Your project's build/test command |
 | `./gradlew -p demo-app connectedDebugAndroidTest` | `pr-check.yaml` | Your integration test command, or remove the step |
 | `reactivecircus/android-emulator-runner` | `pr-check.yaml` | Remove if not an Android project |
-| `./gradlew changelogUpdate` | `prepare-release.yml`, `auto-patch-release.yml` | Your changelog generation command |
-| `./gradlew versionBump` | `release.yml` | Your version increment command |
+| `bash .github/scripts/update-changelog.sh` | `prepare-release.yml`, `auto-patch-release.yml` | Your changelog generation command |
+| `bash .github/scripts/bump-version.sh` | `release.yml` | Your version increment command |
 | `gradle.properties` version regex | `prepare-release.yml`, `release.yml` | Path and pattern for your version file |
 | `sed` README version pattern | `prepare-release.yml`, `auto-patch-release.yml` | Regex matching your README's version references |
 | `v[0-9]+\.[0-9]+\.[0-9]+` tag pattern | `auto-patch-release.yml` | Adjust if your tags use a different format |

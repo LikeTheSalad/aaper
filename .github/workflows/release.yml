@@ -50,7 +50,6 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-java
       - name: Creating a GH release
         id: variables
         env:
@@ -66,7 +65,7 @@ jobs:
                             $tag
       - name: Bump version
         run: |
-          ./gradlew versionBump
+          bash .github/scripts/bump-version.sh
           git commit -a -m "Bumping version"
           git push
       - name: Create PR to main
