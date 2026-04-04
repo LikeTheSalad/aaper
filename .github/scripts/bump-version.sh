@@ -1,30 +1,27 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 properties_file="${PROPERTIES_FILE:-gradle.properties}"
 
-if [[ ! -f "$properties_file" ]]; then
+if [ ! -f "$properties_file" ]; then
   echo "Properties file not found: $properties_file" >&2
   exit 1
 fi
 
-current_version="$(
-  perl -ne 'print "$1\n" if /^version=(\d+\.\d+\.\d+)$/' "$properties_file" | head -n 1
-)"
+current_version=$(grep -m 1 '^version=[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' "$properties_file" | cut -d= -f2)
 
-if [[ -z "$current_version" ]]; then
+if [ -z "$current_version" ]; then
   echo "Could not read version from $properties_file" >&2
   exit 1
 fi
 
-if [[ ! "$current_version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
-  echo "Could not find minor version in: $current_version" >&2
-  exit 1
-fi
+major=$(printf '%s\n' "$current_version" | cut -d. -f1)
+minor=$(printf '%s\n' "$current_version" | cut -d. -f2)
 
-new_version="${BASH_REMATCH[1]}.$((BASH_REMATCH[2] + 1)).0"
+new_version="$major.$((minor + 1)).0"
 
-perl -0pi -e 's/^version=\Q'"$current_version"'\E$/version='"$new_version"'/m' "$properties_file"
+sed -i.bak "s/^version=$current_version$/version=$new_version/" "$properties_file"
+rm -f "$properties_file.bak"
 
 echo "Bumped version: $current_version -> $new_version"

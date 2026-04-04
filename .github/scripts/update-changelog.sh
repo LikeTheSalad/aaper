@@ -1,17 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 changelog_file="${CHANGELOG_FILE:-CHANGELOG.md}"
 version="${VERSION:-}"
 release_date="${RELEASE_DATE:-$(date +%Y-%m-%d)}"
 
-if [[ -z "$version" ]]; then
+if [ -z "$version" ]; then
   echo "VERSION is required" >&2
   exit 1
 fi
 
-if [[ ! -f "$changelog_file" ]]; then
+if [ ! -f "$changelog_file" ]; then
   echo "Changelog file not found: $changelog_file" >&2
   exit 1
 fi
@@ -21,4 +21,5 @@ if ! grep -q '^## Unreleased$' "$changelog_file"; then
   exit 1
 fi
 
-perl -0pi -e 's/^## Unreleased$/## Version '"$version"' ('"$release_date"')/m' "$changelog_file"
+sed -i.bak "s/^## Unreleased$/## Version $version ($release_date)/" "$changelog_file"
+rm -f "$changelog_file.bak"

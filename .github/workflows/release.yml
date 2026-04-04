@@ -65,7 +65,7 @@ jobs:
                             $tag
       - name: Bump version
         run: |
-          bash .github/scripts/bump-version.sh
+          sh .github/scripts/bump-version.sh
           git commit -a -m "Bumping version"
           git push
       - name: Create PR to main

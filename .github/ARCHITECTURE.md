@@ -84,7 +84,7 @@ prepares a release branch and PR for review; step 2 publishes the artifacts and 
   branches.
 - Reads `version` from `gradle.properties` (e.g. `3.1.0`).
 - Creates and pushes a `release/3.1.0` branch.
-- Runs `bash .github/scripts/update-changelog.sh` and updates version references in `README.md`
+- Runs `sh .github/scripts/update-changelog.sh` and updates version references in `README.md`
   via `sed`.
 - Creates a `pre-release/3.1.0` branch, commits those changes, and opens a PR:
   `pre-release/3.1.0` → `release/3.1.0`.
@@ -98,7 +98,7 @@ prepares a release branch and PR for review; step 2 publishes the artifacts and 
   - `release`: publishes to Maven Central and the Gradle Plugin Portal.
   - `post_release` (runs after `release` succeeds): reads the version from `gradle.properties`,
     creates a git tag (`v3.1.0`), pushes it, creates a GitHub Release, runs
-    `bash .github/scripts/bump-version.sh` to advance `gradle.properties` to the next version,
+    `sh .github/scripts/bump-version.sh` to advance `gradle.properties` to the next version,
     commits and pushes, then opens a PR from the release branch back to `main`.
 
 ---
@@ -135,7 +135,7 @@ Two jobs:
    intentionally **not committed** — it only affects the local runner so that the changelog script,
    the publish tasks (`publishAndReleaseToMavenCentral`, `publishPlugins`), and the plugin's
    embedded `BuildConfig.SDK_DEPENDENCY_URI` use the correct version.
-4. Runs `bash .github/scripts/update-changelog.sh` and updates README version references.
+4. Runs `sh .github/scripts/update-changelog.sh` and updates README version references.
 5. Publishes to Maven Central, then to the Gradle Plugin Portal.
 6. Restores `gradle.properties` (`git checkout -- gradle.properties`), stages only `CHANGELOG.md`
    and `README.md`, commits, and pushes. This keeps `gradle.properties` on `main` pointing at the
@@ -290,8 +290,8 @@ These patterns can be copied without changes:
 | `./checks.sh` | `pr-check.yaml` | Your project's build/test command |
 | `./gradlew -p demo-app connectedDebugAndroidTest` | `pr-check.yaml` | Your integration test command, or remove the step |
 | `reactivecircus/android-emulator-runner` | `pr-check.yaml` | Remove if not an Android project |
-| `bash .github/scripts/update-changelog.sh` | `prepare-release.yml`, `auto-patch-release.yml` | Your changelog generation command |
-| `bash .github/scripts/bump-version.sh` | `release.yml` | Your version increment command |
+| `sh .github/scripts/update-changelog.sh` | `prepare-release.yml`, `auto-patch-release.yml` | Your changelog generation command |
+| `sh .github/scripts/bump-version.sh` | `release.yml` | Your version increment command |
 | `gradle.properties` version regex | `prepare-release.yml`, `release.yml` | Path and pattern for your version file |
 | `sed` README version pattern | `prepare-release.yml`, `auto-patch-release.yml` | Regex matching your README's version references |
 | `v[0-9]+\.[0-9]+\.[0-9]+` tag pattern | `auto-patch-release.yml` | Adjust if your tags use a different format |

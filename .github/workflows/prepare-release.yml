@@ -41,7 +41,7 @@ jobs:
       - name: Updating the CHANGELOG.md file
         env:
           VERSION: ${{ steps.variables.outputs.version }}
-        run: bash .github/scripts/update-changelog.sh
+        run: sh .github/scripts/update-changelog.sh
       - name: Updating README.md version references
         env:
           VERSION: ${{ steps.variables.outputs.version }}
