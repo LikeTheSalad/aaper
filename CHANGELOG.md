@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-## Unreleased
+## Version 3.0.0 (2026-04-04)
 
 * Bumping up dependencies
 * Setting up GH Workflows
