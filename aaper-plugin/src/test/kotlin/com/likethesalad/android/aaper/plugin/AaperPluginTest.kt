@@ -40,10 +40,35 @@ class AaperPluginTest {
         testProject.runGradle(projectName, "assembleDebug")
     }
 
-    private fun createProjectDescriptor(projectName: String): AndroidAppProjectDescriptor {
+    @Test
+    fun `Verify CodeAppenderTask loads from cache`() {
+        val assetName = "voidMethod"
+        val projectName = "voidMethod_cached"
+        val cacheDir = File(temporaryFolder, "build-cache")
+        val testProject = AndroidTestProject(temporaryFolder, cacheDir)
+        val descriptor = createProjectDescriptor(assetName, projectName)
+
+        testProject.addSubproject(descriptor)
+
+        // First run: populates the cache
+        testProject.runGradle(projectName, "assembleDebug")
+
+        // Wipe build outputs to force a cache look-up on the next run
+        File(temporaryFolder, "$projectName/build").deleteRecursively()
+
+        // Second run: CodeAppenderTask should be restored FROM-CACHE
+        val result = testProject.runGradle(projectName, "assembleDebug")
+
+        assertThat(result.output).contains("> Task :$projectName:debugAaperCodeAppender FROM-CACHE")
+    }
+
+    private fun createProjectDescriptor(
+        assetName: String,
+        projectName: String = assetName
+    ): AndroidAppProjectDescriptor {
         val descriptor = AndroidAppProjectDescriptor(
             projectName,
-            projectDirProvider.getFile(projectName),
+            projectDirProvider.getFile(assetName),
         )
         descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("com.likethesalad.aaper"))
 

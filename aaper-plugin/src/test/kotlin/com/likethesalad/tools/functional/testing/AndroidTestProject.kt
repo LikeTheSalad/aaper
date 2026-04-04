@@ -5,7 +5,7 @@ import java.io.File
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
-class AndroidTestProject(val rootDir: File) {
+class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File? = null) {
     private val rootGradleFile = File(rootDir, BUILD_GRADLE_FILE_NAME)
     private val settingsFile = File(rootDir, SETTINGS_GRADLE_FILE_NAME)
 
@@ -31,7 +31,7 @@ class AndroidTestProject(val rootDir: File) {
         withInfo: Boolean = false
     ): BuildResult {
         return createGradleRunner(withInfo)
-            .withArguments(commands.map { ":$forProjectName:$it" } + "--stacktrace")
+            .withArguments(commands.map { ":$forProjectName:$it" } + buildCacheArgs() + "--stacktrace")
             .build()
     }
 
@@ -41,9 +41,12 @@ class AndroidTestProject(val rootDir: File) {
         withInfo: Boolean = false
     ): BuildResult {
         return createGradleRunner(withInfo)
-            .withArguments(commands.map { ":$forProjectName:$it" } + "--stacktrace")
+            .withArguments(commands.map { ":$forProjectName:$it" } + buildCacheArgs() + "--stacktrace")
             .buildAndFail()
     }
+
+    private fun buildCacheArgs(): List<String> =
+        if (localBuildCacheDir != null) listOf("--build-cache") else emptyList()
 
     fun addSubproject(descriptor: ProjectDescriptor) {
         val projectDir = File(rootDir, descriptor.projectName).apply { mkdirs() }
@@ -79,6 +82,17 @@ class AndroidTestProject(val rootDir: File) {
 
     private fun setUpRootProject() {
         rootGradleFile.writeText("")
+
+        val buildCacheBlock = if (localBuildCacheDir != null) {
+            """
+            buildCache {
+                local {
+                    directory = new File('${localBuildCacheDir.absolutePath.replace("\\", "/")}')
+                }
+            }
+            """.trimIndent()
+        } else ""
+
         settingsFile.writeText(
             """
             pluginManagement {
@@ -88,6 +102,7 @@ class AndroidTestProject(val rootDir: File) {
                     google()
                 }
             }
+            $buildCacheBlock
             dependencyResolutionManagement {
                 repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
                 repositories {
