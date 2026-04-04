@@ -323,7 +323,7 @@ your project, add it to your app module's `plugins` block.
 ```kotlin
 plugins {
     id("com.android.application")
-    id("com.likethesalad.aaper") version "3.0.0"
+    id("com.likethesalad.aaper") version "3.1.0"
 }
 ```
 
