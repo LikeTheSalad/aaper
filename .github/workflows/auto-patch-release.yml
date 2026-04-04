@@ -1,0 +1,149 @@
+name: Auto patch release
+
+on:
+  schedule:
+    - cron: '0 12 1 * *'  # noon UTC on the 1st of every month
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check prerequisites
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.open_prs.outputs.should_release }}
+      version: ${{ steps.next_version.outputs.version }}
+    permissions:
+      pull-requests: read
+      contents: read
+
+    steps:
+      - name: Check for open PRs
+        id: open_prs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          count=$(gh pr list --state open --json number --jq length)
+          if [[ $count -gt 0 ]]; then
+            echo "$count open PR(s) found — skipping auto release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v6
+        if: steps.open_prs.outputs.should_release == 'true'
+        with:
+          fetch-depth: 0
+
+      - name: Compute next patch version
+        id: next_version
+        if: steps.open_prs.outputs.should_release == 'true'
+        run: |
+          latest=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          [[ -z "$latest" ]] && echo "No release tags found" && exit 1
+          ver=${latest#v}
+          IFS='.' read -r major minor patch <<< "$ver"
+          next="$major.$minor.$((patch + 1))"
+          echo "version=$next" >> "$GITHUB_OUTPUT"
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.should_release == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Get GitHub App User ID and set up git config
+        id: get-user-id
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+
+      - run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
+
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set release variables
+        id: vars
+        run: |
+          version="${{ needs.check.outputs.version }}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "branch=auto-patch/$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create release branch
+        run: |
+          git checkout -b ${{ steps.vars.outputs.branch }}
+          git push --set-upstream origin ${{ steps.vars.outputs.branch }}
+
+      - name: Set patch version in gradle.properties
+        run: sed -i "s/^version=.*/version=${{ steps.vars.outputs.version }}/" gradle.properties
+
+      - name: Update CHANGELOG.md
+        run: ./gradlew changelogUpdate
+
+      - name: Update README.md version references
+        run: |
+          sed -i 's/id("com.likethesalad.aaper") version "[0-9]\+\.[0-9]\+\.[0-9]\+"/id("com.likethesalad.aaper") version "${{ steps.vars.outputs.version }}"/g' README.md
+
+      - name: Publish to Maven Central
+        run: ./gradlew publishAndReleaseToMavenCentral -Prelease=true
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+
+      - name: Publish to Gradle Plugin Portal
+        run: ./gradlew publishPlugins -Prelease=true
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+
+      - name: Commit release files
+        run: |
+          git checkout -- gradle.properties
+          git add CHANGELOG.md README.md
+          git commit -m "Release ${{ steps.vars.outputs.version }}"
+          git push
+
+      - name: Tag and create GitHub release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git tag ${{ steps.vars.outputs.tag }}
+          git push origin ${{ steps.vars.outputs.tag }}
+          gh release create --target ${{ steps.vars.outputs.branch }} \
+                            --title "${{ steps.vars.outputs.version }}" \
+                            ${{ steps.vars.outputs.tag }}
+
+      - name: Open PR to main
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          pr_url=$(gh pr create --title "Release ${{ steps.vars.outputs.version }}" \
+                                --body "Automated patch release ${{ steps.vars.outputs.version }}." \
+                                --base main)
+          gh pr merge "$pr_url" --auto --merge

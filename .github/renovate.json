@@ -3,6 +3,8 @@
   "extends": [
     "config:recommended"
   ],
+  "automerge": true,
+  "schedule": ["* * 2-31 * *"],
   "packageRules": [
     {
       "description": "Instrumentation test libraries in demo-app tend to require coordinated upgrades. fragment-testing is included because it transitively depends on androidx.test:monitor, causing AGP consistent-resolution conflicts if it lags behind the rest of the test stack.",
