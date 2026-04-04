@@ -1,0 +1,26 @@
+name: Publish to Maven Central
+description: Publishes all modules to Maven Central.
+inputs:
+  maven-central-username:
+    description: Maven Central user token username
+    required: true
+  maven-central-password:
+    description: Maven Central user token password
+    required: true
+  gpg-private-key:
+    description: Armored GPG private key for artifact signing
+    required: true
+  gpg-password:
+    description: GPG key passphrase
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Publish to Maven Central
+      shell: bash
+      env:
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ inputs.maven-central-username }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ inputs.maven-central-password }}
+        GPG_PRIVATE_KEY: ${{ inputs.gpg-private-key }}
+        GPG_PASSWORD: ${{ inputs.gpg-password }}
+      run: ./gradlew publishAndReleaseToMavenCentral -Prelease=true

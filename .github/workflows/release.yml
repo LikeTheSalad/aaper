@@ -14,35 +14,25 @@ jobs:
             echo This workflow should only be run against release branches
             exit 1
           fi
-      - uses: actions/create-github-app-token@v3
-        id: app-token
+      - uses: ./.github/actions/setup-bot-git-user
+        id: bot
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
-      - name: Get GitHub App User ID and set up git config
-        id: get-user-id
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      - run: |
-          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
-          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java
-      - name: Release to Maven Central
-        run: ./gradlew publishAndReleaseToMavenCentral -Prelease=true
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
-      - name: Release to the Gradle plugin portal
-        run: ./gradlew publishPlugins -Prelease=true
-        env:
-          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
-          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+      - uses: ./.github/actions/publish-maven-central
+        with:
+          maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-password: ${{ secrets.GPG_PASSWORD }}
+      - uses: ./.github/actions/publish-gradle-portal
+        with:
+          gradle-publish-key: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          gradle-publish-secret: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-password: ${{ secrets.GPG_PASSWORD }}
 
   post_release:
     name: Post release
@@ -54,25 +44,17 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/create-github-app-token@v3
-        id: app-token
+      - uses: ./.github/actions/setup-bot-git-user
+        id: bot
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
-      - name: Get GitHub App User ID and set up git config
-        id: get-user-id
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      - run: |
-          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
-          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java
       - name: Creating a GH release
         id: variables
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
         run: |
           version=$(cat gradle.properties | grep -Po "(?<=version=)\d+\.\d+\.\d+")
           tag="v$version"
@@ -89,7 +71,7 @@ jobs:
           git push
       - name: Create PR to main
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
         run: |
           message="Prepare for the next release"
           gh pr create --title "$message" \
