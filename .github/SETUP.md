@@ -103,8 +103,12 @@ least one required status check.
 Go to **Settings → Branches → Add branch protection rule** for `main`:
 
 - [x] Require status checks to pass before merging
-    - Add **`Gradle check`** (the job name from `pr-check.yaml`) as a required check
+    - Add **`checks`** (the rollup job in `pr-check.yaml`) as a required check
 - [x] Require branches to be up to date before merging
+
+`checks` is a rollup job that depends on all other jobs in `pr-check.yaml` and always reports a
+result, even when dependencies fail. Using it as the single required check means the branch rule
+never needs to change when jobs are added or renamed in the workflow.
 
 This also ensures Renovate PRs (which use the same auto-merge mechanism) are not merged until CI
 passes.
