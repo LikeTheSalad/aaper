@@ -10,8 +10,8 @@ jobs:
     name: Check prerequisites
     runs-on: ubuntu-latest
     outputs:
-      should_release: ${{ steps.open_prs.outputs.should_release }}
-      version: ${{ steps.next_version.outputs.version }}
+      should_release: ${{ steps.release_info.outputs.should_release }}
+      version: ${{ steps.release_info.outputs.version }}
     permissions:
       pull-requests: read
       contents: read
@@ -36,16 +36,36 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Compute next patch version
-        id: next_version
+      - name: Compute release info
+        id: release_info
         if: steps.open_prs.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           latest=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
           [[ -z "$latest" ]] && echo "No release tags found" && exit 1
+
+          last_tag_date=$(git log -1 --format="%cs" "$latest")
+
+          pr_count=$(gh pr list \
+            --state merged \
+            --search "merged:>${last_tag_date}" \
+            --json number,headRefName \
+            --limit 200 \
+            --jq '[.[] | select(.headRefName | test("^(auto-patch|pre-release|release)/") | not)] | length')
+
+          if [[ $pr_count -eq 0 ]]; then
+            echo "No merged PRs since $latest ($last_tag_date) — skipping release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           ver=${latest#v}
           IFS='.' read -r major minor patch <<< "$ver"
           next="$major.$minor.$((patch + 1))"
           echo "version=$next" >> "$GITHUB_OUTPUT"
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
 
   release:
     name: Release
@@ -88,7 +108,9 @@ jobs:
       - name: Update CHANGELOG.md
         env:
           VERSION: ${{ steps.vars.outputs.version }}
-        run: sh .github/scripts/update-changelog.sh
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: sh .github/scripts/generate-patch-changelog.sh
 
       - name: Update README.md version references
         run: |

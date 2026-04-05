@@ -95,6 +95,17 @@ land on `main` automatically once checks pass.
 
 Go to **Settings → General → Pull Requests** and check **Allow auto-merge**.
 
+### Allow squash merging
+
+Renovate is configured with `"automergeStrategy": "squash"` so that each dependency update lands
+on `main` as a single clean commit. Without this setting enabled, Renovate's merge request will
+fail.
+
+Go to **Settings → General → Pull Requests** and check **Allow squash merging**.
+
+> The release PR created by `auto-patch-release.yml` uses `gh pr merge --auto --merge`
+> (explicit `--merge` flag), so it is unaffected by the squash default.
+
 ### Branch protection on `main`
 
 For auto-merge to wait for CI before merging (rather than merging immediately), `main` must have at

@@ -16,8 +16,9 @@ For manual setup instructions (secrets, branch protection, etc.) see [SETUP.md](
 ├── SETUP.md                 # Manual setup instructions for a new remote repo
 ├── renovate.json            # Renovate dependency-update bot configuration
 ├── scripts/
-│   ├── bump-version.sh      # Shell helper: bumps gradle.properties to the next minor version
-│   └── update-changelog.sh  # Shell helper: turns "Unreleased" into a versioned heading
+│   ├── bump-version.sh               # Shell helper: bumps gradle.properties to the next minor version
+│   ├── update-changelog.sh           # Shell helper: turns "Unreleased" into a versioned heading (minor/major releases)
+│   └── generate-patch-changelog.sh   # Shell helper: builds a patch changelog from merged PRs via GitHub API
 ├── actions/
 │   ├── setup-java/          # Composite action: installs the project JDK
 │   ├── setup-bot-git-user/  # Composite action: creates GitHub App token + configures git
@@ -111,7 +112,7 @@ tagging, changelog, and merging back to `main` — is unattended.
 
 **Files involved:**
 - `workflows/auto-patch-release.yml`
-- `scripts/update-changelog.sh`
+- `scripts/generate-patch-changelog.sh`
 - `actions/setup-bot-git-user/action.yml`
 - `actions/setup-java/action.yml`
 - `actions/publish-maven-central/action.yml`
@@ -125,17 +126,23 @@ Two jobs:
 1. Counts all open PRs in the repository via `gh pr list`. Sets `should_release=false` and exits
    cleanly if any are found — this is expected, not an error.
 2. Fetches full git history and all tags, finds the latest semver tag matching
-   `v{major}.{minor}.{patch}`, increments the patch component, and exposes it as an output.
+   `v{major}.{minor}.{patch}`, and records its date.
+3. Counts merged PRs since that date via `gh pr list`, excluding release-automation branches
+   (`auto-patch/*`, `pre-release/*`, `release/*`). If none are found, sets `should_release=false`
+   and exits cleanly — no release is needed when nothing has changed.
+4. Increments the patch component of the latest tag and exposes `version` and `should_release`
+   as outputs.
 
 **`release` job** (only runs when `should_release == 'true'`):
 1. Sets up the bot user and checks out `main` using the bot token (required so that subsequent
    pushes work under the bot identity).
 2. Creates and pushes an `auto-patch/{version}` branch.
 3. **Temporarily** patches `gradle.properties` with the new patch version using `sed`. This is
-   intentionally **not committed** — it only affects the local runner so that the changelog script,
-   the publish tasks (`publishAndReleaseToMavenCentral`, `publishPlugins`), and the plugin's
-   embedded `BuildConfig.SDK_DEPENDENCY_URI` use the correct version.
-4. Runs `sh .github/scripts/update-changelog.sh` and updates README version references.
+   intentionally **not committed** — it only affects the local runner so that the publish tasks
+   (`publishAndReleaseToMavenCentral`, `publishPlugins`) and the plugin's embedded
+   `BuildConfig.SDK_DEPENDENCY_URI` use the correct version.
+4. Runs `sh .github/scripts/generate-patch-changelog.sh` (see below) and updates README version
+   references.
 5. Publishes to Maven Central, then to the Gradle Plugin Portal.
 6. Restores `gradle.properties` (`git checkout -- gradle.properties`), stages only `CHANGELOG.md`
    and `README.md`, commits, and pushes. This keeps `gradle.properties` on `main` pointing at the
@@ -145,6 +152,25 @@ Two jobs:
 8. Opens a PR `auto-patch/{version}` → `main` and calls `gh pr merge --auto --merge` to enable
    GitHub's native auto-merge. The PR merges automatically once `pr-check.yaml` passes. A regular
    (non-squash) merge is used so the tagged commit remains in `main`'s linear history.
+
+**`generate-patch-changelog.sh`:**
+
+Unlike the manual-release flow (which consumes the hand-written `## Unreleased` block),
+patch release changelog entries are generated automatically from merged PR titles via the
+GitHub API (`gh pr list`). The script:
+
+1. Finds the latest release tag and its commit date.
+2. Queries merged PRs since that date, excluding release-automation branches.
+3. Categorises each PR by its GitHub labels:
+   - Label `bug` → listed under `### Bug Fixes`
+   - Label `enhancement` → listed under `### Features`
+   - No matching label → listed directly under the version heading (no sub-heading)
+4. Each entry links back to the PR: `* PR title ([#N](url))`.
+5. Inserts the new `## Version X.Y.Z (date)` section into `CHANGELOG.md` **before** the first
+   existing `## Version` line, leaving the `## Unreleased` block intact above it.
+
+The `## Unreleased` block is intentionally preserved — it accumulates hand-written notes for
+the next planned minor or major release and must not be consumed by automated patch releases.
 
 **Prerequisite:** "Allow auto-merge" must be enabled in repo Settings → General, and `main` must
 have branch protection requiring the `checks` status check (see SETUP.md).
@@ -164,6 +190,10 @@ without human intervention once CI passes.
 - `"automerge": true` — Renovate sets GitHub's native auto-merge flag on every PR it opens.
   GitHub merges the PR as soon as the `checks` status check passes, without Renovate needing to
   run again.
+- `"automergeStrategy": "squash"` — Renovate requests squash merges, producing a single clean
+  commit per dependency update. Requires **Allow squash merging** to be enabled in repo Settings
+  → General → Pull Requests (see SETUP.md). The PR title becomes the commit subject, and the
+  PR number is appended (`(#N)`), which keeps `main`'s history readable.
 - `"schedule": ["* * 2-31 * *"]` — Renovate does not create or update PRs on the 1st of the
   month. This coordinates with the automated patch release: by the time noon UTC arrives on the
   1st, no new Renovate PRs exist to block the open-PR check.
@@ -290,7 +320,8 @@ These patterns can be copied without changes:
 | `./checks.sh` | `pr-check.yaml` | Your project's build/test command |
 | `./gradlew -p demo-app connectedDebugAndroidTest` | `pr-check.yaml` | Your integration test command, or remove the step |
 | `reactivecircus/android-emulator-runner` | `pr-check.yaml` | Remove if not an Android project |
-| `sh .github/scripts/update-changelog.sh` | `prepare-release.yml`, `auto-patch-release.yml` | Your changelog generation command |
+| `sh .github/scripts/update-changelog.sh` | `prepare-release.yml` | Your changelog generation command for manual releases |
+| `sh .github/scripts/generate-patch-changelog.sh` | `auto-patch-release.yml` | Replace with your PR-based changelog command, or adapt the label names (`bug`, `enhancement`) to match your repo's label conventions |
 | `sh .github/scripts/bump-version.sh` | `release.yml` | Your version increment command |
 | `gradle.properties` version regex | `prepare-release.yml`, `release.yml` | Path and pattern for your version file |
 | `sed` README version pattern | `prepare-release.yml`, `auto-patch-release.yml` | Regex matching your README's version references |
