@@ -126,7 +126,8 @@ passes.
 ### Branch protection on `release/**`
 
 The pre-release PR (`pre-release/{version}` → `release/{version}`) must also wait for CI before a
-human merges it, because merging that PR is what triggers publishing.
+human merges it, because this PR is the explicit human approval gate and merging it is what
+triggers `release-publish.yml`.
 
 Go to **Settings → Branches → Add branch protection rule** for `release/**`:
 
