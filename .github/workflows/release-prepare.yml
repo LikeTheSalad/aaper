@@ -1,0 +1,177 @@
+name: Release — Prepare
+
+on:
+  schedule:
+    - cron: '0 12 1 * *'  # noon UTC on the 1st of every month
+  workflow_dispatch:
+    inputs:
+      version_override:
+        description: 'Force version bump type (overrides label detection)'
+        type: choice
+        options: ['', 'patch', 'minor', 'major']
+        default: ''
+
+jobs:
+  check:
+    name: Check prerequisites
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.finalize.outputs.should_release }}
+      version: ${{ steps.release_info.outputs.version }}
+    permissions:
+      pull-requests: read
+      contents: read
+
+    steps:
+      - name: Check for open PRs
+        id: open_prs
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          count=$(gh pr list --state open --json number --jq length)
+          if [[ $count -gt 0 ]]; then
+            echo "$count open PR(s) found — skipping automated release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v6
+        if: github.event_name != 'schedule' || steps.open_prs.outputs.should_release == 'true'
+        with:
+          fetch-depth: 0
+
+      - name: Compute version
+        id: release_info
+        if: github.event_name != 'schedule' || steps.open_prs.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          latest=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          [[ -z "$latest" ]] && echo "No release tags found" && exit 1
+
+          last_tag_date=$(git log -1 --format="%cs" "$latest")
+
+          prs_json=$(gh pr list \
+            --state merged \
+            --search "merged:>${last_tag_date}" \
+            --json number,labels,headRefName \
+            --limit 200 \
+            --jq '[.[] | select(.headRefName | test("^(pre-release|release)/") | not)]')
+
+          pr_count=$(echo "$prs_json" | jq length)
+          if [[ $pr_count -eq 0 ]]; then
+            echo "No merged PRs since $latest — skipping release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          override="${{ inputs.version_override }}"
+          if [[ -n "$override" ]]; then
+            bump="$override"
+          else
+            all_labels=$(echo "$prs_json" | jq -r '[.[].labels[].name]')
+            has_breaking=$(echo "$all_labels" | jq -r 'any(. == "breaking")')
+            has_enhancement=$(echo "$all_labels" | jq -r 'any(. == "enhancement")')
+
+            if [[ "$has_breaking" == "true" ]]; then
+              bump="major"
+            elif [[ "$has_enhancement" == "true" ]]; then
+              bump="minor"
+            else
+              bump="patch"
+            fi
+          fi
+
+          ver=${latest#v}
+          IFS='.' read -r major minor patch <<< "$ver"
+          case "$bump" in
+            major) next="$((major + 1)).0.0" ;;
+            minor) next="$major.$((minor + 1)).0" ;;
+            patch) next="$major.$minor.$((patch + 1))" ;;
+          esac
+
+          echo "Next version: $next (bump: $bump)"
+          echo "version=$next" >> "$GITHUB_OUTPUT"
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+
+      - name: Finalize outputs
+        id: finalize
+        run: |
+          should_release="${{ steps.release_info.outputs.should_release || steps.open_prs.outputs.should_release || 'false' }}"
+          echo "should_release=$should_release" >> "$GITHUB_OUTPUT"
+
+  prepare:
+    name: Prepare release
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.should_release == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-bot-git-user
+        id: bot
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.GH_BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.bot.outputs.token }}
+          fetch-depth: 0
+
+      - name: Set release variables
+        id: vars
+        run: |
+          version="${{ needs.check.outputs.version }}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "release_branch=release/$version" >> "$GITHUB_OUTPUT"
+          echo "pre_release_branch=pre-release/$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create release branch
+        run: |
+          git checkout -b ${{ steps.vars.outputs.release_branch }}
+          git push --set-upstream origin ${{ steps.vars.outputs.release_branch }}
+
+      - name: Create pre-release branch
+        run: git checkout -b ${{ steps.vars.outputs.pre_release_branch }}
+
+      - name: Set version in gradle.properties
+        run: |
+          sed -i "s/^version=.*/version=${{ steps.vars.outputs.version }}/" gradle.properties
+
+      - name: Update CHANGELOG.md
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: sh .github/scripts/generate-changelog.sh
+
+      - name: Update README.md version references
+        run: |
+          sed -i 's/id("com.likethesalad.aaper") version "[0-9]\+\.[0-9]\+\.[0-9]\+"/id("com.likethesalad.aaper") version "${{ steps.vars.outputs.version }}"/g' README.md
+
+      - name: Commit and push pre-release branch
+        run: |
+          git add gradle.properties CHANGELOG.md README.md
+          git commit -m "Prepare release ${{ steps.vars.outputs.version }}"
+          git push --set-upstream origin ${{ steps.vars.outputs.pre_release_branch }}
+
+      - name: Open pre-release PR
+        env:
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: |
+          gh pr create \
+            --title "Prepare release ${{ steps.vars.outputs.version }}" \
+            --body "Automated release preparation for ${{ steps.vars.outputs.version }}." \
+            --base ${{ steps.vars.outputs.release_branch }} \
+            --head ${{ steps.vars.outputs.pre_release_branch }}

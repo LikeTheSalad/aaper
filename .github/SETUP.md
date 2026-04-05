@@ -6,10 +6,9 @@ Steps required when setting up the CI/CD workflows in a new GitHub remote reposi
 
 ## 1. Create and install a GitHub App (bot account)
 
-The release workflows (`prepare-release.yml`, `release.yml`, `auto-patch-release.yml`) use a GitHub
-App token to create branches, push commits, and open PRs. Using an App token instead of
-`GITHUB_TOKEN` allows the bot's PRs to trigger `pr-check.yaml` (the default `GITHUB_TOKEN` does
-not).
+The release workflows (`release-prepare.yml`, `release-publish.yml`) use a GitHub App token to
+create branches, push commits, and open PRs. Using an App token instead of `GITHUB_TOKEN` allows
+the bot's PRs to trigger `pr-check.yaml` (the default `GITHUB_TOKEN` does not).
 
 1. Go to **GitHub → Settings → Developer settings → GitHub Apps → New GitHub App**.
 2. Fill in the required fields (name, homepage URL). Disable the webhook.
@@ -90,8 +89,8 @@ Go to **Settings → Secrets and variables → Actions**.
 
 ### Allow auto-merge
 
-`auto-patch-release.yml` opens a PR and enables auto-merge on it so the changelog/README changes
-land on `main` automatically once checks pass.
+`release-publish.yml` opens the final `release/**` → `main` PR and enables auto-merge on it so the
+released commit lands on `main` automatically once checks pass.
 
 Go to **Settings → General → Pull Requests** and check **Allow auto-merge**.
 
@@ -103,7 +102,7 @@ fail.
 
 Go to **Settings → General → Pull Requests** and check **Allow squash merging**.
 
-> The release PR created by `auto-patch-release.yml` uses `gh pr merge --auto --merge`
+> The release PR created by `release-publish.yml` uses `gh pr merge --auto --merge`
 > (explicit `--merge` flag), so it is unaffected by the squash default.
 
 ### Branch protection on `main`
@@ -123,3 +122,17 @@ never needs to change when jobs are added or renamed in the workflow.
 
 This also ensures Renovate PRs (which use the same auto-merge mechanism) are not merged until CI
 passes.
+
+### Branch protection on `release/**`
+
+The pre-release PR (`pre-release/{version}` → `release/{version}`) must also wait for CI before a
+human merges it, because merging that PR is what triggers publishing.
+
+Go to **Settings → Branches → Add branch protection rule** for `release/**`:
+
+- [x] Require status checks to pass before merging
+    - Add **`checks`** as a required check
+- [x] Require branches to be up to date before merging
+
+Using the same `checks` rollup job keeps the protection rule stable even if `pr-check.yaml` gains
+more jobs later.

@@ -1,13 +1,13 @@
 #!/bin/sh
-# Generates a patch-release changelog section from merged GitHub PRs since the
-# last release tag and inserts it into CHANGELOG.md.
+# Generates a changelog section from merged GitHub PRs since the last release
+# tag and inserts it into CHANGELOG.md after the <!-- CHANGELOG_INSERT --> marker.
 #
-# Required env vars (provided by GitHub Actions):
-#   VERSION            - the new patch version, e.g. "3.0.1"
+# Required env vars:
+#   VERSION            - the new version, e.g. "3.1.0"
 #   GH_TOKEN           - GitHub token for gh CLI calls
 #   GITHUB_REPOSITORY  - owner/repo, e.g. "LikeTheSalad/aaper"
 #
-# Optional env vars:
+# Optional:
 #   RELEASE_DATE    - override the release date (defaults to today, YYYY-MM-DD)
 #   CHANGELOG_FILE  - path to the changelog (defaults to CHANGELOG.md)
 #
@@ -39,16 +39,16 @@ prs_json=$(gh pr list \
   --search "merged:>${last_tag_date}" \
   --json number,title,labels,headRefName \
   --limit 200 \
-  --jq '[.[] | select(.headRefName | test("^(auto-patch|pre-release|release)/") | not)]')
+  --jq '[.[] | select(.headRefName | test("^(pre-release|release)/") | not)]')
 
 pr_count=$(printf '%s' "$prs_json" | jq length)
 if [ "$pr_count" -eq 0 ]; then
-  echo "No merged PRs since $latest_tag ($last_tag_date) — nothing to release" >&2
+  echo "No merged PRs since $latest_tag ($last_tag_date) — nothing to add to changelog" >&2
   exit 1
 fi
 
 # Build categorised changelog body via jq.
-# Uncategorised PRs appear first (no sub-heading), followed by labelled categories.
+# Uncategorised PRs appear first (no sub-heading), then labelled categories.
 entries=$(printf '%s' "$prs_json" | jq -r \
   --arg repo "$repo" \
   '
@@ -71,23 +71,23 @@ entries=$(printf '%s' "$prs_json" | jq -r \
   [$other, $bug_fixes, $features] | map(select(. != "")) | join("\n\n")
   ')
 
-# Insert the new section before the first existing "## Version" line.
-# The "## Unreleased" block (reserved for the next minor release) is preserved above it.
+# Insert the new section immediately after the <!-- CHANGELOG_INSERT --> marker.
+# The marker is preserved so each future release inserts above the previous one.
 tmp=$(mktemp)
 trap 'rm -f "$tmp"' EXIT
 
 inserted=0
 while IFS= read -r line; do
-  if [ "$inserted" -eq 0 ] && printf '%s' "$line" | grep -qE '^## Version '; then
-    printf '## Version %s (%s)\n\n%s\n\n' "$version" "$release_date" "$entries"
+  printf '%s\n' "$line"
+  if [ "$inserted" -eq 0 ] && [ "$line" = "<!-- CHANGELOG_INSERT -->" ]; then
+    printf '\n## Version %s (%s)\n\n%s\n' "$version" "$release_date" "$entries"
     inserted=1
   fi
-  printf '%s\n' "$line"
 done < "$changelog_file" > "$tmp"
 
-# Safety: if no "## Version" marker exists yet, append at the end
 if [ "$inserted" -eq 0 ]; then
-  printf '\n## Version %s (%s)\n\n%s\n' "$version" "$release_date" "$entries" >> "$tmp"
+  echo "<!-- CHANGELOG_INSERT --> marker not found in $changelog_file" >&2
+  exit 1
 fi
 
 mv "$tmp" "$changelog_file"
