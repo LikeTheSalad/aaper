@@ -62,11 +62,13 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.bot.outputs.token }}
         run: |
+          notes=$(sed '0,/^## Version /d; /^## Version /,$d' CHANGELOG.md)
           git tag ${{ steps.vars.outputs.tag }}
           git push origin ${{ steps.vars.outputs.tag }}
           gh release create ${{ steps.vars.outputs.tag }} \
             --target ${{ github.event.pull_request.base.ref }} \
-            --title "${{ steps.vars.outputs.version }}"
+            --title "${{ steps.vars.outputs.version }}" \
+            --notes "$notes"
 
       - name: Open PR to main
         env:
