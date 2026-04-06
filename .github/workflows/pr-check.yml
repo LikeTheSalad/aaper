@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
 jobs:
   pr_check:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'
