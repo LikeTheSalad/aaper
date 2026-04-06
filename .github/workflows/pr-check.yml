@@ -10,4 +10,6 @@ jobs:
       checks-command: './checks.sh'
       run-instrumentation-tests: true
       instrumentation-test-command: './gradlew -p demo-app connectedDebugAndroidTest'
-    secrets: inherit
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+

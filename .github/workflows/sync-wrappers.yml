@@ -6,4 +6,6 @@ jobs:
     uses: LikeTheSalad/github-tools/.github/workflows/sync-wrappers.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'
-    secrets: inherit
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+
