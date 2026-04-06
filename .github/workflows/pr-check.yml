@@ -1,15 +1,13 @@
 name: PR Check
-
 on:
-  - pull_request
-  - workflow_dispatch
-
+  pull_request:
+  workflow_dispatch:
 jobs:
   checks:
     uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'
-      checks-command: ./checks.sh
+      checks-command: './checks.sh'
       run-instrumentation-tests: true
-      instrumentation-test-command: ./gradlew -p demo-app connectedDebugAndroidTest
+      instrumentation-test-command: './gradlew -p demo-app connectedDebugAndroidTest'
     secrets: inherit
