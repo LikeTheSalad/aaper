@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  checks:
+  pr_check:
     uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'
@@ -13,3 +13,14 @@ jobs:
     secrets:
       GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
 
+  checks:
+    name: checks
+    if: ${{ always() }}
+    needs: pr_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Finalize check status
+        env:
+          RESULT: ${{ needs.pr_check.result }}
+        run: |
+          test "$RESULT" = "success"
