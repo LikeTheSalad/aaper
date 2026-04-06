@@ -1,0 +1,11 @@
+name: Sync github-tools wrappers
+on:
+  workflow_dispatch:
+jobs:
+  sync:
+    uses: LikeTheSalad/github-tools/.github/workflows/sync-wrappers.yml@main
+    with:
+      app-id: '${{ vars.APP_ID }}'
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+

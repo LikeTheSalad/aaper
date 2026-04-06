@@ -1,6 +1,8 @@
 Change Log
 ==========
 
+<!-- CHANGELOG_INSERT -->
+
 ## Version 3.1.0 (2026-04-04)
 
 * Bumping up dependencies

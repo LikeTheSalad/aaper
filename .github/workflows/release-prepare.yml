@@ -1,0 +1,21 @@
+name: Release — Prepare
+on:
+  schedule:
+    - cron: '0 12 1 * *'
+  workflow_dispatch:
+    inputs:
+      version_override:
+        description: 'Force version bump type (overrides label detection)'
+        type: choice
+        options: ['', 'patch', 'minor', 'major']
+        default: ''
+jobs:
+  release:
+    uses: LikeTheSalad/github-tools/.github/workflows/release-prepare.yml@main
+    with:
+      app-id: '${{ vars.APP_ID }}'
+      version-override: '${{ inputs.version_override || '''' }}'
+      readme-version-sed: 's/id("com.likethesalad.aaper") version "[0-9]\+\.[0-9]\+\.[0-9]\+"/id("com.likethesalad.aaper") version "{version}"/g'
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+
