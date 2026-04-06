@@ -5,45 +5,10 @@ on:
   - workflow_dispatch
 
 jobs:
-  build:
-    name: Gradle check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-java
-      - name: Build and check with Gradle Wrapper
-        run: ./checks.sh
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-      - name: Run connected instrumented tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
-          profile: pixel
-          script: ./gradlew -p demo-app connectedDebugAndroidTest
-      - name: Store build report
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: reports
-          path: |
-            **/build/reports/
-            **/build/test-results/
-
   checks:
-    name: checks
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    if: always()
-    steps:
-      - name: All checks passed
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        run: exit 1
+    uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
+    with:
+      checks-command: ./checks.sh
+      run-instrumentation-tests: true
+      instrumentation-test-command: ./gradlew -p demo-app connectedDebugAndroidTest
+    secrets: inherit
