@@ -8,6 +8,7 @@ jobs:
   checks:
     uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
     with:
+      app-id: '${{ vars.APP_ID }}'
       checks-command: ./checks.sh
       run-instrumentation-tests: true
       instrumentation-test-command: ./gradlew -p demo-app connectedDebugAndroidTest
