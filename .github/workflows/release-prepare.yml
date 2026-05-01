@@ -1,7 +1,7 @@
 name: Release — Prepare
 on:
   schedule:
-    - cron: '0 12 1 * *'
+    - cron: '0 0 1 * *'
   workflow_dispatch:
     inputs:
       version_override:
@@ -21,4 +21,3 @@ jobs:
       readme-version-sed: 's/id("com.likethesalad.aaper") version "[0-9]\+\.[0-9]\+\.[0-9]\+"/id("com.likethesalad.aaper") version "{version}"/g'
     secrets:
       GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
-
