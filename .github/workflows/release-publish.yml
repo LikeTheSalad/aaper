@@ -6,6 +6,9 @@ on:
       - 'release/**'
 jobs:
   release:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: LikeTheSalad/github-tools/.github/workflows/release-publish.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'

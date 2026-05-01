@@ -11,6 +11,9 @@ on:
         default: ''
 jobs:
   release:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: LikeTheSalad/github-tools/.github/workflows/release-prepare.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'

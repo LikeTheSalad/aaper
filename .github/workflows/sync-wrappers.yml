@@ -3,6 +3,9 @@ on:
   workflow_dispatch:
 jobs:
   sync:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: LikeTheSalad/github-tools/.github/workflows/sync-wrappers.yml@main
     with:
       app-id: '${{ vars.APP_ID }}'
