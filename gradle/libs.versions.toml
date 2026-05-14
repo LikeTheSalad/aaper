@@ -1,5 +1,5 @@
 [versions]
-asm = "9.9.1"
+asm = "9.10"
 android = "9.2.1"
 junit = "6.0.3"
 assertj = "3.27.7"
