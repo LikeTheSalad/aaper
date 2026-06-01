@@ -3,6 +3,15 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.2 (2026-06-01)
+
+* Update dependency io.mockk:mockk to v1.14.11 ([#55](https://github.com/LikeTheSalad/aaper/pull/55))
+* Update asm to v9.10.1 ([#54](https://github.com/LikeTheSalad/aaper/pull/54))
+* Update dependency org.junit:junit-bom to v6.1.0 ([#53](https://github.com/LikeTheSalad/aaper/pull/53))
+* Update asm to v9.10 ([#52](https://github.com/LikeTheSalad/aaper/pull/52))
+* Update Gradle to v9.5.1 ([#51](https://github.com/LikeTheSalad/aaper/pull/51))
+* Update android to v9.2.1 ([#50](https://github.com/LikeTheSalad/aaper/pull/50))
+
 ## Version 3.1.1 (2026-05-01)
 
 * Update Gradle to v9.5.0 ([#47](https://github.com/LikeTheSalad/aaper/pull/47))
