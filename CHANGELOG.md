@@ -3,6 +3,13 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.3 (2026-07-01)
+
+* Update dependency org.junit:junit-bom to v6.1.1 ([#62](https://github.com/LikeTheSalad/aaper/pull/62))
+* Update Gradle to v9.6.1 ([#61](https://github.com/LikeTheSalad/aaper/pull/61))
+* Update Gradle to v9.6.0 ([#60](https://github.com/LikeTheSalad/aaper/pull/60))
+* Update plugin buildConfig to v6.0.10 ([#58](https://github.com/LikeTheSalad/aaper/pull/58))
+
 ## Version 3.1.2 (2026-06-01)
 
 * Update dependency io.mockk:mockk to v1.14.11 ([#55](https://github.com/LikeTheSalad/aaper/pull/55))
