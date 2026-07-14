@@ -1,6 +1,6 @@
 [versions]
 asm = "9.10.1"
-android = "9.2.1"
+android = "9.3.0"
 junit = "6.1.2"
 assertj = "3.27.7"
 mockk = "1.14.11"
