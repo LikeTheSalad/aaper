@@ -3,6 +3,14 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.4 (2026-08-01)
+
+* Update dependency io.github.classgraph:classgraph to v4.8.186 ([#69](https://github.com/LikeTheSalad/aaper/pull/69))
+* Update dependency io.github.classgraph:classgraph to v4.8.185 ([#68](https://github.com/LikeTheSalad/aaper/pull/68))
+* Update android to v9.3.1 ([#67](https://github.com/LikeTheSalad/aaper/pull/67))
+* Update android to v9.3.0 ([#66](https://github.com/LikeTheSalad/aaper/pull/66))
+* Update dependency org.junit:junit-bom to v6.1.2 ([#65](https://github.com/LikeTheSalad/aaper/pull/65))
+
 ## Version 3.1.3 (2026-07-01)
 
 * Update dependency org.junit:junit-bom to v6.1.1 ([#62](https://github.com/LikeTheSalad/aaper/pull/62))
