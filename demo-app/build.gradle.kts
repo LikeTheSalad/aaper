@@ -1,4 +1,5 @@
 plugins {
+    alias(rootLibs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.android.application)
     id("com.likethesalad.aaper")
 }
