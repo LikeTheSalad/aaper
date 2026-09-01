@@ -3,6 +3,23 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.5 (2026-09-01)
+
+* Update dependency io.github.classgraph:classgraph to v4.8.194 ([#86](https://github.com/LikeTheSalad/aaper/pull/86))
+* Update android to v9.3.2 ([#85](https://github.com/LikeTheSalad/aaper/pull/85))
+* Update dependency org.jetbrains.kotlin.jvm to v2.4.10 ([#84](https://github.com/LikeTheSalad/aaper/pull/84))
+* Update Gradle to 9.7.1 with Kotlin compatibility ([#83](https://github.com/LikeTheSalad/aaper/pull/83))
+* Update dependency io.github.classgraph:classgraph to v4.8.193 ([#82](https://github.com/LikeTheSalad/aaper/pull/82))
+* Update dependency androidx.fragment:fragment-testing to v1.9.0 ([#81](https://github.com/LikeTheSalad/aaper/pull/81))
+* Update dependency io.github.classgraph:classgraph to v4.8.192 ([#80](https://github.com/LikeTheSalad/aaper/pull/80))
+* Update dependency androidx.fragment:fragment to v1.9.0 ([#79](https://github.com/LikeTheSalad/aaper/pull/79))
+* Update dependency androidx.appcompat:appcompat to v1.8.0 ([#78](https://github.com/LikeTheSalad/aaper/pull/78))
+* Update dependency io.github.classgraph:classgraph to v4.8.190 ([#77](https://github.com/LikeTheSalad/aaper/pull/77))
+* Update dependency io.github.classgraph:classgraph to v4.8.189 ([#76](https://github.com/LikeTheSalad/aaper/pull/76))
+* Update dependency io.github.classgraph:classgraph to v4.8.188 ([#75](https://github.com/LikeTheSalad/aaper/pull/75))
+* Update dependency io.github.classgraph:classgraph to v4.8.187 ([#74](https://github.com/LikeTheSalad/aaper/pull/74))
+* Update dependency org.junit:junit-bom to v6.1.3 ([#73](https://github.com/LikeTheSalad/aaper/pull/73))
+
 ## Version 3.1.4 (2026-08-01)
 
 * Update dependency io.github.classgraph:classgraph to v4.8.186 ([#69](https://github.com/LikeTheSalad/aaper/pull/69))
