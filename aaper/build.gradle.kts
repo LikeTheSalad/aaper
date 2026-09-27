@@ -11,6 +11,7 @@ android {
             isIncludeAndroidResources = true
             all {
                 it.useJUnitPlatform()
+                it.jvmArgs("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
             }
         }
     }
