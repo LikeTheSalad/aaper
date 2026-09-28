@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.likethesalad.android.aaper.sample"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId = "com.likethesalad.android.aaper.sample"
         minSdk = 23
