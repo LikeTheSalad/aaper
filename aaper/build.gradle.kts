@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.likethesalad.android.aaper"
-    compileSdk = 36
+    compileSdk = 37
 
     testOptions {
         unitTests {
