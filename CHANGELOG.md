@@ -3,6 +3,22 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.6 (2026-10-01)
+
+* Update plugin buildConfig to v6.1.2 ([#101](https://github.com/LikeTheSalad/aaper/pull/101))
+* Update Gradle to v9.8.0 ([#100](https://github.com/LikeTheSalad/aaper/pull/100))
+* Update dependency androidx.core:core to v1.19.1 ([#99](https://github.com/LikeTheSalad/aaper/pull/99))
+* Update dependency io.github.classgraph:classgraph to v4.8.196 ([#98](https://github.com/LikeTheSalad/aaper/pull/98))
+* Update dependency androidx.fragment:fragment-testing to v1.9.1 ([#97](https://github.com/LikeTheSalad/aaper/pull/97))
+* Update dependency androidx.fragment:fragment to v1.9.1 ([#96](https://github.com/LikeTheSalad/aaper/pull/96))
+* Update plugin buildConfig to v6.1.1 ([#95](https://github.com/LikeTheSalad/aaper/pull/95))
+* Update android to v9.4.1 ([#94](https://github.com/LikeTheSalad/aaper/pull/94))
+* Update plugin buildConfig to v6.1.0 ([#93](https://github.com/LikeTheSalad/aaper/pull/93))
+* Update dependency org.robolectric:robolectric to v4.17 ([#92](https://github.com/LikeTheSalad/aaper/pull/92))
+* Update dependency io.github.classgraph:classgraph to v4.8.195 ([#91](https://github.com/LikeTheSalad/aaper/pull/91))
+* Update dependency org.jetbrains.kotlin.jvm to v2.4.20 ([#90](https://github.com/LikeTheSalad/aaper/pull/90))
+* Update android to v9.4.0 ([#89](https://github.com/LikeTheSalad/aaper/pull/89))
+
 ## Version 3.1.5 (2026-09-01)
 
 * Update dependency io.github.classgraph:classgraph to v4.8.194 ([#86](https://github.com/LikeTheSalad/aaper/pull/86))
