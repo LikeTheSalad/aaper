@@ -61,7 +61,9 @@ abstract class CodeAppenderTask : DefaultTask() {
     private fun findAnnotatedMethods(): List<MethodInfo> {
         val annotatedMethods = mutableListOf<MethodInfo>()
         ClassGraph()
-            .overrideClasspath(allDirectories.get().map { it.asFile })
+            .enableClasspathEntries(allDirectories.get().map { it.asFile })
+            .enableClassInfo()
+            .enableMethodInfo()
             .ignoreMethodVisibility()
             .enableAnnotationInfo()
             .scan().use { scanResult ->
@@ -73,7 +75,7 @@ abstract class CodeAppenderTask : DefaultTask() {
                                 annotatedMethods.add(
                                     MethodInfo(
                                         methodInfo.name,
-                                        methodInfo.typeDescriptorStr,
+                                        methodInfo.typeDescriptorString,
                                         ClassName(classInfo.packageName, classInfo.simpleName)
                                     )
                                 )
@@ -86,7 +88,7 @@ abstract class CodeAppenderTask : DefaultTask() {
     }
 
     private fun validateAnnotatedMethod(methodInfo: io.github.classgraph.MethodInfo) {
-        val returnType = Type.getMethodType(methodInfo.typeDescriptorStr).returnType
+        val returnType = Type.getMethodType(methodInfo.typeDescriptorString).returnType
         if (returnType != Type.VOID_TYPE) {
             throw IllegalStateException("${EnsurePermissions::class.java.simpleName}-annotated methods must return VOID, but the method '${methodInfo.name}' inside '${methodInfo.className}' returns '${returnType.className}' instead.")
         }
