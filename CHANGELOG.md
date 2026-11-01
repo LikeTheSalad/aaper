@@ -3,6 +3,20 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.1.7 (2026-11-01)
+
+* Update android to v9.5.0 ([#115](https://github.com/LikeTheSalad/aaper/pull/115))
+* Update dependency io.github.classgraph:classgraph to v5.0.1 ([#114](https://github.com/LikeTheSalad/aaper/pull/114))
+* Migrate ClassGraph to v5 for Java 17 compatibility ([#113](https://github.com/LikeTheSalad/aaper/pull/113))
+* Update Gradle to v9.8.2 ([#112](https://github.com/LikeTheSalad/aaper/pull/112))
+* Update asm to v9.11.1 ([#111](https://github.com/LikeTheSalad/aaper/pull/111))
+* Update dependency io.github.classgraph:classgraph to v4.8.199 ([#109](https://github.com/LikeTheSalad/aaper/pull/109))
+* Update dependency io.github.classgraph:classgraph to v4.8.198 ([#108](https://github.com/LikeTheSalad/aaper/pull/108))
+* Update asm to v9.11 ([#107](https://github.com/LikeTheSalad/aaper/pull/107))
+* Update dependency org.jetbrains.kotlin.jvm to v2.4.21 ([#106](https://github.com/LikeTheSalad/aaper/pull/106))
+* Update Gradle to v9.8.1 ([#105](https://github.com/LikeTheSalad/aaper/pull/105))
+* Update dependency io.github.classgraph:classgraph to v4.8.197 ([#104](https://github.com/LikeTheSalad/aaper/pull/104))
+
 ## Version 3.1.6 (2026-10-01)
 
 * Update plugin buildConfig to v6.1.2 ([#101](https://github.com/LikeTheSalad/aaper/pull/101))
